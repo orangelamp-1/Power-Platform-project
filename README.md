@@ -1,4 +1,4 @@
-# Dataverse Solution
+# Power-Platform-project
 
 A Microsoft Power Platform / Dataverse solution managed via source control and deployed through a Jenkins CI/CD pipeline.
 

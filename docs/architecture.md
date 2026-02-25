@@ -1,6 +1,6 @@
 # Architecture Overview
 
-## Solution: Dataverse Solution
+## Solution: Power-Platform-project
 
 ### Overview
 
@@ -19,7 +19,7 @@
 ### Repository Structure
 
 ```
-dataverse-solution/
+Power-Platform-project/
 ├── src/
 │   └── solution/
 ├── data/

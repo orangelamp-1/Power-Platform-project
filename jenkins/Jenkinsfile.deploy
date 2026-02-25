@@ -141,10 +141,10 @@ pipeline {
                 echo '=== Deploying Managed solution to Test ==='
                 powershell """
                     pac auth create `
-                        --url '${TEST_ENV_URL}' `
-                        --tenant '${TENANT_ID}' `
-                        --applicationId '${CLIENT_ID}' `
-                        --clientSecret '${CLIENT_SECRET}' `
+                        --url "\$env:TEST_ENV_URL" `
+                        --tenant "\$env:TENANT_ID" `
+                        --applicationId "\$env:CLIENT_ID" `
+                        --clientSecret "\$env:CLIENT_SECRET" `
                         --name TestEnvironment
                     pac auth select --name TestEnvironment
                     pac solution import `
@@ -196,10 +196,10 @@ pipeline {
                 echo '=== Deploying Managed solution to Production ==='
                 powershell """
                     pac auth create `
-                        --url '${PROD_ENV_URL}' `
-                        --tenant '${TENANT_ID}' `
-                        --applicationId '${CLIENT_ID}' `
-                        --clientSecret '${CLIENT_SECRET}' `
+                        --url "\$env:PROD_ENV_URL" `
+                        --tenant "\$env:TENANT_ID" `
+                        --applicationId "\$env:CLIENT_ID" `
+                        --clientSecret "\$env:CLIENT_SECRET" `
                         --name ProdEnvironment
                     pac auth select --name ProdEnvironment
                     pac solution import `

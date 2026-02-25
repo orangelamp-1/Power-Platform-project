@@ -67,7 +67,7 @@ pipeline {
                 powershell """
                     git config --global user.name '${GIT_USER_NAME}'
                     git config --global user.email '${GIT_USER_EMAIL}'
-                    \$repoWithAuth = '${GITHUB_REPO}' -replace 'https://', "https://${GITHUB_TOKEN}@"
+                    \$repoWithAuth = '${GITHUB_REPO}' -replace 'https://', "https://\$env:GITHUB_TOKEN@"
                     git clone --branch main \$repoWithAuth repo
                 """
             }
@@ -79,10 +79,10 @@ pipeline {
                 echo '=== Authenticating to Dev environment ==='
                 powershell """
                     pac auth create `
-                        --url '${DEV_ENV_URL}' `
-                        --tenant '${TENANT_ID}' `
-                        --applicationId '${CLIENT_ID}' `
-                        --clientSecret '${CLIENT_SECRET}' `
+                        --url "\$env:DEV_ENV_URL" `
+                        --tenant "\$env:TENANT_ID" `
+                        --applicationId "\$env:CLIENT_ID" `
+                        --clientSecret "\$env:CLIENT_SECRET" `
                         --name DevEnvironment
                     pac auth select --name DevEnvironment
                 """
@@ -161,7 +161,7 @@ pipeline {
                         Set-Location repo
                         git add '${SOLUTION_SRC}/'
                         git commit -m '${message}'
-                        \$repoWithAuth = '${GITHUB_REPO}' -replace 'https://', "https://${GITHUB_TOKEN}@"
+                        \$repoWithAuth = '${GITHUB_REPO}' -replace 'https://', "https://\$env:GITHUB_TOKEN@"
                         git push \$repoWithAuth main
                         Write-Host 'Pushed to main: ${message}'
                     """

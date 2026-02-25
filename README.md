@@ -4,6 +4,18 @@ A Microsoft Power Platform / Dataverse solution managed via source control and d
 
 ---
 
+## Overview
+
+Development was done using windows 11 and VSCode.
+
+---
+
+## Use of AI
+
+Claude has been used to accelerate the setup of the git repo and jenkins pipelines.
+Claude has been used to create and format documentation.
+
+---
 
 ## License
 

@@ -1,0 +1,188 @@
+// =============================================================================
+// Jenkinsfile.export — Dev Environment → GitHub Repository
+// =============================================================================
+// Purpose:
+//   Manually triggered pipeline that exports the solution from the Dev
+//   Dataverse environment, unpacks it into source XML, and commits/pushes
+//   the changes to the main branch of this repository.
+//
+// Trigger:   Manual (Build with Parameters in Jenkins)
+// Agent:     Windows — PowerShell
+//
+// Flow:
+//   1. Checkout     – clone the repo so we can commit back to it
+//   2. Authenticate – connect pac to the Dev environment
+//   3. Export       – export Unmanaged solution zip from Dev
+//   4. Unpack       – explode the zip into tracked XML source files
+//   5. Diff check   – abort cleanly if nothing has changed
+//   6. Commit       – stage all changes and push to main
+// =============================================================================
+
+pipeline {
+
+    agent { label 'windows' }
+
+    parameters {
+        string(
+            name: 'COMMIT_MESSAGE',
+            defaultValue: '',
+            description: 'Describe what changed in Dev (e.g. "Add user email validation"). Leave blank to use a timestamp.'
+        )
+    }
+
+    environment {
+        SOLUTION_NAME    = 'OL_MAIN'
+        SOLUTION_SRC     = 'src/solution'
+        EXPORT_DIR       = 'export'
+
+        // Dev environment — stored as Jenkins credentials
+        DEV_ENV_URL      = credentials('dataverse-dev-url')
+
+        // Service Principal — stored as Jenkins credentials
+        TENANT_ID        = credentials('dataverse-tenant-id')
+        CLIENT_ID        = credentials('dataverse-client-id')
+        CLIENT_SECRET    = credentials('dataverse-client-secret')
+
+        // GitHub — Personal Access Token stored as Jenkins secret text credential
+        // Token needs: repo (read + write) scope
+        GITHUB_TOKEN     = credentials('github-pat')
+        GITHUB_REPO      = 'https://github.com/orangelamp-1/Power-Platform-project.git'
+        GIT_USER_NAME    = 'orangelamp-1 Jenkins CI'
+        GIT_USER_EMAIL   = 'orangelamp@protonmail.com'
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        timeout(time: 30, unit: 'MINUTES')
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
+    stages {
+
+        // ─── Stage 1: Checkout ────────────────────────────────────────────────
+        stage('Checkout') {
+            steps {
+                echo '=== Checking out repository ==='
+                powershell """
+                    git config --global user.name '${GIT_USER_NAME}'
+                    git config --global user.email '${GIT_USER_EMAIL}'
+                    \$repoWithAuth = '${GITHUB_REPO}' -replace 'https://', "https://${GITHUB_TOKEN}@"
+                    git clone --branch main \$repoWithAuth repo
+                """
+            }
+        }
+
+        // ─── Stage 2: Authenticate to Dev ────────────────────────────────────
+        stage('Authenticate') {
+            steps {
+                echo '=== Authenticating to Dev environment ==='
+                powershell """
+                    pac auth create `
+                        --url '${DEV_ENV_URL}' `
+                        --tenant '${TENANT_ID}' `
+                        --applicationId '${CLIENT_ID}' `
+                        --clientSecret '${CLIENT_SECRET}' `
+                        --name DevEnvironment
+                    pac auth select --name DevEnvironment
+                """
+            }
+        }
+
+        // ─── Stage 3: Export Unmanaged Solution ───────────────────────────────
+        stage('Export') {
+            steps {
+                echo '=== Exporting unmanaged solution from Dev ==='
+                powershell """
+                    New-Item -ItemType Directory -Force -Path '${EXPORT_DIR}' | Out-Null
+                    pac solution export `
+                        --name '${SOLUTION_NAME}' `
+                        --path '${EXPORT_DIR}\\${SOLUTION_NAME}.zip' `
+                        --managed false `
+                        --overwrite
+                    Get-ChildItem '${EXPORT_DIR}'
+                """
+            }
+        }
+
+        // ─── Stage 4: Unpack into Source XML ─────────────────────────────────
+        stage('Unpack') {
+            steps {
+                echo '=== Unpacking solution into source XML ==='
+                powershell """
+                    pac solution unpack `
+                        --zipfile '${EXPORT_DIR}\\${SOLUTION_NAME}.zip' `
+                        --folder 'repo/${SOLUTION_SRC}' `
+                        --packagetype Unmanaged `
+                        --allowDelete
+                    Write-Host 'Unpack complete. Changed files:'
+                    git -C repo diff --name-only
+                    git -C repo status --short
+                """
+            }
+        }
+
+        // ─── Stage 5: Check for Changes ──────────────────────────────────────
+        stage('Diff Check') {
+            steps {
+                echo '=== Checking for changes ==='
+                script {
+                    def count = powershell(
+                        script: '(git -C repo status --porcelain | Measure-Object -Line).Lines',
+                        returnStdout: true
+                    ).trim()
+
+                    if (count == '0') {
+                        echo 'No changes detected — Dev solution matches the repository. Nothing to commit.'
+                        currentBuild.result = 'SUCCESS'
+                        error('NO_CHANGES')
+                    } else {
+                        echo "Detected ${count} changed file(s) — proceeding to commit."
+                    }
+                }
+            }
+        }
+
+        // ─── Stage 6: Commit and Push ─────────────────────────────────────────
+        stage('Commit & Push') {
+            steps {
+                echo '=== Committing changes to main ==='
+                script {
+                    def timestamp = powershell(
+                        script: 'Get-Date -Format "yyyy-MM-dd HH:mm"',
+                        returnStdout: true
+                    ).trim()
+
+                    def message = params.COMMIT_MESSAGE?.trim()
+                                  ? params.COMMIT_MESSAGE.trim()
+                                  : "chore: export solution from Dev [${timestamp}]"
+
+                    powershell """
+                        Set-Location repo
+                        git add '${SOLUTION_SRC}/'
+                        git commit -m '${message}'
+                        \$repoWithAuth = '${GITHUB_REPO}' -replace 'https://', "https://${GITHUB_TOKEN}@"
+                        git push \$repoWithAuth main
+                        Write-Host 'Pushed to main: ${message}'
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Export and commit successful. Run the deploy pipeline when ready to promote.'
+        }
+        failure {
+            script {
+                if (currentBuild.result != 'SUCCESS') {
+                    echo '❌ Export pipeline failed — review logs above.'
+                }
+            }
+        }
+        always {
+            cleanWs(deleteDirs: true, notFailBuild: true)
+        }
+    }
+}

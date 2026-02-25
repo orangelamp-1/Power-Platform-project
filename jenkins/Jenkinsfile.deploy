@@ -1,0 +1,233 @@
+// =============================================================================
+// Jenkinsfile.deploy — GitHub Repository → Test → Production
+// =============================================================================
+// Purpose:
+//   Manually triggered pipeline that packs the solution source from the repo
+//   and deploys it. Both Test and Production receive the Managed solution.
+//
+// Trigger:   Manual (Build with Parameters in Jenkins)
+// Agent:     Windows — PowerShell
+//
+// Parameters:
+//   DEPLOY_TARGET = "test"       → Pack + deploy Managed to Test only
+//   DEPLOY_TARGET = "production" → Pack + deploy Managed to Test, then prompt
+//                                  for manual approval before deploying to Prod
+//
+// Flow:
+//   1. Checkout      – pull latest main
+//   2. Validate      – XML validation of all solution files
+//   3. Pack          – build Unmanaged + Managed zips
+//   4. Deploy Test   – import Managed into Test environment
+//   5. Approve Prod  – manual sign-off (production target only)
+//   6. Deploy Prod   – import Managed into Production (production target only)
+// =============================================================================
+
+pipeline {
+
+    agent { label 'windows' }
+
+    parameters {
+        choice(
+            name: 'DEPLOY_TARGET',
+            choices: ['test', 'production'],
+            description: 'Choose "test" to deploy to Test only. Choose "production" to deploy to Test then prompt for Production approval.'
+        )
+    }
+
+    environment {
+        SOLUTION_NAME    = 'OL_MAIN'
+        SOLUTION_SRC     = 'src/solution'
+        BUILD_DIR        = 'build'
+
+        // Environment URLs — stored as Jenkins credentials
+        TEST_ENV_URL     = credentials('dataverse-test-url')
+        PROD_ENV_URL     = credentials('dataverse-prod-url')
+
+        // Service Principal — stored as Jenkins credentials
+        TENANT_ID        = credentials('dataverse-tenant-id')
+        CLIENT_ID        = credentials('dataverse-client-id')
+        CLIENT_SECRET    = credentials('dataverse-client-secret')
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        timeout(time: 60, unit: 'MINUTES')
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
+    stages {
+
+        // ─── Stage 1: Checkout ────────────────────────────────────────────────
+        stage('Checkout') {
+            steps {
+                echo '=== Checking out main branch ==='
+                checkout scm
+                powershell 'git log -1 --pretty=format:"%h — %s (%an, %ar)"'
+            }
+        }
+
+        // ─── Stage 2: Validate ────────────────────────────────────────────────
+        stage('Validate') {
+            steps {
+                echo '=== Validating solution XML ==='
+                powershell """
+                    \$ErrorActionPreference = 'Stop'
+
+                    function Test-Xml {
+                        param([string]\$Path)
+                        try {
+                            \$xml = New-Object System.Xml.XmlDocument
+                            \$xml.Load((Resolve-Path \$Path))
+                            Write-Host "  OK: \$Path"
+                        } catch {
+                            throw "Invalid XML in \$Path : \$_"
+                        }
+                    }
+
+                    Write-Host '>> Solution.xml'
+                    Test-Xml '${SOLUTION_SRC}/Solution.xml'
+
+                    Write-Host '>> Customizations.xml'
+                    Test-Xml '${SOLUTION_SRC}/Other/Customizations.xml'
+
+                    Write-Host '>> Entity definitions'
+                    Get-ChildItem -Path '${SOLUTION_SRC}/Entities' -Recurse -Filter '*.xml' | ForEach-Object {
+                        Test-Xml \$_.FullName
+                    }
+
+                    Write-Host 'All XML files valid.'
+                """
+            }
+            post {
+                failure {
+                    error 'XML validation failed — fix errors in the solution source before deploying.'
+                }
+            }
+        }
+
+        // ─── Stage 3: Pack (Unmanaged + Managed) ──────────────────────────────
+        stage('Pack') {
+            steps {
+                echo '=== Packing solution ==='
+                powershell """
+                    New-Item -ItemType Directory -Force -Path '${BUILD_DIR}' | Out-Null
+
+                    Write-Host '-- Packing Unmanaged --'
+                    pac solution pack `
+                        --folder '${SOLUTION_SRC}' `
+                        --zipfile '${BUILD_DIR}\\${SOLUTION_NAME}_unmanaged.zip' `
+                        --packagetype Unmanaged
+
+                    Write-Host '-- Packing Managed --'
+                    pac solution pack `
+                        --folder '${SOLUTION_SRC}' `
+                        --zipfile '${BUILD_DIR}\\${SOLUTION_NAME}_managed.zip' `
+                        --packagetype Managed
+
+                    Get-ChildItem '${BUILD_DIR}'
+                """
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: "build\\*.zip", fingerprint: true
+                }
+            }
+        }
+
+        // ─── Stage 4: Deploy to Test ──────────────────────────────────────────
+        stage('Deploy Test') {
+            steps {
+                echo '=== Deploying Managed solution to Test ==='
+                powershell """
+                    pac auth create `
+                        --url '${TEST_ENV_URL}' `
+                        --tenant '${TENANT_ID}' `
+                        --applicationId '${CLIENT_ID}' `
+                        --clientSecret '${CLIENT_SECRET}' `
+                        --name TestEnvironment
+                    pac auth select --name TestEnvironment
+                    pac solution import `
+                        --path '${BUILD_DIR}\\${SOLUTION_NAME}_managed.zip' `
+                        --activate-plugins `
+                        --force-overwrite `
+                        --publish-changes
+                    Write-Host 'Test deployment complete.'
+                """
+            }
+            post {
+                success { echo '✅ Test environment updated successfully.' }
+                failure { error '❌ Test deployment failed — Production gate will not open.' }
+            }
+        }
+
+        // ─── Stage 5: Production Approval Gate ────────────────────────────────
+        stage('Approve Production') {
+            when {
+                expression { return params.DEPLOY_TARGET == 'production' }
+            }
+            options {
+                timeout(time: 24, unit: 'HOURS')
+            }
+            input {
+                message 'Deploy Managed solution to Production?'
+                ok 'Approve & Deploy to Production'
+                submitter 'release-managers'
+                parameters {
+                    string(
+                        name: 'RELEASE_NOTES',
+                        defaultValue: '',
+                        description: 'Release notes for this production deployment'
+                    )
+                }
+            }
+            steps {
+                echo "=== Production deployment approved ==="
+                echo "Release notes: ${RELEASE_NOTES}"
+            }
+        }
+
+        // ─── Stage 6: Deploy to Production ────────────────────────────────────
+        stage('Deploy Prod') {
+            when {
+                expression { return params.DEPLOY_TARGET == 'production' }
+            }
+            steps {
+                echo '=== Deploying Managed solution to Production ==='
+                powershell """
+                    pac auth create `
+                        --url '${PROD_ENV_URL}' `
+                        --tenant '${TENANT_ID}' `
+                        --applicationId '${CLIENT_ID}' `
+                        --clientSecret '${CLIENT_SECRET}' `
+                        --name ProdEnvironment
+                    pac auth select --name ProdEnvironment
+                    pac solution import `
+                        --path '${BUILD_DIR}\\${SOLUTION_NAME}_managed.zip' `
+                        --activate-plugins `
+                        --publish-changes
+                    Write-Host 'Production deployment complete.'
+                """
+            }
+            post {
+                success { echo '✅ Production deployment successful.' }
+                failure { echo '❌ Production deployment failed — investigate before retrying.' }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Pipeline complete.'
+        }
+        failure {
+            echo '❌ Pipeline failed. Check stage logs. Production was NOT updated.'
+        }
+        aborted {
+            echo '⚠️ Pipeline aborted — Production approval may have timed out or been rejected.'
+        }
+        always {
+            cleanWs(deleteDirs: true, notFailBuild: true)
+        }
+    }
+}

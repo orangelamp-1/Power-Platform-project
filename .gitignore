@@ -1,0 +1,33 @@
+# Power Platform
+*.zip
+*.msapp
+bin/
+obj/
+
+# Node
+node_modules/
+npm-debug.log
+
+# Python
+__pycache__/
+*.pyc
+.env
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Jenkins
+.jenkins/workspace/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets - never commit these
+*.pfx
+*.cer
+secrets.json
+local.settings.json

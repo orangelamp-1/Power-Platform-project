@@ -160,21 +160,24 @@ pipeline {
             options {
                 timeout(time: 24, unit: 'HOURS')
             }
-            input {
-                message 'Deploy Managed solution to Production?'
-                ok 'Approve & Deploy to Production'
-                submitter 'release-managers'
-                parameters {
-                    string(
-                        name: 'RELEASE_NOTES',
-                        defaultValue: '',
-                        description: 'Release notes for this production deployment'
-                    )
-                }
-            }
             steps {
+                script {
+                    def releaseNotes = input(
+                        message: 'Deploy Managed solution to Production?',
+                        ok: 'Approve & Deploy to Production',
+                        submitter: 'release-managers',
+                        parameters: [
+                            string(
+                                name: 'RELEASE_NOTES',
+                                defaultValue: '',
+                                description: 'Release notes for this production deployment'
+                            )
+                        ]
+                    )
+                    env.RELEASE_NOTES = releaseNotes ?: ''
+                }
                 echo "=== Production deployment approved ==="
-                echo "Release notes: ${RELEASE_NOTES}"
+                echo "Release notes: ${env.RELEASE_NOTES}"
             }
         }
 

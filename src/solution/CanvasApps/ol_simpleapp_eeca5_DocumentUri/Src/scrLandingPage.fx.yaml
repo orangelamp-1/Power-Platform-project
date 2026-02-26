@@ -1,0 +1,12 @@
+scrLandingPage As screen:
+
+    lbl_LandingPage_Title As label:
+        Align: =Align.Center
+        Height: =200
+        Size: =50
+        Text: ="Welcome Title"
+        Width: =500
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =Parent.Height / 2 - Self.Height / 2
+        ZIndex: =1
+

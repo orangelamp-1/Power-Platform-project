@@ -1,6 +1,5 @@
 # Power Platform
 *.zip
-*.msapp
 bin/
 obj/
 

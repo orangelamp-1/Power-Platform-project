@@ -106,26 +106,7 @@ pipeline {
             }
         }
 
-        // ─── Stage 3: Canvas Pack ─────────────────────────────────────────────
-        stage('Canvas Pack') {
-            steps {
-                echo '=== Re-packing canvas apps from source YAML ==='
-                powershell """
-                    \$canvasDir = '${SOLUTION_SRC}/CanvasApps'
-                    if (Test-Path \$canvasDir) {
-                        Get-ChildItem -Path \$canvasDir -Directory | ForEach-Object {
-                            \$msappPath = Join-Path \$canvasDir ("\$(\$_.Name).msapp")
-                            Write-Host "Packing: \$(\$_.Name) → \$msappPath"
-                            pac canvas pack --msapp \$msappPath --sources \$_.FullName
-                        }
-                    } else {
-                        Write-Host 'No CanvasApps directory found — skipping.'
-                    }
-                """
-            }
-        }
-
-        // ─── Stage 4: Pack (Unmanaged + Managed) ──────────────────────────────
+        // ─── Stage 3: Pack (Unmanaged + Managed) ──────────────────────────────
         stage('Pack') {
             steps {
                 echo '=== Packing solution ==='
@@ -160,7 +141,7 @@ pipeline {
                 echo '=== Deploying Managed solution to Test ==='
                 powershell """
                     pac auth create `
-                        --url "\$env:TEST_ENV_URL" `
+                        --environment "\$env:TEST_ENV_URL" `
                         --tenant "\$env:TENANT_ID" `
                         --applicationId "\$env:CLIENT_ID" `
                         --clientSecret "\$env:CLIENT_SECRET" `
@@ -215,7 +196,7 @@ pipeline {
                 echo '=== Deploying Managed solution to Production ==='
                 powershell """
                     pac auth create `
-                        --url "\$env:PROD_ENV_URL" `
+                        --environment "\$env:PROD_ENV_URL" `
                         --tenant "\$env:TENANT_ID" `
                         --applicationId "\$env:CLIENT_ID" `
                         --clientSecret "\$env:CLIENT_SECRET" `

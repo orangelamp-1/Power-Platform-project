@@ -108,7 +108,15 @@ The pipelines authenticate to Dataverse using a Service Principal rather than a 
 | Script Path | `jenkins/Jenkinsfile.export` |
 | Build Triggers | *(none — manual only)* |
 
-The **Build with Parameters** button will prompt for an optional commit message before running.
+The **Build with Parameters** button will prompt for an optional commit message and a **Force Export** checkbox before running.
+
+After saving the job, open its **Configure** page and grant the deploy job permission to copy artifacts:
+
+1. Scroll to **Copy Artifact Permission Policy**
+2. Under **Permissions to Copy Artifacts**, enter `solution-deploy`
+3. Click **Save**
+
+> Without this, the deploy pipeline's **Get Managed Zip** stage will fail with a permission error.
 
 ---
 

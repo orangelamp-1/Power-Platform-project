@@ -123,7 +123,7 @@ pipeline {
                     pac solution pack `
                         --folder '${SOLUTION_SRC}' `
                         --zipfile '${BUILD_DIR}\\${SOLUTION_NAME}_managed.zip' `
-                        --packagetype Managed
+                        --packagetype Both
 
                     Get-ChildItem '${BUILD_DIR}'
                 """

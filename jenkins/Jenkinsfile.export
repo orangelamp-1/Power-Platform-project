@@ -12,7 +12,7 @@
 // Flow:
 //   1. Checkout     – clone the repo so we can commit back to it
 //   2. Authenticate – connect pac to the Dev environment
-//   3. Export       – export Unmanaged solution zip from Dev
+//   3. Export       – export Unmanaged + Managed solution zips from Dev
 //   4. Unpack       – explode the zip into tracked XML source files
 //   5. Diff check   – abort cleanly if nothing has changed
 //   6. Commit       – stage all changes and push to main
@@ -89,19 +89,34 @@ pipeline {
             }
         }
 
-        // ─── Stage 3: Export Unmanaged Solution ───────────────────────────────
+        // ─── Stage 3: Export Unmanaged + Managed Solutions ────────────────────
         stage('Export') {
             steps {
-                echo '=== Exporting unmanaged solution from Dev ==='
+                echo '=== Exporting Unmanaged and Managed solution zips from Dev ==='
                 powershell """
                     New-Item -ItemType Directory -Force -Path '${EXPORT_DIR}' | Out-Null
+
+                    Write-Host '-- Exporting Unmanaged --'
                     pac solution export `
                         --name '${SOLUTION_NAME}' `
                         --path '${EXPORT_DIR}\\${SOLUTION_NAME}.zip' `
                         --managed false `
                         --overwrite
+
+                    Write-Host '-- Exporting Managed --'
+                    pac solution export `
+                        --name '${SOLUTION_NAME}' `
+                        --path '${EXPORT_DIR}\\${SOLUTION_NAME}_managed.zip' `
+                        --managed true `
+                        --overwrite
+
                     Get-ChildItem '${EXPORT_DIR}'
                 """
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: "export\\*.zip", fingerprint: true
+                }
             }
         }
 
@@ -113,7 +128,7 @@ pipeline {
                     pac solution unpack `
                         --zipfile '${EXPORT_DIR}\\${SOLUTION_NAME}.zip' `
                         --folder 'repo/${SOLUTION_SRC}' `
-                        --packagetype Both `
+                        --packagetype Unmanaged `
                         --allowDelete
                     Write-Host 'Unpack complete. Changed files:'
                     git -C repo diff --name-only

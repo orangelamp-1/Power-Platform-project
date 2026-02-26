@@ -60,6 +60,7 @@ Install via **Manage Jenkins → Plugins**:
 | Credentials Binding | Inject secrets into shell steps |
 | Timestamper | Adds timestamps to console output |
 | Workspace Cleanup | `cleanWs()` support |
+| Copy Artifact | `copyArtifacts()` — lets deploy pipeline pull the managed zip from the export pipeline |
 | Role-based Authorization Strategy | Optionally for Jenkins RBAC
 
 ---

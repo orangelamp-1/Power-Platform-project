@@ -122,7 +122,26 @@ pipeline {
             }
         }
 
-        // ─── Stage 5: Check for Changes ──────────────────────────────────────
+        // ─── Stage 5: Canvas Unpack ──────────────────────────────────────────
+        stage('Canvas Unpack') {
+            steps {
+                echo '=== Unpacking canvas apps into source YAML ==='
+                powershell """
+                    \$canvasDir = 'repo/${SOLUTION_SRC}/CanvasApps'
+                    if (Test-Path \$canvasDir) {
+                        Get-ChildItem -Path \$canvasDir -Filter '*.msapp' | ForEach-Object {
+                            \$srcFolder = Join-Path \$_.DirectoryName \$_.BaseName
+                            Write-Host "Unpacking: \$(\$_.Name) → \$srcFolder"
+                            pac canvas unpack --msapp \$_.FullName --sources \$srcFolder
+                        }
+                    } else {
+                        Write-Host 'No CanvasApps directory found — skipping.'
+                    }
+                """
+            }
+        }
+
+        // ─── Stage 6: Diff Check ─────────────────────────────────────────────
         stage('Diff Check') {
             steps {
                 echo '=== Checking for changes ==='

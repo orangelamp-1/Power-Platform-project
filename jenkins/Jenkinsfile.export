@@ -28,6 +28,11 @@ pipeline {
             defaultValue: '',
             description: 'Describe what changed in Dev (e.g. "Add user email validation"). Leave blank to use a timestamp.'
         )
+        booleanParam(
+            name: 'FORCE_EXPORT',
+            defaultValue: false,
+            description: 'Commit and push even if no source changes are detected after unpack.'
+        )
     }
 
     environment {
@@ -147,10 +152,12 @@ pipeline {
                         returnStdout: true
                     ).trim()
 
-                    if (count == '0') {
+                    if (count == '0' && !params.FORCE_EXPORT) {
                         echo 'No changes detected — Dev solution matches the repository. Nothing to commit.'
                         currentBuild.result = 'SUCCESS'
                         error('NO_CHANGES')
+                    } else if (count == '0') {
+                        echo 'No changes detected but FORCE_EXPORT is set — proceeding to commit anyway.'
                     } else {
                         echo "Detected ${count} changed file(s) — proceeding to commit."
                     }

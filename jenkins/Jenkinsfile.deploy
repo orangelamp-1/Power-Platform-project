@@ -86,7 +86,7 @@ pipeline {
                     }
 
                     Write-Host '>> Solution.xml'
-                    Test-Xml '${SOLUTION_SRC}/Solution.xml'
+                    Test-Xml '${SOLUTION_SRC}/Other/Solution.xml'
 
                     Write-Host '>> Customizations.xml'
                     Test-Xml '${SOLUTION_SRC}/Other/Customizations.xml'

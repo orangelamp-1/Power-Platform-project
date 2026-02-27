@@ -1,0 +1,15 @@
+<aiskillconfig uniquename="ais_FormFillFieldOptOut_ol_gr_task_ol_title">
+  <aiskill>FormFillFieldOptOut</aiskill>
+  <attribute>
+    <entityid.logicalname>ol_gr_task</entityid.logicalname>
+    <logicalname>ol_title</logicalname>
+  </attribute>
+  <description>ol_gr_task - Title Form fill opt out</description>
+  <entity>
+    <logicalname>ol_gr_task</logicalname>
+  </entity>
+  <iscustomizable>1</iscustomizable>
+  <scope>1</scope>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</aiskillconfig>

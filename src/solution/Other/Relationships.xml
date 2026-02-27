@@ -3,12 +3,7 @@
   <EntityRelationship Name="business_unit_ol_gr_task" />
   <EntityRelationship Name="lk_ol_gr_task_createdby" />
   <EntityRelationship Name="lk_ol_gr_task_modifiedby" />
-  <EntityRelationship Name="msdyn_flow_actionapprovalmodelrelationship_systemuser" />
-  <EntityRelationship Name="msdyn_flow_awaitallactionmodelrelationship_user" />
-  <EntityRelationship Name="msdyn_flow_awaitallmodelrelationship_systemuser" />
-  <EntityRelationship Name="msdyn_flow_basicapprovalmodelrelationship_systemuser" />
   <EntityRelationship Name="owner_ol_gr_task" />
-  <EntityRelationship Name="powerpagecomponent_webrole_systemuser" />
   <EntityRelationship Name="team_ol_gr_task" />
   <EntityRelationship Name="user_ol_gr_task" />
 </EntityRelationships>

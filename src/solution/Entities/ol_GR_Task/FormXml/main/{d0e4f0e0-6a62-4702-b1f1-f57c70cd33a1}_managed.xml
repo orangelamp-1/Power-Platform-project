@@ -5,57 +5,72 @@
     <IntroducedVersion>1.0.0.0</IntroducedVersion>
     <FormPresentation>1</FormPresentation>
     <FormActivationState>1</FormActivationState>
-    <form>
+    <form headerdensity="HighWithControls">
       <tabs>
-        <tab verticallayout="true" id="{cb7ab01c-98a0-4d46-9686-f4e7f290cd99}" IsUserDefined="1">
+        <tab verticallayout="true" id="{cb7ab01c-98a0-4d46-9686-f4e7f290cd99}" IsUserDefined="1" name="General" contenttype="cardSections" expanded="true">
           <labels>
             <label description="General" languagecode="1033" />
           </labels>
           <columns>
-            <column width="33%">
+            <column width="100%">
               <sections>
-                <section showlabel="false" showbar="false" IsUserDefined="0" id="{73b5d579-3ebc-4219-a12f-7f40d003d239}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{73b5d579-3ebc-4219-a12f-7f40d003d239}" name="Task Overview" columns="1" celllabelposition="Left">
                   <labels>
-                    <label description="General" languagecode="1033" />
+                    <label description="Task Overview" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{164d202a-58a6-4099-8bc3-eb737633453a}">
+                      <cell id="{cf813454-2143-4cde-b416-2659cbbafaf0}" locklevel="0" colspan="1" rowspan="1">
                         <labels>
                           <label description="" languagecode="1033" />
                         </labels>
-                        <control id="ol_taskid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="ol_taskid" />
+                        <control id="emailaddress" classid="{ADA2203E-B4CD-49BE-9DDF-234642B43B52}" datafieldname="emailaddress" disabled="false" />
                       </cell>
                     </row>
                     <row>
-                      <cell id="{d6e106fb-e697-44f3-a771-71ec6c209cfc}">
+                      <cell id="{5d6a9a29-572c-416e-81ed-f37cc5611fd5}" locklevel="0" colspan="1" rowspan="1">
                         <labels>
                           <label description="" languagecode="1033" />
                         </labels>
-                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                        <control id="ol_shortdescription" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_shortdescription" disabled="false" />
                       </cell>
                     </row>
                   </rows>
                 </section>
-              </sections>
-            </column>
-            <column width="66%">
-              <sections>
-                <section showlabel="false" showbar="false" id="{069cbdd8-ea37-4c86-a665-ba8258c1af0e}" IsUserDefined="0" height="auto">
+                <section name="Task Details" id="3467fe12-c0e7-403f-8d56-88344f80a5b5" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Top" columns="1" labelwidth="115">
                   <labels>
-                    <label description="Notes" languagecode="1033" />
+                    <label description="Task Details" languagecode="1033" />
                   </labels>
                   <rows>
                     <row>
-                      <cell showlabel="false" rowspan="15" auto="false" id="{49a16de8-ce67-43bb-bfcd-656250cfe407}">
+                      <cell locklevel="0" id="{152be10d-1d20-4d9e-a992-a5d09b91d7b0}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9ac6d455-6b04-4a09-bb9d-774435b96031}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_description" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="ol_description" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="Timeline" id="6847ff57-1ffd-48ac-bd9f-301e5536bd57" IsUserDefined="0" locklevel="0" showlabel="false" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Timeline" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row />
+                    <row>
+                      <cell locklevel="0" id="{a41a37a8-9533-4d58-b3ba-ca5da59eb881}" rowspan="15" colspan="1">
                         <labels>
                           <label description="Note Text" languagecode="1033" />
                         </labels>
-                        <control id="notescontrol" classid="{06375649-c143-495e-a496-c962e5b4488e}">
-                          <parameters>
-                            <DefaultTabId>NotesTab</DefaultTabId>
-                          </parameters>
-                        </control>
+                        <control id="notescontrol" classid="{06375649-C143-495E-A496-C962E5B4488E}" disabled="false" />
                       </cell>
                     </row>
                     <row />
@@ -71,7 +86,7 @@
                     <row />
                     <row />
                     <row />
-                    <row height="auto" />
+                    <row />
                   </rows>
                 </section>
               </sections>
@@ -79,6 +94,63 @@
           </columns>
         </tab>
       </tabs>
+      <header id="{8ab4ad7a-78e9-4dfd-a207-bed1130b4bfd}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{47ec5851-30ed-4d15-b680-cfa6ca57e884}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{091d3be3-a1ee-4723-abae-453d0adef853}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{ac4bb804-479d-45a5-9788-4d9a4926ded5}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{164d202a-58a6-4099-8bc3-eb737633453a}" locklevel="1" showlabel="true" colspan="1" rowspan="1">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_ol_taskid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="ol_taskid" disabled="true" />
+            </cell>
+            <cell id="{d6e106fb-e697-44f3-a771-71ec6c209cfc}" locklevel="1" colspan="1" rowspan="1">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <footer id="{21deba89-3c5a-4613-a9ec-2d2809f6000d}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{62bff3e4-ec71-4606-bbef-6e34288fde5a}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{09f8c159-eeb4-4bdc-8d14-bc225af85f68}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{3a7a254d-77f5-4bc2-8672-2b08c2b0e560}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </footer>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
     </form>
     <IsCustomizable>1</IsCustomizable>
     <CanBeDeleted>1</CanBeDeleted>

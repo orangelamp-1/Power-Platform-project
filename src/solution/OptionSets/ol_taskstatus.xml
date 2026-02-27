@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<optionset Name="ol_taskstatus" localizedName="Task Status" description="Task Status choice." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <OptionSetType>picklist</OptionSetType>
+  <IsGlobal>1</IsGlobal>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <ExternalTypeName></ExternalTypeName>
+  <displaynames>
+    <displayname description="Task Status" languagecode="1033" />
+  </displaynames>
+  <Descriptions>
+    <Description description="Task Status choice." languagecode="1033" />
+  </Descriptions>
+  <options>
+    <option value="125250000" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="New" languagecode="1033" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1033" />
+      </Descriptions>
+    </option>
+    <option value="125250001" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="In Progress" languagecode="1033" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1033" />
+      </Descriptions>
+    </option>
+    <option value="125250002" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="On Hold" languagecode="1033" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1033" />
+      </Descriptions>
+    </option>
+    <option value="125250003" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Resolved" languagecode="1033" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1033" />
+      </Descriptions>
+    </option>
+    <option value="125250200" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Closed" languagecode="1033" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1033" />
+      </Descriptions>
+    </option>
+    <option value="125250999" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Cancelled" languagecode="1033" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1033" />
+      </Descriptions>
+    </option>
+  </options>
+</optionset>

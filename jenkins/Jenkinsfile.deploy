@@ -2,24 +2,24 @@
 // Jenkinsfile.deploy — GitHub Repository → Test → Production
 // =============================================================================
 // Purpose:
-//   Manually triggered pipeline that retrieves the Managed solution zip produced
-//   by the export pipeline and deploys it to Test and/or Production.
+//   Manually triggered pipeline that checks out the solution source from the repo,
+//   packs a Managed zip, and deploys it to Test and/or Production.
 //
 // Trigger:   Manual (Build with Parameters in Jenkins)
 // Agent:     Windows — PowerShell
 //
 // Parameters:
-//   DEPLOY_TARGET = "test"       → deploy Managed to Test only
-//   DEPLOY_TARGET = "production" → deploy Managed to Test, then prompt
+//   DEPLOY_TARGET = "test"       → pack + deploy Managed to Test only
+//   DEPLOY_TARGET = "production" → pack + deploy Managed to Test, then prompt
 //                                  for manual approval before deploying to Prod
 //
 // Flow:
-//   1. Checkout         – pull latest main
-//   2. Validate         – XML validation of all solution files
-//   3. Get Managed Zip  – copy managed zip artifact from last successful export build
-//   4. Deploy Test      – import Managed into Test environment
-//   5. Approve Prod     – manual sign-off (production target only)
-//   6. Deploy Prod      – import Managed into Production (production target only)
+//   1. Checkout      – pull latest main
+//   2. Validate      – XML validation of all solution files
+//   3. Pack          – build Managed zip from source
+//   4. Deploy Test   – import Managed into Test environment
+//   5. Approve Prod  – manual sign-off (production target only)
+//   6. Deploy Prod   – import Managed into Production (production target only)
 // =============================================================================
 
 pipeline {
@@ -29,8 +29,8 @@ pipeline {
     parameters {
         choice(
             name: 'DEPLOY_TARGET',
-            choices: ['test', 'production'],
-            description: 'Choose "test" to deploy to Test only. Choose "production" to deploy to Test then prompt for Production approval.'
+            choices: ['Test', 'Production'],
+            description: 'Choose "Test" to deploy to Test only. Choose "Production" to deploy to Test then prompt for Production approval.'
         )
     }
 
@@ -106,22 +106,22 @@ pipeline {
             }
         }
 
-        // ─── Stage 3: Get Managed Zip ─────────────────────────────────────────
-        stage('Get Managed Zip') {
+        // ─── Stage 3: Pack Managed ────────────────────────────────────────────
+        stage('Pack') {
             steps {
-                echo '=== Copying managed zip from last successful export build ==='
-                copyArtifacts(
-                    projectName: 'solution-export',
-                    filter: "export/${SOLUTION_NAME}_managed.zip",
-                    target: "${BUILD_DIR}",
-                    flatten: true,
-                    selector: lastSuccessful()
-                )
-                powershell "Get-ChildItem '${BUILD_DIR}'"
+                echo '=== Packing Managed solution from source ==='
+                powershell """
+                    New-Item -ItemType Directory -Force -Path '${BUILD_DIR}' | Out-Null
+                    pac solution pack `
+                        --folder '${SOLUTION_SRC}' `
+                        --zipfile '${BUILD_DIR}\\${SOLUTION_NAME}_managed.zip' `
+                        --packagetype Managed
+                    Get-ChildItem '${BUILD_DIR}'
+                """
             }
             post {
-                failure {
-                    error 'Could not retrieve managed zip — run the solution-export pipeline first.'
+                success {
+                    archiveArtifacts artifacts: "build\\*.zip", fingerprint: true
                 }
             }
         }

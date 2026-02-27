@@ -133,7 +133,7 @@ pipeline {
                     pac solution unpack `
                         --zipfile '${EXPORT_DIR}\\${SOLUTION_NAME}.zip' `
                         --folder 'repo/${SOLUTION_SRC}' `
-                        --packagetype Unmanaged `
+                        --packagetype Both `
                         --allowDelete
                     Write-Host 'Unpack complete. Changed files:'
                     git -C repo diff --name-only

@@ -90,9 +90,8 @@ The pipelines authenticate to Dataverse using a Service Principal rather than a 
 
 1. Go to **Azure Portal → Azure Active Directory → App registrations → New registration**
 2. Name it something neutral (e.g. `dataverse-ci-agent`)
-3. Under **API permissions**, add: `Dynamics CRM → user_impersonation`
-4. Create a **Client secret** and copy the value immediately
-5. In each Dataverse environment, go to **Settings → Users → Application Users** and add the app registration as a System Administrator
+3. Create a **Client secret** and copy the value immediately
+4. In each Dataverse environment, go to **Settings → Users → Application Users** and add the app registration as a System Administrator
 
 ---
 

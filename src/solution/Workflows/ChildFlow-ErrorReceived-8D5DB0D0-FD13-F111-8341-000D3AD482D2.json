@@ -1,0 +1,139 @@
+{
+  "properties": {
+    "connectionReferences": {},
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "sourceName",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "sourceName",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_1": {
+                  "title": "sourceURL",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "sourceURL",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_2": {
+                  "title": "additionalDetails",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "additionalDetails",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text",
+                "text_1"
+              ]
+            }
+          },
+          "metadata": {
+            "operationMetadataId": "cdd3a191-5871-4977-81fe-4c9c850d1717"
+          }
+        }
+      },
+      "actions": {
+        "Scope_-_Main": {
+          "type": "Scope",
+          "actions": {
+            "Send_Email": {
+              "type": "Compose",
+              "inputs": "@null",
+              "metadata": {
+                "operationMetadataId": "3abdf969-4133-400b-92f5-9590a95557ca"
+              }
+            },
+            "Respond_to_a_Power_App_or_flow": {
+              "type": "Response",
+              "kind": "PowerApp",
+              "inputs": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "responsecode": {
+                      "title": "responseCode",
+                      "type": "string",
+                      "x-ms-content-hint": "TEXT",
+                      "x-ms-dynamically-added": true
+                    },
+                    "responsedescription": {
+                      "title": "responseDescription",
+                      "type": "string",
+                      "x-ms-content-hint": "TEXT",
+                      "x-ms-dynamically-added": true
+                    }
+                  },
+                  "additionalProperties": {}
+                },
+                "statusCode": 200,
+                "body": {
+                  "responsecode": "200",
+                  "responsedescription": "OK"
+                }
+              },
+              "runAfter": {
+                "Send_Email": [
+                  "SUCCEEDED"
+                ]
+              }
+            }
+          },
+          "runAfter": {}
+        },
+        "Scope_-_Error_Handling": {
+          "type": "Scope",
+          "actions": {
+            "Terminate_-_Failed_Main_Scope": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed"
+              },
+              "runAfter": {
+                "Send_Email_Error_Handling_Failure": [
+                  "SUCCEEDED"
+                ]
+              }
+            },
+            "Send_Email_Error_Handling_Failure": {
+              "type": "Compose",
+              "inputs": "@null",
+              "metadata": {
+                "operationMetadataId": "3abdf969-4133-400b-92f5-9590a95557ca"
+              }
+            }
+          },
+          "runAfter": {
+            "Scope_-_Main": [
+              "FAILED"
+            ]
+          }
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

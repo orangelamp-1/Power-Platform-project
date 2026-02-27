@@ -20,19 +20,65 @@
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{71375ddb-d2a3-47e9-9bb3-69a7ee1e8834}">
+                      <cell id="{71375ddb-d2a3-47e9-9bb3-69a7ee1e8834}" locklevel="1">
                         <labels>
                           <label description="" languagecode="1033" />
                         </labels>
-                        <control id="ol_taskid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="ol_taskid" />
+                        <control id="ol_taskid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="ol_taskid" disabled="true" />
                       </cell>
                     </row>
                     <row>
-                      <cell id="{406640c0-4cda-40c1-9cc7-ed9e03db5c71}">
+                      <cell id="{406640c0-4cda-40c1-9cc7-ed9e03db5c71}" visible="false">
                         <labels>
                           <label description="" languagecode="1033" />
                         </labels>
                         <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9e68b447-00b7-4bf7-95a6-6342f8318fc6}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_title" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_title" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{58073b22-d587-4fb6-855c-df0f52845e6e}" locklevel="0" colspan="1" rowspan="1" visible="false">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="statecode" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="statecode" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{5d21e0f5-cd4f-4b94-85cf-f07f6f30bf6b}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_status" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="ol_status" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{8d686d93-f665-40b6-95bd-f6359365acab}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_duedate" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="ol_duedate" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{87dd43ff-9edd-4560-9e1b-18a4b94e2265}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_assignedto" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ol_assignedto" disabled="false">
+                          <parameters>
+                            <DefaultViewId>{697DA552-1F93-4CBB-A2A0-82042C6DFB1C}</DefaultViewId>
+                            <AvailableViewIds>{8217A290-E738-4390-842D-EF014842D3E4},{697DA552-1F93-4CBB-A2A0-82042C6DFB1C},{89AA53D1-74BB-4CF5-A772-6AB6F1237D18}</AvailableViewIds>
+                            <DisableViewPicker>true</DisableViewPicker>
+                          </parameters>
+                        </control>
                       </cell>
                     </row>
                   </rows>
@@ -42,6 +88,9 @@
           </columns>
         </tab>
       </tabs>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
     </form>
     <IsCustomizable>1</IsCustomizable>
     <CanBeDeleted>1</CanBeDeleted>

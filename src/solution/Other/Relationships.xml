@@ -6,6 +6,7 @@
   <EntityRelationship Name="lk_ol_gr_task_modifiedby" />
   <EntityRelationship Name="lk_ol_gr_user_createdby" />
   <EntityRelationship Name="lk_ol_gr_user_modifiedby" />
+  <EntityRelationship Name="ol_gr_task_AssignedTo_ol_gr_user" />
   <EntityRelationship Name="owner_ol_gr_task" />
   <EntityRelationship Name="owner_ol_gr_user" />
   <EntityRelationship Name="team_ol_gr_task" />

@@ -14,7 +14,6 @@
           <cell name="ol_title" width="150" />
           <cell name="ol_status" width="100" />
           <cell name="createdon" width="100" />
-          <cell name="ol_shortdescription" width="150" />
         </row>
       </grid>
     </layoutxml>
@@ -31,7 +30,6 @@
           </filter>
           <attribute name="ol_status" />
           <attribute name="ol_title" />
-          <attribute name="ol_shortdescription" />
         </entity>
       </fetch>
     </fetchxml>

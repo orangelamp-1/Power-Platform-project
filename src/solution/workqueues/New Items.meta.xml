@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<workqueue workqueueid="6ac1a162-f713-f111-8341-000d3ad482d2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <allowupdateinputwhileprocessing>0</allowupdateinputwhileprocessing>
+  <continueprocessingifslaviolated>0</continueprocessingifslaviolated>
+  <inputschematype>0</inputschematype>
+  <iscustomizable>1</iscustomizable>
+  <itemmaxrequeuecount>40</itemmaxrequeuecount>
+  <itemmaxretrycount>0</itemmaxretrycount>
+  <name>New Items</name>
+  <prioritytype>0</prioritytype>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+  <workqueuekey>b53dbd3c-be9d-48e8-a841-477cc02a20e7</workqueuekey>
+  <workqueuetype>0</workqueuetype>
+</workqueue>

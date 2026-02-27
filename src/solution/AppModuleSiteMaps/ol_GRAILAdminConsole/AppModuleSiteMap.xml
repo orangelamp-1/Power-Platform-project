@@ -11,6 +11,9 @@
         <Title LCID="1033" Title="Area1" />
       </Titles>
       <Group Id="group_f0097a00" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IntroducedVersion="7.0.0.0" IsProfile="false" ToolTipResourseId="SitemapDesigner.Unknown">
+        <Titles>
+          <Title LCID="1033" Title="GRAIL" />
+        </Titles>
         <SubArea Id="subarea_a035552c" Icon="/_imgs/imagestrips/transparent_spacer.gif" Entity="ol_gr_task" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA" />
       </Group>
     </Area>

@@ -1,0 +1,122 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "ol_CRDataverse"
+        },
+        "runtimeSource": "embedded"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added,_modified_or_deleted": {
+          "type": "OpenApiConnectionWebhook",
+          "description": "New GRAIL Task",
+          "inputs": {
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "ol_gr_task",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/runas": 1
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "metadata": {
+            "operationMetadataId": "df0937a2-a2e5-4b45-b7bc-9ea2697ea751"
+          }
+        }
+      },
+      "actions": {
+        "Scope_-_Main": {
+          "type": "Scope",
+          "actions": {
+            "Add_a_new_row_-_Notes": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "annotations",
+                  "item/subject": "@{triggerOutputs()?['body/ol_taskid']} Created",
+                  "item/objectid_ol_gr_task@odata.bind": "ol_gr_tasks/@{triggerOutputs()?['body/ol_gr_taskid']}"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              },
+              "metadata": {
+                "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
+              }
+            }
+          },
+          "runAfter": {
+            "Compose": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Scope_-_Error_Handling": {
+          "type": "Scope",
+          "actions": {
+            "Terminate_-_Failed_Main_Scope": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed"
+              },
+              "runAfter": {
+                "Run_a_Child_Flow": [
+                  "SUCCEEDED"
+                ]
+              }
+            },
+            "Run_a_Child_Flow": {
+              "type": "Workflow",
+              "inputs": {
+                "host": {
+                  "workflowReferenceName": "8d5db0d0-fd13-f111-8341-000d3ad482d2"
+                },
+                "body": {
+                  "text": "@workflow()?['tags']['flowDisplayName']",
+                  "text_1": "@concat('https://flow.microsoft.com/manage/environments/', workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])",
+                  "text_2": "Task Notes Error"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Scope_-_Main": [
+              "FAILED"
+            ]
+          }
+        },
+        "Compose": {
+          "type": "Compose",
+          "inputs": "@workflow()",
+          "runAfter": {}
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

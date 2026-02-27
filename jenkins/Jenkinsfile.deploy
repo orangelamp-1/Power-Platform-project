@@ -10,7 +10,7 @@
 //
 // Parameters:
 //   DEPLOY_TARGET = "test"       → pack + deploy Managed to Test only
-//   DEPLOY_TARGET = "production" → pack + deploy Managed to Test, then prompt
+//   DEPLOY_TARGET = "Production" → pack + deploy Managed to Test, then prompt
 //                                  for manual approval before deploying to Prod
 //
 // Flow:
@@ -155,7 +155,7 @@ pipeline {
         // ─── Stage 5: Production Approval Gate ────────────────────────────────
         stage('Approve Production') {
             when {
-                expression { return params.DEPLOY_TARGET == 'production' }
+                expression { return params.DEPLOY_TARGET == 'Production' }
             }
             options {
                 timeout(time: 24, unit: 'HOURS')
@@ -184,7 +184,7 @@ pipeline {
         // ─── Stage 6: Deploy to Production ────────────────────────────────────
         stage('Deploy Prod') {
             when {
-                expression { return params.DEPLOY_TARGET == 'production' }
+                expression { return params.DEPLOY_TARGET == 'Production' }
             }
             steps {
                 echo '=== Deploying Managed solution to Production ==='

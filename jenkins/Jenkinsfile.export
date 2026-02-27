@@ -104,7 +104,7 @@ pipeline {
                     Write-Host '-- Exporting Unmanaged --'
                     pac solution export `
                         --name '${SOLUTION_NAME}' `
-                        --path '${EXPORT_DIR}\\${SOLUTION_NAME}_unmanaged.zip' `
+                        --path '${EXPORT_DIR}\\${SOLUTION_NAME}.zip' `
                         --managed false `
                         --overwrite
 
@@ -131,7 +131,7 @@ pipeline {
                 echo '=== Unpacking solution into source XML ==='
                 powershell """
                     pac solution unpack `
-                        --zipfile '${EXPORT_DIR}\\${SOLUTION_NAME}_unmanaged.zip' `
+                        --zipfile '${EXPORT_DIR}\\${SOLUTION_NAME}.zip' `
                         --folder 'repo/${SOLUTION_SRC}' `
                         --packagetype Both `
                         --allowDelete

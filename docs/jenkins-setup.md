@@ -2,7 +2,7 @@
 
 This document describes how to configure Jenkins to run the two pipelines that power the ALM process for this project.
 
-## Prerequisites 
+## Prerequisites
 
 ### Jenkins Service Account
 
@@ -36,6 +36,8 @@ See: [learn.microsoft.com — Enable Log On as a Service](https://learn.microsof
 - **Power Platform CLI**: [Installation Guide](https://learn.microsoft.com/en-us/power-platform/developer/howto/install-cli-msi)
 - **git**: [Download](https://git-scm.com/download/win)
 
+> **Important:** pac CLI must be installed at the Machine level (System PATH), not per-user. Copy the pac executable to `C:\Program Files\Microsoft\PowerAppsCli` and add that path to the System PATH via **System Properties → Environment Variables → System variables → Path**. Restart the Jenkins service afterwards so it picks up the updated PATH.
+
 ---
 
 ### Configure Windows Agent Label
@@ -60,8 +62,7 @@ Install via **Manage Jenkins → Plugins**:
 | Credentials Binding | Inject secrets into shell steps |
 | Timestamper | Adds timestamps to console output |
 | Workspace Cleanup | `cleanWs()` support |
-| Copy Artifact | `copyArtifacts()` — lets deploy pipeline pull the managed zip from the export pipeline |
-| Role-based Authorization Strategy | Optionally for Jenkins RBAC
+| Role-based Authorization Strategy | Optionally for Jenkins RBAC |
 
 ---
 
@@ -108,15 +109,26 @@ The pipelines authenticate to Dataverse using a Service Principal rather than a 
 | Script Path | `jenkins/Jenkinsfile.export` |
 | Build Triggers | *(none — manual only)* |
 
-The **Build with Parameters** button will prompt for an optional commit message and a **Force Export** checkbox before running.
+The **Build with Parameters** button prompts for two parameters before running:
 
-After saving the job, open its **Configure** page and grant the deploy job permission to copy artifacts:
+| Parameter | Description |
+|-----------|-------------|
+| `COMMIT_MESSAGE` | Optional description of what changed in Dev. Defaults to a timestamp message. |
+| `FORCE_EXPORT` | Tick to commit and push even if no source changes are detected after unpack. |
 
-1. Scroll to **Copy Artifact Permission Policy**
-2. Under **Permissions to Copy Artifacts**, enter `solution-deploy`
-3. Click **Save**
+### What the export pipeline does
 
-> Without this, the deploy pipeline's **Get Managed Zip** stage will fail with a permission error.
+1. Clones the repo into a `repo/` subdirectory
+2. Authenticates pac to the Dev environment using the service principal
+3. Exports two zips from Dev:
+   - `OL_MAIN.zip` — Unmanaged (used for unpacking to source XML)
+   - `OL_MAIN_managed.zip` — Managed (needed by the unpack `--packagetype Both`)
+4. Both zips are archived as Jenkins build artifacts
+5. Unpacks `OL_MAIN.zip` with `--packagetype Both` — writes Both-format source XML into `src/solution/`
+6. Aborts cleanly if nothing changed (unless `FORCE_EXPORT` is ticked)
+7. Commits and pushes all changed source files to `main`
+
+> **Note on solution versioning:** The version committed to source reflects whatever version is set in the Dev environment at export time. Bump the solution version in Dev before running the export pipeline if you want it reflected in source.
 
 ---
 
@@ -135,8 +147,20 @@ After saving the job, open its **Configure** page and grant the deploy job permi
 
 Run via **Build with Parameters**. You will be prompted to choose:
 
-- **`test`** — deploys Managed solution to Test only
-- **`production`** — deploys Managed to Test, then presents an approval prompt before deploying Managed to Production
+| Parameter | Options |
+|-----------|---------|
+| `DEPLOY_TARGET` | `Test` — packs and deploys Managed to Test only |
+| | `Production` — packs and deploys Managed to Test, then prompts for approval before deploying to Production |
+
+### What the deploy pipeline does
+
+1. Checks out the latest `main` branch
+2. Validates all solution XML files (`Solution.xml`, `Customizations.xml`, all entity definitions)
+3. Packs a Managed zip from the Both-format source using `pac solution pack --packagetype Managed`
+4. Imports the Managed zip into Test
+5. If `DEPLOY_TARGET = Production`: presents a manual approval gate, then imports into Production
+
+The Managed zip is archived as a Jenkins build artifact after packing.
 
 ---
 
@@ -146,7 +170,7 @@ The deploy pipeline pauses at the **Approve Production** stage and waits up to 2
 
 1. Open the `solution-deploy` build in Jenkins
 2. Click the **Approve & Deploy to Production** button (only visible to users in the `release-managers` group)
-3. Enter release notes and confirm the backup check
+3. Enter release notes and click confirm
 4. The Managed solution will then be imported to Production
 
 To configure the `release-managers` group go to **Manage Jenkins → Manage and Assign Roles** (requires Role Strategy Plugin).
@@ -157,23 +181,26 @@ To configure the `release-managers` group go to **Manage Jenkins → Manage and 
 
 ```
 Developer makes changes in Dev environment
+  (optionally bump solution version in Dev before exporting)
           │
           ▼
 Run "solution-export" job in Jenkins (manual)
-  → Exports + unpacks solution from Dev
+  → Exports Unmanaged + Managed zips from Dev
+  → Unpacks source XML (Both format) to src/solution/
   → Commits changed XML to main
+  → Archives both zips as build artifacts
           │
           ▼
 Run "solution-deploy" job in Jenkins (manual)
-  with DEPLOY_TARGET = test
+  with DEPLOY_TARGET = Test
   → Validates XML
-  → Packs Unmanaged + Managed zips
+  → Packs Managed zip from source
   → Deploys Managed to Test
           │
           │  (tester signs off on Test)
           ▼
 Run "solution-deploy" job again
-  with DEPLOY_TARGET = production
+  with DEPLOY_TARGET = Production
   → Validates + packs again from latest main
   → Deploys Managed to Test
   → Waits for approval (release manager approves in Jenkins UI)

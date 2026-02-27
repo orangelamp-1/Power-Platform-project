@@ -153,9 +153,8 @@ pipeline {
                     ).trim()
 
                     if (count == '0' && !params.FORCE_EXPORT) {
-                        echo 'No changes detected — Dev solution matches the repository. Nothing to commit.'
-                        currentBuild.result = 'SUCCESS'
-                        error('NO_CHANGES')
+                        echo 'No changes detected — Dev solution matches the repository. Skipping commit.'
+                        env.NO_CHANGES = 'true'
                     } else if (count == '0') {
                         echo 'No changes detected but FORCE_EXPORT is set — proceeding to commit anyway.'
                     } else {
@@ -167,6 +166,9 @@ pipeline {
 
         // ─── Stage 6: Commit and Push ─────────────────────────────────────────
         stage('Commit & Push') {
+            when {
+                expression { return env.NO_CHANGES != 'true' }
+            }
             steps {
                 echo '=== Committing changes to main ==='
                 script {
@@ -194,7 +196,13 @@ pipeline {
 
     post {
         success {
-            echo '✅ Export and commit successful. Run the deploy pipeline when ready to promote.'
+            script {
+                if (env.NO_CHANGES == 'true') {
+                    echo 'No changes in Dev — nothing committed. Repository is already up to date.'
+                } else {
+                    echo '✅ Export and commit successful. Run the deploy pipeline when ready to promote.'
+                }
+            }
         }
         failure {
             script {

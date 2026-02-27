@@ -12,9 +12,10 @@
 // Flow:
 //   1. Checkout     – clone the repo so we can commit back to it
 //   2. Authenticate – connect pac to the Dev environment
+//   2b. Set Version – increment solution Revision in Dev before export
 //   3. Export       – export Unmanaged + Managed solution zips from Dev
 //   4. Unpack       – explode the zip into tracked XML source files
-//   5. Diff check   – abort cleanly if nothing has changed
+//   5. Diff check   – log whether content changed beyond the version bump
 //   6. Commit       – stage all changes and push to main
 // =============================================================================
 
@@ -27,11 +28,6 @@ pipeline {
             name: 'COMMIT_MESSAGE',
             defaultValue: '',
             description: 'Describe what changed in Dev (e.g. "Add user email validation"). Leave blank to use a timestamp.'
-        )
-        booleanParam(
-            name: 'FORCE_EXPORT',
-            defaultValue: false,
-            description: 'Commit and push even if no source changes are detected after unpack.'
         )
     }
 
@@ -173,22 +169,22 @@ pipeline {
         }
 
         // ─── Stage 5: Diff Check ─────────────────────────────────────────────
+        // Solution.xml always changes (version bump), so it is excluded from
+        // the content-change count. The commit always runs — this stage is
+        // informational only.
         stage('Diff Check') {
             steps {
-                echo '=== Checking for changes ==='
+                echo '=== Checking for content changes (excluding version bump) ==='
                 script {
                     def count = powershell(
-                        script: '(git -C repo status --porcelain | Measure-Object -Line).Lines',
+                        script: "(git -C repo status --porcelain -- '${SOLUTION_SRC}' | Where-Object { \$_ -notmatch 'Solution\\.xml' } | Measure-Object -Line).Lines",
                         returnStdout: true
                     ).trim()
 
-                    if (count == '0' && !params.FORCE_EXPORT) {
-                        echo 'No changes detected — Dev solution matches the repository. Skipping commit.'
-                        env.NO_CHANGES = 'true'
-                    } else if (count == '0') {
-                        echo 'No changes detected but FORCE_EXPORT is set — proceeding to commit anyway.'
+                    if (count == '0') {
+                        echo 'Version bumped only — no other content changes detected.'
                     } else {
-                        echo "Detected ${count} changed file(s) — proceeding to commit."
+                        echo "Version bumped + ${count} other file(s) changed."
                     }
                 }
             }
@@ -196,9 +192,6 @@ pipeline {
 
         // ─── Stage 6: Commit and Push ─────────────────────────────────────────
         stage('Commit & Push') {
-            when {
-                expression { return env.NO_CHANGES != 'true' }
-            }
             steps {
                 echo '=== Committing changes to main ==='
                 script {
@@ -226,13 +219,7 @@ pipeline {
 
     post {
         success {
-            script {
-                if (env.NO_CHANGES == 'true') {
-                    echo 'No changes in Dev — nothing committed. Repository is already up to date.'
-                } else {
-                    echo '✅ Export and commit successful. Run the deploy pipeline when ready to promote.'
-                }
-            }
+            echo '✅ Export and commit successful. Run the deploy pipeline when ready to promote.'
         }
         failure {
             script {

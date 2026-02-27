@@ -94,6 +94,36 @@ pipeline {
             }
         }
 
+        // ─── Stage 2b: Set Solution Version ──────────────────────────────────
+        stage('Set Version') {
+            steps {
+                echo '=== Bumping solution Revision in Dev ==='
+                powershell """
+                    # ── Edit this line to change Major.Minor.Build ──────────────
+                    \$prefix = '1.0.0'
+                    # ────────────────────────────────────────────────────────────
+
+                    [xml]\$sol = Get-Content 'repo/${SOLUTION_SRC}/Other/Solution.xml'
+                    \$current       = \$sol.ImportExportXml.SolutionManifest.Version
+                    \$parts         = \$current.Split('.')
+                    \$currentPrefix = \$parts[0..2] -join '.'
+
+                    if (\$currentPrefix -eq \$prefix) {
+                        \$newRevision = [int]\$parts[3] + 1
+                    } else {
+                        Write-Host "Prefix changed (\$currentPrefix → \$prefix) — resetting Revision to 0"
+                        \$newRevision = 0
+                    }
+
+                    \$newVersion = "\$prefix.\$newRevision"
+                    Write-Host "Bumping version: \$current → \$newVersion"
+                    pac solution online-version `
+                        --solution-name '${SOLUTION_NAME}' `
+                        --solution-version \$newVersion
+                """
+            }
+        }
+
         // ─── Stage 3: Export Unmanaged + Managed Solutions ────────────────────
         stage('Export') {
             steps {

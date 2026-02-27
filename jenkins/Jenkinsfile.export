@@ -15,7 +15,7 @@
 //   2b. Set Version – increment solution Revision in Dev before export
 //   3. Export       – export Unmanaged + Managed solution zips from Dev
 //   4. Unpack       – explode the zip into tracked XML source files
-//   5. Diff check   – log whether content changed beyond the version bump
+//   5. Diff check   – log change count (1 = version only, >1 = content changes too)
 //   6. Commit       – stage all changes and push to main
 // =============================================================================
 
@@ -169,22 +169,21 @@ pipeline {
         }
 
         // ─── Stage 5: Diff Check ─────────────────────────────────────────────
-        // Solution.xml always changes (version bump), so it is excluded from
-        // the content-change count. The commit always runs — this stage is
-        // informational only.
+        // Solution.xml always changes (version bump), so count == 1 means
+        // version-only. The commit always runs — this stage is informational only.
         stage('Diff Check') {
             steps {
-                echo '=== Checking for content changes (excluding version bump) ==='
+                echo '=== Checking for content changes ==='
                 script {
                     def count = powershell(
-                        script: "(git -C repo status --porcelain -- '${SOLUTION_SRC}' | Where-Object { \$_ -notmatch 'Solution\\.xml' } | Measure-Object -Line).Lines",
+                        script: '(git -C repo status --porcelain | Measure-Object -Line).Lines',
                         returnStdout: true
                     ).trim()
 
-                    if (count == '0') {
+                    if (count == '1') {
                         echo 'Version bumped only — no other content changes detected.'
                     } else {
-                        echo "Version bumped + ${count} other file(s) changed."
+                        echo "Version bumped + ${(count as Integer) - 1} other file(s) changed."
                     }
                 }
             }

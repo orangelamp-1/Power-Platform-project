@@ -145,12 +145,13 @@ The **Build with Parameters** button prompts for two parameters before running:
 | Script Path | `jenkins/Jenkinsfile.deploy` |
 | Build Triggers | *(none — manual only)* |
 
-Run via **Build with Parameters**. You will be prompted to choose:
+Run via **Build with Parameters**. You will be prompted for:
 
-| Parameter | Options |
-|-----------|---------|
-| `DEPLOY_TARGET` | `Test` — packs and deploys Managed to Test only |
-| | `Production` — packs and deploys Managed to Test, then prompts for approval before deploying to Production |
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `DEPLOY_TARGET` | `Test` | `Test` — packs and deploys Managed to Test only. `Production` — deploys to Test then prompts for approval before deploying to Production. |
+| `STAGE_AND_UPGRADE` | off | Import using `--stage-and-upgrade` instead of a direct overwrite. Use when deploying a new solution version. |
+| `FORCE_OVERWRITE` | off | Force overwrite of unmanaged customisations in the target environment. Slow — only enable when needed. |
 
 ### What the deploy pipeline does
 

@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Entity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Name LocalizedName="GRAIL Task" OriginalName="GRAIL Task">ol_GR_Task</Name>
+  <Name LocalizedName="GRAIL User" OriginalName="GRAIL User">ol_GR_User</Name>
   <EntityInfo>
-    <entity Name="ol_GR_Task">
+    <entity Name="ol_GR_User">
       <LocalizedNames>
-        <LocalizedName description="GRAIL Task" languagecode="1033" />
+        <LocalizedName description="GRAIL User" languagecode="1033" />
       </LocalizedNames>
       <LocalizedCollectionNames>
-        <LocalizedCollectionName description="GRAIL Tasks" languagecode="1033" />
+        <LocalizedCollectionName description="GRAIL Users" languagecode="1033" />
       </LocalizedCollectionNames>
       <Descriptions>
-        <Description description="Task record table. " languagecode="1033" />
+        <Description description="" languagecode="1033" />
       </Descriptions>
       <attributes>
         <attribute PhysicalName="CreatedBy">
@@ -329,49 +329,10 @@
             <Description description="Unique identifier of the delegate user who modified the record." languagecode="1033" />
           </Descriptions>
         </attribute>
-        <attribute PhysicalName="ol_Description">
-          <Type>ntext</Type>
-          <Name>ol_description</Name>
-          <LogicalName>ol_description</LogicalName>
-          <RequiredLevel>recommended</RequiredLevel>
-          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
-          <ImeMode>auto</ImeMode>
-          <ValidForUpdateApi>1</ValidForUpdateApi>
-          <ValidForReadApi>1</ValidForReadApi>
-          <ValidForCreateApi>1</ValidForCreateApi>
-          <IsCustomField>1</IsCustomField>
-          <IsAuditEnabled>1</IsAuditEnabled>
-          <IsSecured>0</IsSecured>
-          <IntroducedVersion>1.0</IntroducedVersion>
-          <IsCustomizable>1</IsCustomizable>
-          <IsRenameable>1</IsRenameable>
-          <CanModifySearchSettings>1</CanModifySearchSettings>
-          <CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
-          <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings>
-          <SourceType>0</SourceType>
-          <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
-          <IsSortableEnabled>0</IsSortableEnabled>
-          <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings>
-          <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
-          <IsDataSourceSecret>0</IsDataSourceSecret>
-          <AutoNumberFormat></AutoNumberFormat>
-          <IsSearchable>0</IsSearchable>
-          <IsFilterable>0</IsFilterable>
-          <IsRetrievable>0</IsRetrievable>
-          <IsLocalizable>0</IsLocalizable>
-          <Format>text</Format>
-          <MaxLength>5000</MaxLength>
-          <displaynames>
-            <displayname description="Description" languagecode="1033" />
-          </displaynames>
-          <Descriptions>
-            <Description description="Full description for this GRAIL Task. Multiline 5000 char limit." languagecode="1033" />
-          </Descriptions>
-        </attribute>
-        <attribute PhysicalName="ol_GR_TaskId">
+        <attribute PhysicalName="ol_GR_UserId">
           <Type>primarykey</Type>
-          <Name>ol_gr_taskid</Name>
-          <LogicalName>ol_gr_taskid</LogicalName>
+          <Name>ol_gr_userid</Name>
+          <LogicalName>ol_gr_userid</LogicalName>
           <RequiredLevel>systemrequired</RequiredLevel>
           <DisplayMask>ValidForAdvancedFind|RequiredForGrid</DisplayMask>
           <ImeMode>auto</ImeMode>
@@ -399,97 +360,18 @@
           <IsRetrievable>1</IsRetrievable>
           <IsLocalizable>0</IsLocalizable>
           <displaynames>
-            <displayname description="GRAIL Task GUID" languagecode="1033" />
+            <displayname description="GRAIL User GUID" languagecode="1033" />
           </displaynames>
           <Descriptions>
             <Description description="Unique identifier GUID for entity instances" languagecode="1033" />
           </Descriptions>
         </attribute>
-        <attribute PhysicalName="ol_ShortDescription">
+        <attribute PhysicalName="ol_UserID">
           <Type>nvarchar</Type>
-          <Name>ol_shortdescription</Name>
-          <LogicalName>ol_shortdescription</LogicalName>
-          <RequiredLevel>recommended</RequiredLevel>
-          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
-          <ImeMode>auto</ImeMode>
-          <ValidForUpdateApi>1</ValidForUpdateApi>
-          <ValidForReadApi>1</ValidForReadApi>
-          <ValidForCreateApi>1</ValidForCreateApi>
-          <IsCustomField>1</IsCustomField>
-          <IsAuditEnabled>1</IsAuditEnabled>
-          <IsSecured>0</IsSecured>
-          <IntroducedVersion>1.0</IntroducedVersion>
-          <IsCustomizable>1</IsCustomizable>
-          <IsRenameable>1</IsRenameable>
-          <CanModifySearchSettings>1</CanModifySearchSettings>
-          <CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
-          <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings>
-          <SourceType>0</SourceType>
-          <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
-          <IsSortableEnabled>0</IsSortableEnabled>
-          <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings>
-          <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
-          <IsDataSourceSecret>0</IsDataSourceSecret>
-          <AutoNumberFormat></AutoNumberFormat>
-          <IsSearchable>0</IsSearchable>
-          <IsFilterable>0</IsFilterable>
-          <IsRetrievable>0</IsRetrievable>
-          <IsLocalizable>0</IsLocalizable>
-          <Format>text</Format>
-          <MaxLength>100</MaxLength>
-          <Length>200</Length>
-          <displaynames>
-            <displayname description="Short Description" languagecode="1033" />
-          </displaynames>
-          <Descriptions>
-            <Description description="Short description for this GRAIL Task. Single line 100 char limit." languagecode="1033" />
-          </Descriptions>
-        </attribute>
-        <attribute PhysicalName="ol_Status">
-          <Type>picklist</Type>
-          <Name>ol_status</Name>
-          <LogicalName>ol_status</LogicalName>
+          <Name>ol_userid</Name>
+          <LogicalName>ol_userid</LogicalName>
           <RequiredLevel>required</RequiredLevel>
-          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
-          <ImeMode>auto</ImeMode>
-          <ValidForUpdateApi>1</ValidForUpdateApi>
-          <ValidForReadApi>1</ValidForReadApi>
-          <ValidForCreateApi>1</ValidForCreateApi>
-          <IsCustomField>1</IsCustomField>
-          <IsAuditEnabled>1</IsAuditEnabled>
-          <IsSecured>0</IsSecured>
-          <IntroducedVersion>1.0.0.0</IntroducedVersion>
-          <IsCustomizable>1</IsCustomizable>
-          <IsRenameable>1</IsRenameable>
-          <CanModifySearchSettings>1</CanModifySearchSettings>
-          <CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
-          <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings>
-          <SourceType>0</SourceType>
-          <IsGlobalFilterEnabled>1</IsGlobalFilterEnabled>
-          <IsSortableEnabled>1</IsSortableEnabled>
-          <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings>
-          <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
-          <IsDataSourceSecret>0</IsDataSourceSecret>
-          <AutoNumberFormat></AutoNumberFormat>
-          <IsSearchable>0</IsSearchable>
-          <IsFilterable>0</IsFilterable>
-          <IsRetrievable>0</IsRetrievable>
-          <IsLocalizable>0</IsLocalizable>
-          <AppDefaultValue>125250000</AppDefaultValue>
-          <OptionSetName>ol_taskstatus</OptionSetName>
-          <displaynames>
-            <displayname description="Task Status" languagecode="1033" />
-          </displaynames>
-          <Descriptions>
-            <Description description="Status of this GRAIL Task" languagecode="1033" />
-          </Descriptions>
-        </attribute>
-        <attribute PhysicalName="ol_TaskID">
-          <Type>nvarchar</Type>
-          <Name>ol_taskid</Name>
-          <LogicalName>ol_taskid</LogicalName>
-          <RequiredLevel>required</RequiredLevel>
-          <DisplayMask>QueueItemTitle|PrimaryName|ReadOnlyInUI|ValidForAdvancedFind|ValidForForm|ValidForGrid|RequiredForForm</DisplayMask>
+          <DisplayMask>PrimaryName|ReadOnlyInUI|ValidForAdvancedFind|ValidForForm|ValidForGrid|RequiredForForm</DisplayMask>
           <ImeMode>auto</ImeMode>
           <ValidForUpdateApi>1</ValidForUpdateApi>
           <ValidForReadApi>1</ValidForReadApi>
@@ -510,7 +392,7 @@
           <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
           <ExternalName></ExternalName>
           <IsDataSourceSecret>0</IsDataSourceSecret>
-          <AutoNumberFormat>GR-TSK{SEQNUM:6}</AutoNumberFormat>
+          <AutoNumberFormat>GR-USR{SEQNUM:6}</AutoNumberFormat>
           <IsSearchable>1</IsSearchable>
           <IsFilterable>0</IsFilterable>
           <IsRetrievable>1</IsRetrievable>
@@ -519,50 +401,10 @@
           <MaxLength>200</MaxLength>
           <Length>400</Length>
           <displaynames>
-            <displayname description="TaskID" languagecode="1033" />
+            <displayname description="UserID" languagecode="1033" />
           </displaynames>
           <Descriptions>
-            <Description description="Unique ID for GRAIL Task records GR-TSK{SEQNUM:6}" languagecode="1033" />
-          </Descriptions>
-        </attribute>
-        <attribute PhysicalName="ol_Title">
-          <Type>nvarchar</Type>
-          <Name>ol_title</Name>
-          <LogicalName>ol_title</LogicalName>
-          <RequiredLevel>required</RequiredLevel>
-          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
-          <ImeMode>auto</ImeMode>
-          <ValidForUpdateApi>1</ValidForUpdateApi>
-          <ValidForReadApi>1</ValidForReadApi>
-          <ValidForCreateApi>1</ValidForCreateApi>
-          <IsCustomField>1</IsCustomField>
-          <IsAuditEnabled>1</IsAuditEnabled>
-          <IsSecured>0</IsSecured>
-          <IntroducedVersion>1.0</IntroducedVersion>
-          <IsCustomizable>1</IsCustomizable>
-          <IsRenameable>1</IsRenameable>
-          <CanModifySearchSettings>1</CanModifySearchSettings>
-          <CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
-          <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings>
-          <SourceType>0</SourceType>
-          <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
-          <IsSortableEnabled>0</IsSortableEnabled>
-          <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings>
-          <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
-          <IsDataSourceSecret>0</IsDataSourceSecret>
-          <AutoNumberFormat></AutoNumberFormat>
-          <IsSearchable>0</IsSearchable>
-          <IsFilterable>0</IsFilterable>
-          <IsRetrievable>0</IsRetrievable>
-          <IsLocalizable>0</IsLocalizable>
-          <Format>text</Format>
-          <MaxLength>100</MaxLength>
-          <Length>200</Length>
-          <displaynames>
-            <displayname description="Title" languagecode="1033" />
-          </displaynames>
-          <Descriptions>
-            <Description description="Title of this GRAIL Task." languagecode="1033" />
+            <Description description="Unique ID for GRAIL User records GR-USR{SEQNUM:6}" languagecode="1033" />
           </Descriptions>
         </attribute>
         <attribute PhysicalName="OverriddenCreatedOn">
@@ -794,7 +636,7 @@
           <IsFilterable>1</IsFilterable>
           <IsRetrievable>0</IsRetrievable>
           <IsLocalizable>0</IsLocalizable>
-          <optionset Name="ol_gr_task_statecode">
+          <optionset Name="ol_gr_user_statecode">
             <OptionSetType>state</OptionSetType>
             <IntroducedVersion>1.0.0.0</IntroducedVersion>
             <IsCustomizable>1</IsCustomizable>
@@ -802,7 +644,7 @@
               <displayname description="Status" languagecode="1033" />
             </displaynames>
             <Descriptions>
-              <Description description="Status of the GRAIL Task" languagecode="1033" />
+              <Description description="Status of the GRAIL User" languagecode="1033" />
             </Descriptions>
             <states>
               <state value="0" defaultstatus="1" invariantname="Active">
@@ -821,7 +663,7 @@
             <displayname description="Status" languagecode="1033" />
           </displaynames>
           <Descriptions>
-            <Description description="Status of the GRAIL Task" languagecode="1033" />
+            <Description description="Status of the GRAIL User" languagecode="1033" />
           </Descriptions>
         </attribute>
         <attribute PhysicalName="statuscode">
@@ -854,7 +696,7 @@
           <IsFilterable>0</IsFilterable>
           <IsRetrievable>0</IsRetrievable>
           <IsLocalizable>0</IsLocalizable>
-          <optionset Name="ol_gr_task_statuscode">
+          <optionset Name="ol_gr_user_statuscode">
             <OptionSetType>status</OptionSetType>
             <IntroducedVersion>1.0.0.0</IntroducedVersion>
             <IsCustomizable>1</IsCustomizable>
@@ -862,7 +704,7 @@
               <displayname description="Status Reason" languagecode="1033" />
             </displaynames>
             <Descriptions>
-              <Description description="Reason for the status of the GRAIL Task" languagecode="1033" />
+              <Description description="Reason for the status of the GRAIL User" languagecode="1033" />
             </Descriptions>
             <statuses>
               <status value="1" state="0">
@@ -881,7 +723,7 @@
             <displayname description="Status Reason" languagecode="1033" />
           </displaynames>
           <Descriptions>
-            <Description description="Reason for the status of the GRAIL Task" languagecode="1033" />
+            <Description description="Reason for the status of the GRAIL User" languagecode="1033" />
           </Descriptions>
         </attribute>
         <attribute PhysicalName="TimeZoneRuleVersionNumber">
@@ -963,17 +805,17 @@
           </Descriptions>
         </attribute>
       </attributes>
-      <EntitySetName>ol_gr_tasks</EntitySetName>
+      <EntitySetName>ol_gr_users</EntitySetName>
       <IsDuplicateCheckSupported>1</IsDuplicateCheckSupported>
       <IsBusinessProcessEnabled>0</IsBusinessProcessEnabled>
       <IsRequiredOffline>0</IsRequiredOffline>
       <IsInteractionCentricEnabled>0</IsInteractionCentricEnabled>
-      <IsCollaboration>1</IsCollaboration>
+      <IsCollaboration>0</IsCollaboration>
       <AutoRouteToOwnerQueue>0</AutoRouteToOwnerQueue>
       <IsConnectionsEnabled>1</IsConnectionsEnabled>
       <EntityColor></EntityColor>
       <IsDocumentManagementEnabled>0</IsDocumentManagementEnabled>
-      <AutoCreateAccessTeams>1</AutoCreateAccessTeams>
+      <AutoCreateAccessTeams>0</AutoCreateAccessTeams>
       <IsOneNoteIntegrationEnabled>0</IsOneNoteIntegrationEnabled>
       <IsKnowledgeManagementEnabled>0</IsKnowledgeManagementEnabled>
       <IsSLAEnabled>0</IsSLAEnabled>
@@ -988,7 +830,7 @@
       <IsActivityParty>1</IsActivityParty>
       <IsReplicated>0</IsReplicated>
       <IsReplicationUserFiltered>0</IsReplicationUserFiltered>
-      <IsMailMergeEnabled>0</IsMailMergeEnabled>
+      <IsMailMergeEnabled>1</IsMailMergeEnabled>
       <IsVisibleInMobile>0</IsVisibleInMobile>
       <IsVisibleInMobileClient>0</IsVisibleInMobileClient>
       <IsReadOnlyInMobileClient>0</IsReadOnlyInMobileClient>
@@ -997,7 +839,7 @@
       <MobileOfflineFilters></MobileOfflineFilters>
       <IsMapiGridEnabled>1</IsMapiGridEnabled>
       <IsReadingPaneEnabled>1</IsReadingPaneEnabled>
-      <IsQuickCreateEnabled>1</IsQuickCreateEnabled>
+      <IsQuickCreateEnabled>0</IsQuickCreateEnabled>
       <SyncToExternalSearchIndex>1</SyncToExternalSearchIndex>
       <IntroducedVersion>1.0.0.0</IntroducedVersion>
       <IsCustomizable>0</IsCustomizable>
@@ -1028,8 +870,6 @@
       <IsEnabledForExternalChannels>0</IsEnabledForExternalChannels>
       <IsMSTeamsIntegrationEnabled>0</IsMSTeamsIntegrationEnabled>
       <IsSolutionAware>0</IsSolutionAware>
-      <HasRelatedNotes>True</HasRelatedNotes>
-      <HasRelatedFeedback>True</HasRelatedFeedback>
     </entity>
   </EntityInfo>
   <FormXml />

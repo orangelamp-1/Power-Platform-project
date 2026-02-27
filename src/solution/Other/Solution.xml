@@ -79,6 +79,7 @@
     </Publisher>
     <RootComponents>
       <RootComponent type="1" schemaName="ol_gr_task" behavior="0" />
+      <RootComponent type="1" schemaName="ol_gr_user" behavior="0" />
       <RootComponent type="62" schemaName="ol_GRAILAdminConsole" behavior="0" />
       <RootComponent type="80" schemaName="ol_GRAILAdminConsole" behavior="0" />
       <RootComponent type="9" schemaName="ol_taskstatus" behavior="0" />

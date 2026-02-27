@@ -32,6 +32,16 @@ pipeline {
             choices: ['Test', 'Production'],
             description: 'Choose "Test" to deploy to Test only. Choose "Production" to deploy to Test then prompt for Production approval.'
         )
+        booleanParam(
+            name: 'STAGE_AND_UPGRADE',
+            defaultValue: false,
+            description: 'Import using stage-and-upgrade instead of a direct overwrite. Use when upgrading to a new solution version.'
+        )
+        booleanParam(
+            name: 'FORCE_OVERWRITE',
+            defaultValue: false,
+            description: 'Force overwrite of unmanaged customisations in the target environment. Slow — only enable when needed.'
+        )
     }
 
     environment {
@@ -138,11 +148,13 @@ pipeline {
                         --clientSecret "\$env:CLIENT_SECRET" `
                         --name TestEnvironment
                     pac auth select --name TestEnvironment
+                    \$upgradeFlag = if ('${params.STAGE_AND_UPGRADE}' -eq 'true') { '--stage-and-upgrade' } else { '' }
+                    \$overwriteFlag = if ('${params.FORCE_OVERWRITE}' -eq 'true') { '--force-overwrite' } else { '' }
                     pac solution import `
                         --path '${BUILD_DIR}\\${SOLUTION_NAME}_managed.zip' `
                         --activate-plugins `
-                        --force-overwrite `
-                        --publish-changes
+                        \$upgradeFlag `
+                        \$overwriteFlag
                     Write-Host 'Test deployment complete.'
                 """
             }
@@ -196,10 +208,13 @@ pipeline {
                         --clientSecret "\$env:CLIENT_SECRET" `
                         --name ProdEnvironment
                     pac auth select --name ProdEnvironment
+                    \$upgradeFlag = if ('${params.STAGE_AND_UPGRADE}' -eq 'true') { '--stage-and-upgrade' } else { '' }
+                    \$overwriteFlag = if ('${params.FORCE_OVERWRITE}' -eq 'true') { '--force-overwrite' } else { '' }
                     pac solution import `
                         --path '${BUILD_DIR}\\${SOLUTION_NAME}_managed.zip' `
                         --activate-plugins `
-                        --publish-changes
+                        \$upgradeFlag `
+                        \$overwriteFlag
                     Write-Host 'Production deployment complete.'
                 """
             }

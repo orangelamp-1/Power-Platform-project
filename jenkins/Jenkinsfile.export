@@ -15,7 +15,7 @@
 //   2b. Set Version – increment solution Revision in Dev before export
 //   3. Export       – export Unmanaged + Managed solution zips from Dev
 //   4. Unpack       – explode the zip into tracked XML source files
-//   5. Diff check   – log change count (1 = version only, >1 = content changes too)
+//   5. Diff check   – skip commit if version-only (unless FORCE_EXPORT is set)
 //   6. Commit       – stage all changes and push to main
 // =============================================================================
 
@@ -28,6 +28,11 @@ pipeline {
             name: 'COMMIT_MESSAGE',
             defaultValue: '',
             description: 'Describe what changed in Dev (e.g. "Add user email validation"). Leave blank to use a timestamp.'
+        )
+        booleanParam(
+            name: 'FORCE_EXPORT',
+            defaultValue: false,
+            description: 'Commit and push even if no content changes are detected after unpack (version bump only).'
         )
     }
 
@@ -170,7 +175,7 @@ pipeline {
 
         // ─── Stage 5: Diff Check ─────────────────────────────────────────────
         // Solution.xml always changes (version bump), so count == 1 means
-        // version-only. The commit always runs — this stage is informational only.
+        // version-only. Skip commit unless FORCE_EXPORT is set.
         stage('Diff Check') {
             steps {
                 echo '=== Checking for content changes ==='
@@ -180,10 +185,13 @@ pipeline {
                         returnStdout: true
                     ).trim()
 
-                    if (count == '1') {
-                        echo 'Version bumped only — no other content changes detected.'
+                    if (count == '1' && !params.FORCE_EXPORT) {
+                        echo 'Version bumped only — no content changes detected. Skipping commit.'
+                        env.NO_CHANGES = 'true'
+                    } else if (count == '1') {
+                        echo 'Version bumped only but FORCE_EXPORT is set — proceeding to commit anyway.'
                     } else {
-                        echo "Version bumped + ${(count as Integer) - 1} other file(s) changed."
+                        echo "Version bumped + ${(count as Integer) - 1} other file(s) changed — proceeding to commit."
                     }
                 }
             }
@@ -191,6 +199,9 @@ pipeline {
 
         // ─── Stage 6: Commit and Push ─────────────────────────────────────────
         stage('Commit & Push') {
+            when {
+                expression { return env.NO_CHANGES != 'true' }
+            }
             steps {
                 echo '=== Committing changes to main ==='
                 script {
@@ -218,7 +229,13 @@ pipeline {
 
     post {
         success {
-            echo '✅ Export and commit successful. Run the deploy pipeline when ready to promote.'
+            script {
+                if (env.NO_CHANGES == 'true') {
+                    echo 'Version bumped in Dev but no content changes — nothing committed. Repository is already up to date.'
+                } else {
+                    echo '✅ Export and commit successful. Run the deploy pipeline when ready to promote.'
+                }
+            }
         }
         failure {
             script {

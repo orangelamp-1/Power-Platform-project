@@ -36,3 +36,11 @@ Security role for user / agent
 
 - Triggered flow - when a holiday is added or removed or editied - recalcaulte the working day table if holiday was within, then use that record to loop over all relevant records and recalcualte the due dates for Low/Medium/High.
 - Will need to store the previous date in a second field to be able to see OG value if a holiday date is changed.
+
+## Error/audit
+- Error log table
+- Use error handling flow to patch to - capture flow link, context, flow name, time etc.
+- API audit table, capture request source, content, responce, timestanp, calling source address.
+- Add both to admin console.
+- Patch to error log table from canvas app - security role - create only for owned records
+- Console.SessionID - userUPN, timestamp. Silently patch.

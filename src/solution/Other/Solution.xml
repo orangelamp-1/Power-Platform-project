@@ -6,7 +6,7 @@
       <LocalizedName description="OL_MAIN" languagecode="1033" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.0.0.4</Version>
+    <Version>1.0.0.5</Version>
     <Managed>2</Managed>
     <Publisher>
       <UniqueName>orangelamp</UniqueName>
@@ -79,7 +79,6 @@
     </Publisher>
     <RootComponents>
       <RootComponent type="1" schemaName="ol_gr_task" behavior="0" />
-      <RootComponent type="1" schemaName="ol_gr_user" behavior="0" />
       <RootComponent type="1" schemaName="systemuser" behavior="1" />
       <RootComponent type="20" id="{9ff633d2-7e15-f111-8342-7c1e52030d20}" behavior="0" />
       <RootComponent type="20" id="{edf29496-7e15-f111-8342-7c1e52030d20}" behavior="0" />

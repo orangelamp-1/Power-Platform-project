@@ -51,18 +51,6 @@
                         <control id="ol_duedate" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="ol_duedate" disabled="false" />
                       </cell>
                     </row>
-                    <row>
-                      <cell id="{5dba9496-1002-4401-83ee-dd83fd71aca3}" locklevel="0" colspan="1" rowspan="1">
-                        <labels>
-                          <label description="Assigned To" languagecode="1033" />
-                        </labels>
-                        <control id="ol_assignedto" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ol_assignedto" disabled="false">
-                          <parameters>
-                            <DisableViewPicker>true</DisableViewPicker>
-                          </parameters>
-                        </control>
-                      </cell>
-                    </row>
                   </rows>
                 </section>
                 <section name="Task Details" id="3467fe12-c0e7-403f-8d56-88344f80a5b5" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Top" columns="1" labelwidth="115">
@@ -140,15 +128,10 @@
                 <label description="" languagecode="1033" />
               </labels>
             </cell>
-            <cell id="{088dfb76-6c4b-45c6-84a5-af02a179adf4}" locklevel="1" colspan="1" rowspan="1">
+            <cell locklevel="0" id="{1fe5c4d1-deda-4a0f-a67e-7bb72738797e}">
               <labels>
-                <label description="Assigned To" languagecode="1033" />
+                <label description="" languagecode="1033" />
               </labels>
-              <control id="header_ol_assignedto" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ol_assignedto" disabled="false">
-                <parameters>
-                  <DisableViewPicker>false</DisableViewPicker>
-                </parameters>
-              </control>
             </cell>
             <cell locklevel="0" id="{4d9f97f5-a9d5-4c75-ab4e-224bdd4fe945}">
               <labels>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26022.150" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26022.00150">
+<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26022.152" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26022.00152">
   <Entities />
   <Roles />
   <Workflows />
@@ -11,6 +11,16 @@
   <optionsets />
   <CustomControls />
   <AppModuleSiteMaps />
+  <teamtemplates>
+    <teamtemplate teamtemplateid="9ac3abf0-7c15-f111-8342-7c1e52030d20">
+      <entitylogicalname>ol_gr_task</entitylogicalname>
+      <defaultaccessrightsmask>5</defaultaccessrightsmask>
+      <description>Grants read access to GRAIL Task, to allow users to read tickets raised by themselves.</description>
+      <iscustomizable>1</iscustomizable>
+      <issystem>0</issystem>
+      <teamtemplatename>Access Team - Read GRAIL Task</teamtemplatename>
+    </teamtemplate>
+  </teamtemplates>
   <AppModules />
   <EntityDataProviders />
   <connectionreferences>

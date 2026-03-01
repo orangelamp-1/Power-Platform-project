@@ -67,20 +67,6 @@
                         <control id="ol_duedate" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="ol_duedate" disabled="false" />
                       </cell>
                     </row>
-                    <row>
-                      <cell id="{87dd43ff-9edd-4560-9e1b-18a4b94e2265}" locklevel="0" colspan="1" rowspan="1">
-                        <labels>
-                          <label description="" languagecode="1033" />
-                        </labels>
-                        <control id="ol_assignedto" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ol_assignedto" disabled="false">
-                          <parameters>
-                            <DefaultViewId>{697DA552-1F93-4CBB-A2A0-82042C6DFB1C}</DefaultViewId>
-                            <AvailableViewIds>{8217A290-E738-4390-842D-EF014842D3E4},{697DA552-1F93-4CBB-A2A0-82042C6DFB1C},{89AA53D1-74BB-4CF5-A772-6AB6F1237D18}</AvailableViewIds>
-                            <DisableViewPicker>true</DisableViewPicker>
-                          </parameters>
-                        </control>
-                      </cell>
-                    </row>
                   </rows>
                 </section>
               </sections>

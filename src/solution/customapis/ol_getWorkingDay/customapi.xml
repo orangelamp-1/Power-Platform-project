@@ -1,0 +1,21 @@
+<customapi uniquename="ol_getWorkingDay">
+  <allowedcustomprocessingsteptype>1</allowedcustomprocessingsteptype>
+  <bindingtype>0</bindingtype>
+  <description default="Get the nth working DateTime from now().">
+    <label description="Get the nth working DateTime from now()." languagecode="1033" />
+  </description>
+  <displayname default="getWorkingDay">
+    <label description="getWorkingDay" languagecode="1033" />
+  </displayname>
+  <fxexpressionid>
+    <uniquename>ol_getWorkingDay</uniquename>
+  </fxexpressionid>
+  <iscustomizable>1</iscustomizable>
+  <isfunction>0</isfunction>
+  <isprivate>0</isprivate>
+  <name>getWorkingDay</name>
+  <plugintypeid>
+    <plugintypeexportkey>462b3e8f-beb4-4981-9b87-a60c2162a9f7</plugintypeexportkey>
+  </plugintypeid>
+  <workflowsdkstepenabled>0</workflowsdkstepenabled>
+</customapi>

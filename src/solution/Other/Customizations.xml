@@ -12,13 +12,13 @@
   <CustomControls />
   <AppModuleSiteMaps />
   <teamtemplates>
-    <teamtemplate teamtemplateid="9ac3abf0-7c15-f111-8342-7c1e52030d20">
+    <teamtemplate teamtemplateid="3b6d6949-8715-f111-8342-7c1e52030d20">
       <entitylogicalname>ol_gr_task</entitylogicalname>
       <defaultaccessrightsmask>5</defaultaccessrightsmask>
-      <description>Grants read access to GRAIL Task, to allow users to read tickets raised by themselves.</description>
+      <description>Grants read and append only access to GRAIL Task record.</description>
       <iscustomizable>1</iscustomizable>
       <issystem>0</issystem>
-      <teamtemplatename>Access Team - Read GRAIL Task</teamtemplatename>
+      <teamtemplatename>Team Template - Read GRAIL Task</teamtemplatename>
     </teamtemplate>
   </teamtemplates>
   <AppModules />
@@ -33,7 +33,7 @@
       <statuscode>1</statuscode>
     </connectionreference>
   </connectionreferences>
-  <workqueues />
+  <msdyn_functions />
   <Languages>
     <Language>1033</Language>
   </Languages>

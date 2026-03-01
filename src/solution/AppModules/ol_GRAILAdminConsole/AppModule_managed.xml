@@ -11,6 +11,20 @@
   <NavigationType>0</NavigationType>
   <AppModuleComponents>
     <AppModuleComponent type="1" schemaName="ol_gr_task" />
+    <AppModuleComponent type="1" schemaName="ol_grailapiauditlog" />
+    <AppModuleComponent type="1" schemaName="ol_grailerrorlog" />
+    <AppModuleComponent type="1" schemaName="workqueue" />
+    <AppModuleComponent type="1" schemaName="workqueueitem" />
+    <AppModuleComponent type="26" id="{15e44183-bc2c-4165-ad57-35157cab21a4}" />
+    <AppModuleComponent type="26" id="{fbce644b-8993-4143-b6a7-5459bb823bfe}" />
+    <AppModuleComponent type="26" id="{77783a7d-b315-f111-8342-7c1e52030d20}" />
+    <AppModuleComponent type="26" id="{23d45e20-b415-f111-8342-7c1e52030d20}" />
+    <AppModuleComponent type="26" id="{33f84b34-b415-f111-8342-7c1e52030d20}" />
+    <AppModuleComponent type="26" id="{fd9db68d-b415-f111-8342-7c1e52030d20}" />
+    <AppModuleComponent type="26" id="{10b3f1c4-b415-f111-8342-7c1e52030d20}" />
+    <AppModuleComponent type="26" id="{584da628-62ab-43e8-969d-d889350a3334}" />
+    <AppModuleComponent type="26" id="{6f8f1839-4030-4638-bc35-d967cd4d49c6}" />
+    <AppModuleComponent type="29" id="{8dcb2609-9615-f111-8342-7c1e52030d20}" />
     <AppModuleComponent type="62" schemaName="ol_GRAILAdminConsole" />
   </AppModuleComponents>
   <AppModuleRoleMaps>

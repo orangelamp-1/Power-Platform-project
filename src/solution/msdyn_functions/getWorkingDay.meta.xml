@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<msdyn_function msdyn_functionid="287217a8-af15-f111-8342-7c1e52030d20" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <customapi>
+    <uniquename>ol_getWorkingDay</uniquename>
+  </customapi>
+  <iscustomizable>1</iscustomizable>
+  <language>100000000</language>
+  <name>getWorkingDay</name>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</msdyn_function>

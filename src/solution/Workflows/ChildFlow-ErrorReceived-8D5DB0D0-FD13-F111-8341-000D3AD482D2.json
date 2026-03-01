@@ -1,6 +1,16 @@
 {
   "properties": {
-    "connectionReferences": {},
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "ol_CRDataverse"
+        },
+        "runtimeSource": "embedded"
+      }
+    },
     "definition": {
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
@@ -23,10 +33,10 @@
               "type": "object",
               "properties": {
                 "text": {
-                  "title": "sourceName",
+                  "title": "sourceAction",
                   "type": "string",
                   "x-ms-dynamically-added": true,
-                  "description": "sourceName",
+                  "description": "sourceAction",
                   "x-ms-content-hint": "TEXT"
                 },
                 "text_1": {
@@ -37,11 +47,18 @@
                   "x-ms-content-hint": "TEXT"
                 },
                 "text_2": {
-                  "title": "additionalDetails",
+                  "title": "sourceContext",
                   "type": "string",
                   "x-ms-dynamically-added": true,
-                  "description": "additionalDetails",
+                  "description": "sourceContext",
                   "x-ms-content-hint": "TEXT"
+                },
+                "text_3": {
+                  "description": "emailRequired",
+                  "title": "emailRequired",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
                 }
               },
               "required": [
@@ -59,14 +76,54 @@
         "Scope_-_Main": {
           "type": "Scope",
           "actions": {
-            "Send_Email": {
-              "type": "Compose",
-              "inputs": "@null",
-              "metadata": {
-                "operationMetadataId": "3abdf969-4133-400b-92f5-9590a95557ca"
+            "Add_a_new_row_-_GRAIL_Error_Logs": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "ol_grailerrorlogs",
+                  "item/ol_action": "@triggerBody()?['text']",
+                  "item/ol_context": "@triggerBody()?['text_2']",
+                  "item/ol_link": "@triggerBody()?['text_1']",
+                  "item/ol_source": "Flow"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
               }
             },
-            "Respond_to_a_Power_App_or_flow": {
+            "Condition_-_emailRequired": {
+              "type": "If",
+              "expression": {
+                "and": [
+                  {
+                    "equals": [
+                      "@triggerBody()?['text_3']",
+                      "Yes"
+                    ]
+                  }
+                ]
+              },
+              "actions": {
+                "PLACEHOLDER_-_Send_Email_Step": {
+                  "type": "Compose",
+                  "inputs": "@null",
+                  "metadata": {
+                    "operationMetadataId": "3abdf969-4133-400b-92f5-9590a95557ca"
+                  }
+                }
+              },
+              "else": {
+                "actions": {}
+              },
+              "runAfter": {
+                "Add_a_new_row_-_GRAIL_Error_Logs": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Respond_to_a_Power_App_or_flow_-_200_OK": {
               "type": "Response",
               "kind": "PowerApp",
               "inputs": {
@@ -95,8 +152,8 @@
                 }
               },
               "runAfter": {
-                "Send_Email": [
-                  "SUCCEEDED"
+                "Condition_-_emailRequired": [
+                  "Succeeded"
                 ]
               }
             }
@@ -113,7 +170,7 @@
               },
               "runAfter": {
                 "Send_Email_Error_Handling_Failure": [
-                  "SUCCEEDED"
+                  "Succeeded"
                 ]
               }
             },
@@ -127,7 +184,7 @@
           },
           "runAfter": {
             "Scope_-_Main": [
-              "FAILED"
+              "Failed"
             ]
           }
         }

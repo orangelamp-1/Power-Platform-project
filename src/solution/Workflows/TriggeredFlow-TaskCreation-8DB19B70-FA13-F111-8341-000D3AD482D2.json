@@ -22,6 +22,14 @@
         "$connections": {
           "defaultValue": {},
           "type": "Object"
+        },
+        "EV Team Template - Read GRAIL Task (ol_EVTeamTemplateReadGRAILTask)": {
+          "defaultValue": "3b6d6949-8715-f111-8342-7c1e52030d20",
+          "type": "String",
+          "metadata": {
+            "schemaName": "ol_EVTeamTemplateReadGRAILTask",
+            "description": "The id of the Team Template - Read GRAIL Task."
+          }
         }
       },
       "triggers": {
@@ -55,7 +63,8 @@
               "inputs": {
                 "parameters": {
                   "entityName": "annotations",
-                  "item/subject": "@{triggerOutputs()?['body/ol_taskid']} Created",
+                  "item/subject": "Record Created",
+                  "item/notetext": "New task created: @{triggerOutputs()?['body/ol_taskid']} ",
                   "item/objectid_ol_gr_task@odata.bind": "ol_gr_tasks/@{triggerOutputs()?['body/ol_gr_taskid']}"
                 },
                 "host": {
@@ -67,13 +76,31 @@
               "metadata": {
                 "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
               }
+            },
+            "Perform_a_bound_action": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "systemusers",
+                  "actionName": "Microsoft.Dynamics.CRM.AddUserToRecordTeam",
+                  "recordId": "@triggerOutputs()?['body/_ol_caller_value']",
+                  "item/Record": "ol_gr_tasks/@{triggerOutputs()?['body/ol_gr_taskid']}",
+                  "item/TeamTemplate/teamtemplateid": "@parameters('EV Team Template - Read GRAIL Task (ol_EVTeamTemplateReadGRAILTask)')"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "PerformBoundAction",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              },
+              "runAfter": {
+                "Add_a_new_row_-_Notes": [
+                  "Succeeded"
+                ]
+              }
             }
           },
-          "runAfter": {
-            "Compose": [
-              "Succeeded"
-            ]
-          }
+          "runAfter": {}
         },
         "Scope_-_Error_Handling": {
           "type": "Scope",
@@ -85,7 +112,7 @@
               },
               "runAfter": {
                 "Run_a_Child_Flow": [
-                  "SUCCEEDED"
+                  "Succeeded"
                 ]
               }
             },
@@ -98,21 +125,16 @@
                 "body": {
                   "text": "@workflow()?['tags']['flowDisplayName']",
                   "text_1": "@concat('https://flow.microsoft.com/manage/environments/', workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])",
-                  "text_2": "Task Notes Error"
+                  "text_3": "Yes"
                 }
               }
             }
           },
           "runAfter": {
             "Scope_-_Main": [
-              "FAILED"
+              "Failed"
             ]
           }
-        },
-        "Compose": {
-          "type": "Compose",
-          "inputs": "@workflow()",
-          "runAfter": {}
         }
       }
     },

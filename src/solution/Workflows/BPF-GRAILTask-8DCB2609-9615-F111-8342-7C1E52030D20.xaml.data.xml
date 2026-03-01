@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{8dcb2609-9615-f111-8342-7c1e52030d20}" Name="BPF-GRAIL Task" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <XamlFileName>/Workflows/BPF-GRAILTask-8DCB2609-9615-F111-8342-7C1E52030D20.xaml</XamlFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>4</Category>
+  <Mode>0</Mode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>1</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <processorder>100</processorder>
+  <RunAs>1</RunAs>
+  <UniqueName>ol_bpfgrailtask</UniqueName>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0.0.5</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <ProcessTriggerScope>1</ProcessTriggerScope>
+  <ModernFlowType>0</ModernFlowType>
+  <PrimaryEntity>ol_GR_Task</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="BPF-GRAIL Task" />
+  </LocalizedNames>
+  <labels>
+    <steplabels id="{fcf47717-97fd-4fcb-a0da-d35eba741551}">
+      <label languagecode="1033" description="Setup" />
+    </steplabels>
+    <steplabels id="{fc6eee3b-9324-4121-b751-ca6cf4cf35a9}">
+      <label languagecode="1033" description="Task Description" />
+    </steplabels>
+    <steplabels id="{85161020-9855-484e-8974-3d6a2c670aea}">
+      <label languagecode="1033" description="Task Priority" />
+    </steplabels>
+    <steplabels id="{912a5d1f-71f1-4d11-862a-40fcec9ea142}">
+      <label languagecode="1033" description="Assigned To" />
+    </steplabels>
+    <steplabels id="{1dbf4446-833f-4d01-ae8d-4996adaa0608}">
+      <label languagecode="1033" description="Processing" />
+    </steplabels>
+    <steplabels id="{5e22fa1c-9f10-4cf8-93ab-74ddfffc369a}">
+      <label languagecode="1033" description="Completion Notes" />
+    </steplabels>
+    <steplabels id="{0802a294-de97-4800-a633-438f36063699}">
+      <label languagecode="1033" description="Completion Date" />
+    </steplabels>
+    <steplabels id="{3260011e-8021-49ff-bc53-a45d221c4ada}">
+      <label languagecode="1033" description="Completed" />
+    </steplabels>
+    <steplabels id="{ead95355-c952-4a4c-8e62-9f173f63535f}">
+      <label languagecode="1033" description="Task Review Required" />
+    </steplabels>
+    <steplabels id="{c05df46a-4efd-4c73-8c21-b6f6da2866ff}">
+      <label languagecode="1033" description="Review Required" />
+    </steplabels>
+    <steplabels id="{4340f547-acd1-4569-a080-5544145e61fd}">
+      <label languagecode="1033" description="Task Review Notes" />
+    </steplabels>
+    <steplabels id="{9833b0e0-c994-424b-81a7-7c32fd5ff100}">
+      <label languagecode="1033" description="Closed" />
+    </steplabels>
+    <steplabels id="{f0d490ea-1728-46c1-a49b-45237e5495fc}">
+      <label languagecode="1033" description="Task Status" />
+    </steplabels>
+  </labels>
+</Workflow>

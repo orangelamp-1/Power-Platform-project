@@ -1,0 +1,12 @@
+<customapirequestparameter uniquename="workingDays">
+  <description default="workingDays">
+    <label description="workingDays" languagecode="1033" />
+  </description>
+  <displayname default="workingDays">
+    <label description="workingDays" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <isoptional>0</isoptional>
+  <name>workingDays</name>
+  <type>7</type>
+</customapirequestparameter>

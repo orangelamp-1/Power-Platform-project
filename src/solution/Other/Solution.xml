@@ -6,7 +6,7 @@
       <LocalizedName description="OL_MAIN" languagecode="1033" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.0.0.5</Version>
+    <Version>1.0.0.6</Version>
     <Managed>2</Managed>
     <Publisher>
       <UniqueName>orangelamp</UniqueName>
@@ -78,22 +78,80 @@
       </Addresses>
     </Publisher>
     <RootComponents>
+      <RootComponent type="1" schemaName="ol_bpfgrailtask" behavior="0" />
       <RootComponent type="1" schemaName="ol_gr_task" behavior="0" />
+      <RootComponent type="1" schemaName="ol_grailapiauditlog" behavior="0" />
+      <RootComponent type="1" schemaName="ol_grailerrorlog" behavior="0" />
       <RootComponent type="1" schemaName="systemuser" behavior="1" />
       <RootComponent type="20" id="{9ff633d2-7e15-f111-8342-7c1e52030d20}" behavior="0" />
       <RootComponent type="20" id="{edf29496-7e15-f111-8342-7c1e52030d20}" behavior="0" />
+      <RootComponent type="29" id="{342d78d4-be15-f111-8342-7c1e52030d20}" behavior="0" />
       <RootComponent type="29" id="{8d5db0d0-fd13-f111-8341-000d3ad482d2}" behavior="0" />
       <RootComponent type="29" id="{8db19b70-fa13-f111-8341-000d3ad482d2}" behavior="0" />
+      <RootComponent type="29" id="{8dcb2609-9615-f111-8342-7c1e52030d20}" behavior="0" />
+      <RootComponent type="29" id="{96a54cc7-9115-f111-8342-7c1e52030d20}" behavior="0" />
+      <RootComponent type="29" id="{c278bc3c-9115-f111-8342-7c1e52030d20}" behavior="0" />
+      <RootComponent type="29" id="{c284c010-8a15-f111-8342-7c1e52030d20}" behavior="0" />
+      <RootComponent type="29" id="{df4f798c-ab15-f111-8342-7c1e52030d20}" behavior="0" />
       <RootComponent type="62" schemaName="ol_GRAILAdminConsole" behavior="0" />
       <RootComponent type="80" schemaName="ol_GRAILAdminConsole" behavior="0" />
+      <RootComponent type="9" schemaName="ol_taskpriority" behavior="0" />
       <RootComponent type="9" schemaName="ol_taskstatus" behavior="0" />
     </RootComponents>
     <MissingDependencies>
+      <MissingDependency>
+        <Required type="1" schemaName="workqueue" displayName="Work Queue" solution="MicrosoftFlowExtensionsCore (1.9.42.0)">
+          <package appName="MicrosoftFlowExtensionsCore" version="1.9.42.0">MicrosoftFlowExtensionsAnchor (1.9.42.0)</package>
+        </Required>
+        <Dependent type="80" schemaName="ol_GRAILAdminConsole" displayName="GRAIL - Admin Console" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="1" schemaName="workqueueitem" displayName="Work Queue Item" solution="MicrosoftFlowExtensionsCore (1.9.42.0)">
+          <package appName="MicrosoftFlowExtensionsCore" version="1.9.42.0">MicrosoftFlowExtensionsAnchor (1.9.42.0)</package>
+        </Required>
+        <Dependent type="80" schemaName="ol_GRAILAdminConsole" displayName="GRAIL - Admin Console" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="61" schemaName="Auditing.svg" displayName="Auditing.svg" solution="PowerPlatformEnvironmentSettings (1.1.1.2971)">
+          <package appName="PowerPlatformEnvironmentSettingsApp" version="1.1.1.2971">PowerPlatformEnvironmentSettingsApp_Anchor (1.1.1.2971)</package>
+        </Required>
+        <Dependent type="62" schemaName="ol_GRAILAdminConsole" />
+      </MissingDependency>
       <MissingDependency>
         <Required type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)">
           <package appName="AppModule Web Resources Package" version="2.5">AppModuleWebResources (2.5)</package>
         </Required>
         <Dependent type="80" schemaName="ol_GRAILAdminConsole" displayName="GRAIL - Admin Console" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="61" schemaName="msdyn_arrow-enter.svg" displayName="msdyn_arrow-enter.svg" solution="msdyn_PowerAdminSettingsDataManagementSolution (1.1.1.2971)">
+          <package appName="PowerPlatformEnvironmentSettingsApp" version="1.1.1.2971">PowerPlatformEnvironmentSettingsApp_Anchor (1.1.1.2971)</package>
+        </Required>
+        <Dependent type="62" schemaName="ol_GRAILAdminConsole" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="61" schemaName="mspp_entity_forms.svg" displayName="mspp_entity_forms.svg" solution="PowerPages_AppResources (1.0.2508.1)">
+          <package appName="Power Pages Core Package" version="1.1.2510.204">PowerPages_Core (1.1.2510.204)</package>
+        </Required>
+        <Dependent type="62" schemaName="ol_GRAILAdminConsole" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="61" schemaName="Process.svg" displayName="Process.svg" solution="PowerPlatformEnvironmentSettings (1.1.1.2971)">
+          <package appName="PowerPlatformEnvironmentSettingsApp" version="1.1.1.2971">PowerPlatformEnvironmentSettingsApp_Anchor (1.1.1.2971)</package>
+        </Required>
+        <Dependent type="62" schemaName="ol_GRAILAdminConsole" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="66" schemaName="MscrmControls.FieldControls.CheckboxControl" displayName="MscrmControls.FieldControls.CheckboxControl" solution="BaseCustomControlsCore (9.0.2602.2012)">
+          <package appName="Base Custom Controls" version="9.0.2602.2012">BaseCustomControlsCore (9.0.2602.2012)</package>
+        </Required>
+        <Dependent type="60" displayName="Information" parentDisplayName="GRAIL Task" id="{d0e4f0e0-6a62-4702-b1f1-f57c70cd33a1}" />
+      </MissingDependency>
+      <MissingDependency>
+        <Required type="90" schemaName="Microsoft.PowerFx.Evaluator, Microsoft.PowerFx.PlexPlugins, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" displayName="Microsoft.PowerFx.Evaluator" solution="msft_PowerfxRuleSolution (1.0.0.72)" id="{462b3e8f-beb4-4981-9b87-a60c2162a9f7}">
+          <package appName="PowerfxRuleApp Package" version="1.0.0.72">PowerfxRuleApp_Anchor (1.0.0.72)</package>
+        </Required>
+        <Dependent type="CustomAPI" displayName="ol_getWorkingDay" id.uniquename="ol_getWorkingDay" />
       </MissingDependency>
       <MissingDependency>
         <Required type="SettingDefinition" displayName="AppChannel" solution="msdyn_AppFrameworkInfraExtensions (1.0.0.15)" id.uniquename="AppChannel">

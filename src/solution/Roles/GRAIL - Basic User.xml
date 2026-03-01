@@ -19,6 +19,7 @@
     <RolePrivilege name="prvAssignWorkflowSession" level="Basic" />
     <RolePrivilege name="prvCreateNewProcess" level="Global" />
     <RolePrivilege name="prvCreateNote" level="Basic" />
+    <RolePrivilege name="prvCreateol_GRAILErrorLog" level="Global" />
     <RolePrivilege name="prvCreateSharePointData" level="Global" />
     <RolePrivilege name="prvCreateTranslationProcess" level="Global" />
     <RolePrivilege name="prvCreateUserApplicationMetadata" level="Basic" />

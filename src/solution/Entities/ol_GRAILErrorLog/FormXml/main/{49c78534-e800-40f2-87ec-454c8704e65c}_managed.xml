@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{49c78534-e800-40f2-87ec-454c8704e65c}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form headerdensity="HighWithControls">
+      <tabs>
+        <tab verticallayout="true" id="{ad5c3509-950d-4372-bf22-5ccecc8b3355}" IsUserDefined="1">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{8c4e27fd-4ee7-481a-ac3a-9a0b81c3474d}">
+                  <labels>
+                    <label description="General" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{d6a0fdf9-74c9-42dc-8b72-044324e1201e}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_errorid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="ol_errorid" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c8ba47a8-e9bd-42d3-9422-51e9452e788f}" visible="false">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{50cab091-cfb4-4d94-ac51-02ca63a666e1}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_source" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_source" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{79ee993a-3939-42c3-b313-5d3b0d5a2dd8}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_action" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_action" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{150d4fe6-0732-47b2-8787-e797e71f61b0}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_context" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="ol_context" disabled="true" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b8653e68-3071-4f6a-8bc0-bdd78e18062f}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_link" classid="{71716B6C-711E-476C-8AB8-5D11542BFB47}" datafieldname="ol_link" disabled="true" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{fa731b53-0e11-40fb-acc8-950935ac3951}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{3f05e9dd-c5b2-48be-b37a-a6bccc686eef}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{6b870a13-58e8-400a-887d-a3cd81108238}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{6a29f7f1-9bec-44f9-a72c-682334a3f8cd}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <footer id="{6e1dedfe-d7c0-4267-a8c4-28fe8df88a85}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{ae05777d-1821-4a39-a1dc-7ce293e468c7}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{a9c53de6-f98b-4fc0-a3f8-6834b400accf}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{36cab054-3fcd-43c0-8f89-8c2cd7509a13}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </footer>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

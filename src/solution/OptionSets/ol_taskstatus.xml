@@ -28,7 +28,7 @@
         <Description description="" languagecode="1033" />
       </Descriptions>
     </option>
-    <option value="125250002" ExternalValue="" IsHidden="0">
+    <option value="125250002" ExternalValue="" IsHidden="1">
       <labels>
         <label description="On Hold" languagecode="1033" />
       </labels>
@@ -38,7 +38,7 @@
     </option>
     <option value="125250003" ExternalValue="" IsHidden="0">
       <labels>
-        <label description="Resolved" languagecode="1033" />
+        <label description="Completed" languagecode="1033" />
       </labels>
       <Descriptions>
         <Description description="" languagecode="1033" />

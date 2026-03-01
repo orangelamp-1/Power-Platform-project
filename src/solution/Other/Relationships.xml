@@ -1,12 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="bpf_ol_gr_task_ol_bpfgrailtask" />
   <EntityRelationship Name="business_unit_ol_gr_task" />
+  <EntityRelationship Name="business_unit_ol_grailapiauditlog" />
+  <EntityRelationship Name="business_unit_ol_grailerrorlog" />
+  <EntityRelationship Name="lk_ol_bpfgrailtask_activestageid" />
+  <EntityRelationship Name="lk_ol_bpfgrailtask_createdby" />
+  <EntityRelationship Name="lk_ol_bpfgrailtask_modifiedby" />
+  <EntityRelationship Name="lk_ol_bpfgrailtask_processid" />
   <EntityRelationship Name="lk_ol_gr_task_createdby" />
   <EntityRelationship Name="lk_ol_gr_task_modifiedby" />
-  <EntityRelationship Name="new_ol_gr_task_Assignedto_systemuser" />
+  <EntityRelationship Name="lk_ol_grailapiauditlog_createdby" />
+  <EntityRelationship Name="lk_ol_grailapiauditlog_modifiedby" />
+  <EntityRelationship Name="lk_ol_grailerrorlog_createdby" />
+  <EntityRelationship Name="lk_ol_grailerrorlog_modifiedby" />
+  <EntityRelationship Name="ol_gr_task_AssignedTo_systemuser" />
   <EntityRelationship Name="ol_gr_task_Caller_systemuser" />
   <EntityRelationship Name="ol_gr_task_ParentTask_ol_gr_task" />
+  <EntityRelationship Name="ol_grailerrorlog_RelatedUser_systemuser" />
+  <EntityRelationship Name="organization_ol_bpfgrailtask" />
   <EntityRelationship Name="owner_ol_gr_task" />
+  <EntityRelationship Name="owner_ol_grailapiauditlog" />
+  <EntityRelationship Name="owner_ol_grailerrorlog" />
   <EntityRelationship Name="team_ol_gr_task" />
+  <EntityRelationship Name="team_ol_grailapiauditlog" />
+  <EntityRelationship Name="team_ol_grailerrorlog" />
   <EntityRelationship Name="user_ol_gr_task" />
+  <EntityRelationship Name="user_ol_grailapiauditlog" />
+  <EntityRelationship Name="user_ol_grailerrorlog" />
 </EntityRelationships>

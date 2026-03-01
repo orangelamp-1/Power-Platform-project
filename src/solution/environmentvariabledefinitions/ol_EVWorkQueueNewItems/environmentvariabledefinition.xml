@@ -1,0 +1,14 @@
+<environmentvariabledefinition schemaname="ol_EVWorkQueueNewItems">
+  <defaultvalue>00000000-0000-0000-0000-000000000000</defaultvalue>
+  <description default="The id of the Work Queue - New Items.">
+    <label description="The id of the Work Queue - New Items." languagecode="1033" />
+  </description>
+  <displayname default="EV Work Queue - New Items">
+    <label description="EV Work Queue - New Items" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.5</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <secretstore>0</secretstore>
+  <type>100000000</type>
+</environmentvariabledefinition>

@@ -14,7 +14,51 @@
         <Titles>
           <Title LCID="1033" Title="GRAIL" />
         </Titles>
-        <SubArea Id="subarea_a035552c" Icon="/_imgs/imagestrips/transparent_spacer.gif" Entity="ol_gr_task" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA" />
+        <SubArea Id="subarea_8ed11155" ResourceId="SitemapDesigner.NewSubArea" VectorIcon="/WebResources/Process.svg" Icon="/WebResources/Process.svg" Url="/main.aspx?pagetype=entitylist&amp;etn=ol_gr_task&amp;viewid=77783a7d-b315-f111-8342-7c1e52030d20&amp;viewType=1039" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA">
+          <Titles>
+            <Title LCID="1033" Title="Unassigned Tasks" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="subarea_2c836474" ResourceId="SitemapDesigner.NewSubArea" VectorIcon="/WebResources/mspp_entity_forms.svg" Icon="/WebResources/mspp_entity_forms.svg" Url="/main.aspx?pagetype=entitylist&amp;etn=ol_gr_task&amp;viewid=fd9db68d-b415-f111-8342-7c1e52030d20&amp;viewType=1039" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA">
+          <Titles>
+            <Title LCID="1033" Title="My Open GRAIL Tasks" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="subarea_a035552c" VectorIcon="/WebResources/mspp_entity_forms.svg" Icon="/WebResources/mspp_entity_forms.svg" Entity="ol_gr_task" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA">
+          <Titles>
+            <Title LCID="1033" Title="Open GRAIL Tasks" />
+          </Titles>
+        </SubArea>
+      </Group>
+      <Group Id="group_710b5f07" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IntroducedVersion="7.0.0.0" IsProfile="false" ToolTipResourseId="SitemapDesigner.Unknown">
+        <Titles>
+          <Title LCID="1033" Title="Resolved Tasks" />
+        </Titles>
+        <SubArea Id="subarea_10312397" ResourceId="SitemapDesigner.NewSubArea" VectorIcon="/WebResources/msdyn_arrow-enter.svg" Icon="/WebResources/msdyn_arrow-enter.svg" Url="/main.aspx?pagetype=entitylist&amp;etn=ol_gr_task&amp;viewid=10b3f1c4-b415-f111-8342-7c1e52030d20&amp;viewType=1039" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA">
+          <Titles>
+            <Title LCID="1033" Title="My Resolved Tasks" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="subarea_812a2fd1" ResourceId="SitemapDesigner.NewSubArea" VectorIcon="/WebResources/msdyn_arrow-enter.svg" Icon="/WebResources/msdyn_arrow-enter.svg" Url="/main.aspx?pagetype=entitylist&amp;etn=ol_gr_task&amp;viewid=33f84b34-b415-f111-8342-7c1e52030d20&amp;viewType=1039" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA">
+          <Titles>
+            <Title LCID="1033" Title="All Resolved Tasks" />
+          </Titles>
+        </SubArea>
+      </Group>
+      <Group Id="group_14275f42" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IntroducedVersion="7.0.0.0" IsProfile="false" ToolTipResourseId="SitemapDesigner.Unknown">
+        <Titles>
+          <Title LCID="1033" Title="Logs" />
+        </Titles>
+        <SubArea Id="subarea_ee9ebadc" VectorIcon="/WebResources/Auditing.svg" Icon="/WebResources/Auditing.svg" Entity="ol_grailapiauditlog" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA">
+          <Titles>
+            <Title LCID="1033" Title="API Audit Logs" />
+          </Titles>
+        </SubArea>
+        <SubArea Id="subarea_72f9693b" VectorIcon="/WebResources/Auditing.svg" Icon="/WebResources/Auditing.svg" Entity="ol_grailerrorlog" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA">
+          <Titles>
+            <Title LCID="1033" Title="Error Logs" />
+          </Titles>
+        </SubArea>
       </Group>
     </Area>
   </SiteMap>

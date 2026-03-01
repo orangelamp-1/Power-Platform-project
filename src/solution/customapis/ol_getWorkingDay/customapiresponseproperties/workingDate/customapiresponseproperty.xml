@@ -1,0 +1,11 @@
+<customapiresponseproperty uniquename="workingDate">
+  <description default="workingDate">
+    <label description="workingDate" languagecode="1033" />
+  </description>
+  <displayname default="workingDate">
+    <label description="workingDate" languagecode="1033" />
+  </displayname>
+  <iscustomizable>1</iscustomizable>
+  <name>workingDate</name>
+  <type>1</type>
+</customapiresponseproperty>

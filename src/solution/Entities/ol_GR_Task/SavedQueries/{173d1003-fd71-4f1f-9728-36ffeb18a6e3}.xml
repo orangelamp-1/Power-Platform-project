@@ -10,8 +10,8 @@
     <layoutxml>
       <grid name="resultset" jump="ol_taskid" select="1" icon="1" preview="1">
         <row name="result" id="ol_gr_taskid">
-          <cell name="ol_taskid" width="300" />
-          <cell name="createdon" width="125" />
+          <cell name="ol_taskid" width="150" />
+          <cell name="createdon" width="150" />
         </row>
       </grid>
     </layoutxml>

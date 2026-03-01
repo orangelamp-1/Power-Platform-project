@@ -1,0 +1,1 @@
+ol_taskoverdue: =If(ol_duedate < ol_completiondate, true, false)

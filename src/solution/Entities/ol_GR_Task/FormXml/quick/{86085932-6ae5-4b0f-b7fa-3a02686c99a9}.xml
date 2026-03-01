@@ -38,7 +38,7 @@
                     <row>
                       <cell id="{9e68b447-00b7-4bf7-95a6-6342f8318fc6}" locklevel="0" colspan="1" rowspan="1">
                         <labels>
-                          <label description="Title" languagecode="1033" />
+                          <label description="Task Title" languagecode="1033" />
                         </labels>
                         <control id="ol_title" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_title" disabled="false" />
                       </cell>
@@ -62,7 +62,7 @@
                     <row>
                       <cell id="{8d686d93-f665-40b6-95bd-f6359365acab}" locklevel="0" colspan="1" rowspan="1">
                         <labels>
-                          <label description="Due Date" languagecode="1033" />
+                          <label description="Task Due Date" languagecode="1033" />
                         </labels>
                         <control id="ol_duedate" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="ol_duedate" disabled="false" />
                       </cell>

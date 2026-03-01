@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{f414b68a-3a40-4d0b-a4d4-de9cdfd7d5f2}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="ol_errorid" select="1" icon="1" preview="1">
+        <row name="result" id="ol_grailerrorlogid">
+          <cell name="ol_errorid" width="300" />
+          <cell name="ol_source" width="173" />
+          <cell name="ol_action" width="217" />
+          <cell name="ol_context" width="183" />
+          <cell name="ol_link" width="245" />
+          <cell name="createdon" width="125" />
+          <cell name="ownerid" width="179" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="ol_grailerrorlog">
+          <attribute name="ol_grailerrorlogid" />
+          <attribute name="ol_errorid" />
+          <attribute name="createdon" />
+          <order attribute="ol_errorid" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+          <attribute name="ol_link" />
+          <attribute name="ol_source" />
+          <attribute name="ol_action" />
+          <attribute name="ol_context" />
+          <attribute name="ownerid" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Active GRAIL Error Logs" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

@@ -20,19 +20,30 @@
                   </labels>
                   <rows>
                     <row>
-                      <cell id="{164d202a-58a6-4099-8bc3-eb737633453a}" locklevel="1" showlabel="true" colspan="1" rowspan="1" visible="true">
+                      <cell id="{164d202a-58a6-4099-8bc3-eb737633453a}" locklevel="1" showlabel="true" colspan="1" rowspan="1" visible="false">
                         <labels>
                           <label description="" languagecode="1033" />
                         </labels>
                         <control id="header_ol_taskid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="ol_taskid" disabled="true" />
                       </cell>
                     </row>
+                    <row />
+                    <row />
+                    <row />
                     <row>
                       <cell id="{6eaed49c-12fe-4f87-9afb-7db4df7e9943}" locklevel="0" colspan="1" rowspan="1">
                         <labels>
                           <label description="" languagecode="1033" />
                         </labels>
                         <control id="ol_title" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_title" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{35624caf-2380-4445-a8d4-22916518f5ae}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Requestor" languagecode="1033" />
+                        </labels>
+                        <control id="ol_caller" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ol_caller" disabled="false" />
                       </cell>
                     </row>
                     <row>
@@ -44,16 +55,51 @@
                       </cell>
                     </row>
                     <row>
+                      <cell id="{3085eccf-31e5-4021-b8de-22c474c4f494}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_priority" classid="{3EF39988-22BB-4F0B-BBBE-64B5A3748AEE}" datafieldname="ol_priority" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{d61345ca-3704-48eb-a064-79d97fcd0746}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_assignedto" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ol_assignedto" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
                       <cell id="{b1557735-cd53-42d2-86a6-e9036cea261a}" locklevel="0" colspan="1" rowspan="1">
                         <labels>
                           <label description="" languagecode="1033" />
                         </labels>
-                        <control id="ol_duedate" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="ol_duedate" disabled="false" />
+                        <control id="ol_duedate" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="ol_duedate" disabled="true" />
                       </cell>
                     </row>
+                    <row>
+                      <cell id="{078aa1f8-17ec-442a-973d-7ee3dc364f64}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_taskoverdue" classid="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}" datafieldname="ol_taskoverdue" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9ac6d455-6b04-4a09-bb9d-774435b96031}" locklevel="0" colspan="1" rowspan="4" auto="true" showlabel="true">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_description" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="ol_description" disabled="false" />
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
                   </rows>
                 </section>
-                <section name="Task Details" id="3467fe12-c0e7-403f-8d56-88344f80a5b5" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Top" columns="1" labelwidth="115">
+                <section name="Task Details" id="3467fe12-c0e7-403f-8d56-88344f80a5b5" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
                   <labels>
                     <label description="Task Details" languagecode="1033" />
                   </labels>
@@ -66,13 +112,51 @@
                       </cell>
                     </row>
                     <row>
-                      <cell id="{9ac6d455-6b04-4a09-bb9d-774435b96031}" locklevel="0" colspan="1" rowspan="1">
+                      <cell id="{7703789d-7e76-4caa-adb1-4e5b484f47f8}" locklevel="0" colspan="1" rowspan="4">
                         <labels>
                           <label description="" languagecode="1033" />
                         </labels>
-                        <control id="ol_description" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="ol_description" disabled="false" />
+                        <control id="ol_completionnotes" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="ol_completionnotes" disabled="false" />
                       </cell>
                     </row>
+                    <row />
+                    <row />
+                    <row />
+                    <row>
+                      <cell id="{883a4e13-3ebd-47f1-8328-684ad7d0c95c}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_completiondate" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="ol_completiondate" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="Review Details" id="6257b8fb-e8e2-41e2-b205-e2645b7238bb" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Review Details" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row />
+                    <row>
+                      <cell locklevel="0" id="{c3aad810-ce9d-4a29-a97b-f1c6cd724f3e}" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_taskreviewrequired" classid="{F9A8A302-114E-466A-B582-6771B2AE0D92}" datafieldname="ol_taskreviewrequired" uniqueid="{d8fd6bf8-dca9-4c60-92ed-4e48714894c6}" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c90de988-625e-4fd3-bee4-fbd01a953292}" locklevel="0" colspan="1" rowspan="4">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                        <control id="ol_taskreviewnotes" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="ol_taskreviewnotes" disabled="false" />
+                      </cell>
+                    </row>
+                    <row />
+                    <row />
+                    <row />
                   </rows>
                 </section>
                 <section name="Timeline" id="6847ff57-1ffd-48ac-bd9f-301e5536bd57" IsUserDefined="0" locklevel="0" showlabel="false" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
@@ -145,9 +229,26 @@
             </cell>
             <cell id="{d6e106fb-e697-44f3-a771-71ec6c209cfc}" locklevel="1" colspan="1" rowspan="1" visible="false">
               <labels>
-                <label description="" languagecode="1033" />
+                <label description="Assigned To" languagecode="1033" />
               </labels>
               <control id="header_ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+            </cell>
+            <cell locklevel="0" id="{5ba31ec7-43a7-413d-a487-73d1fc6677e1}">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{0018665f-5e9c-48d3-8e3c-ba8caa236cf0}" locklevel="0" colspan="1" rowspan="1">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_ol_assignedto" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ol_assignedto" disabled="false" />
+            </cell>
+            <cell id="{26f471b5-a115-4078-9847-2af275a4f5f6}" locklevel="0" colspan="1" rowspan="1">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+              <control id="header_ol_duedate" classid="{5B773807-9FB2-42DB-97C3-7A91EFF8ADFF}" datafieldname="ol_duedate" disabled="false" />
             </cell>
           </row>
         </rows>
@@ -176,6 +277,35 @@
       <DisplayConditions Order="0" FallbackForm="true">
         <Everyone />
       </DisplayConditions>
+      <controlDescriptions>
+        <controlDescription forControl="{d8fd6bf8-dca9-4c60-92ed-4e48714894c6}">
+          <customControl id="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}">
+            <parameters>
+              <datafieldname>ol_taskreviewrequired</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl id="{67FAC785-CD58-4F9F-ABB3-4B7DDC6ED5ED}">
+            <parameters>
+              <datafieldname>ol_taskreviewrequired</datafieldname>
+            </parameters>
+          </customControl>
+          <customControl formFactor="0" name="MscrmControls.FieldControls.CheckboxControl">
+            <parameters>
+              <value type="TwoOptions">ol_taskreviewrequired</value>
+            </parameters>
+          </customControl>
+          <customControl formFactor="2" name="MscrmControls.FieldControls.CheckboxControl">
+            <parameters>
+              <value type="TwoOptions">ol_taskreviewrequired</value>
+            </parameters>
+          </customControl>
+          <customControl formFactor="1" name="MscrmControls.FieldControls.CheckboxControl">
+            <parameters>
+              <value type="TwoOptions">ol_taskreviewrequired</value>
+            </parameters>
+          </customControl>
+        </controlDescription>
+      </controlDescriptions>
     </form>
     <IsCustomizable>1</IsCustomizable>
     <CanBeDeleted>1</CanBeDeleted>

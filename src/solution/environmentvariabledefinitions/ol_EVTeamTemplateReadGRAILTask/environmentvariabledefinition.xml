@@ -1,0 +1,14 @@
+<environmentvariabledefinition schemaname="ol_EVTeamTemplateReadGRAILTask">
+  <defaultvalue>00000000-0000-0000-0000-000000000000</defaultvalue>
+  <description default="The id of the Team Template - Read GRAIL Task.">
+    <label description="The id of the Team Template - Read GRAIL Task." languagecode="1033" />
+  </description>
+  <displayname default="EV Team Template - Read GRAIL Task">
+    <label description="EV Team Template - Read GRAIL Task" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.5</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <secretstore>0</secretstore>
+  <type>100000000</type>
+</environmentvariabledefinition>

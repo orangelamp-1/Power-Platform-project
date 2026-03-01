@@ -5,15 +5,13 @@
     <CanBeDeleted>0</CanBeDeleted>
     <isquickfindquery>0</isquickfindquery>
     <isprivate>0</isprivate>
-    <isdefault>1</isdefault>
+    <isdefault>0</isdefault>
     <savedqueryid>{82cb87b5-24a7-4b3e-92f0-964a97ba5479}</savedqueryid>
     <layoutxml>
       <grid name="resultset" jump="ol_taskid" select="1" icon="1" preview="1">
         <row name="result" id="ol_gr_taskid">
           <cell name="ol_taskid" width="150" />
-          <cell name="ol_title" width="150" />
-          <cell name="ol_status" width="100" />
-          <cell name="createdon" width="100" />
+          <cell name="createdon" width="150" />
         </row>
       </grid>
     </layoutxml>
@@ -28,8 +26,6 @@
           <filter type="and">
             <condition attribute="statecode" operator="eq" value="0" />
           </filter>
-          <attribute name="ol_status" />
-          <attribute name="ol_title" />
         </entity>
       </fetch>
     </fetchxml>

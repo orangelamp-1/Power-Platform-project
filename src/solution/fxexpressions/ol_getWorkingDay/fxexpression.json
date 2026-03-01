@@ -1,0 +1,12 @@
+{
+  "fxexpression": {
+    "@uniquename": "ol_getWorkingDay",
+    "category": "0",
+    "context": "{\"Tables\":[],\"CustomApis\":[],\"ConnectionReferences\":[],\"TabularConnectionReferences\":[],\"ActionConnectorConnectionReferences\":[]}",
+    "iscustomizable": "1",
+    "name": "getWorkingDay",
+    "parameters": "{\"InputParameter\":[{\"type\":7,\"name\":\"workingDays\",\"required\":true,\"entityLogicalName\":null}],\"OutputParameter\":[{\"type\":1,\"name\":\"workingDate\",\"required\":true,\"entityLogicalName\":null}]}",
+    "statecode": "0",
+    "statuscode": "1"
+  }
+}

@@ -6,7 +6,7 @@
       <LocalizedName description="OL_MAIN" languagecode="1033" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.0.0.6</Version>
+    <Version>1.0.0.7</Version>
     <Managed>2</Managed>
     <Publisher>
       <UniqueName>orangelamp</UniqueName>
@@ -100,20 +100,20 @@
     </RootComponents>
     <MissingDependencies>
       <MissingDependency>
-        <Required type="1" schemaName="workqueue" displayName="Work Queue" solution="MicrosoftFlowExtensionsCore (1.9.42.0)">
-          <package appName="MicrosoftFlowExtensionsCore" version="1.9.42.0">MicrosoftFlowExtensionsAnchor (1.9.42.0)</package>
+        <Required type="1" schemaName="workqueue" displayName="Work Queue" solution="MicrosoftFlowExtensionsCore (1.9.44.0)">
+          <package appName="MicrosoftFlowExtensionsCore" version="1.9.44.0">MicrosoftFlowExtensionsAnchor (1.9.44.0)</package>
         </Required>
         <Dependent type="80" schemaName="ol_GRAILAdminConsole" displayName="GRAIL - Admin Console" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="1" schemaName="workqueueitem" displayName="Work Queue Item" solution="MicrosoftFlowExtensionsCore (1.9.42.0)">
-          <package appName="MicrosoftFlowExtensionsCore" version="1.9.42.0">MicrosoftFlowExtensionsAnchor (1.9.42.0)</package>
+        <Required type="1" schemaName="workqueueitem" displayName="Work Queue Item" solution="MicrosoftFlowExtensionsCore (1.9.44.0)">
+          <package appName="MicrosoftFlowExtensionsCore" version="1.9.44.0">MicrosoftFlowExtensionsAnchor (1.9.44.0)</package>
         </Required>
         <Dependent type="80" schemaName="ol_GRAILAdminConsole" displayName="GRAIL - Admin Console" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="61" schemaName="Auditing.svg" displayName="Auditing.svg" solution="PowerPlatformEnvironmentSettings (1.1.1.2971)">
-          <package appName="PowerPlatformEnvironmentSettingsApp" version="1.1.1.2971">PowerPlatformEnvironmentSettingsApp_Anchor (1.1.1.2971)</package>
+        <Required type="61" schemaName="Auditing.svg" displayName="Auditing.svg" solution="PowerPlatformEnvironmentSettings (1.1.1.3024)">
+          <package appName="PowerPlatformEnvironmentSettingsApp" version="1.1.1.3024">PowerPlatformEnvironmentSettingsApp_Anchor (1.1.1.3024)</package>
         </Required>
         <Dependent type="62" schemaName="ol_GRAILAdminConsole" />
       </MissingDependency>
@@ -124,8 +124,8 @@
         <Dependent type="80" schemaName="ol_GRAILAdminConsole" displayName="GRAIL - Admin Console" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="61" schemaName="msdyn_arrow-enter.svg" displayName="msdyn_arrow-enter.svg" solution="msdyn_PowerAdminSettingsDataManagementSolution (1.1.1.2971)">
-          <package appName="PowerPlatformEnvironmentSettingsApp" version="1.1.1.2971">PowerPlatformEnvironmentSettingsApp_Anchor (1.1.1.2971)</package>
+        <Required type="61" schemaName="msdyn_arrow-enter.svg" displayName="msdyn_arrow-enter.svg" solution="msdyn_PowerAdminSettingsDataManagementSolution (1.1.1.3024)">
+          <package appName="PowerPlatformEnvironmentSettingsApp" version="1.1.1.3024">PowerPlatformEnvironmentSettingsApp_Anchor (1.1.1.3024)</package>
         </Required>
         <Dependent type="62" schemaName="ol_GRAILAdminConsole" />
       </MissingDependency>
@@ -136,8 +136,8 @@
         <Dependent type="62" schemaName="ol_GRAILAdminConsole" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="61" schemaName="Process.svg" displayName="Process.svg" solution="PowerPlatformEnvironmentSettings (1.1.1.2971)">
-          <package appName="PowerPlatformEnvironmentSettingsApp" version="1.1.1.2971">PowerPlatformEnvironmentSettingsApp_Anchor (1.1.1.2971)</package>
+        <Required type="61" schemaName="Process.svg" displayName="Process.svg" solution="PowerPlatformEnvironmentSettings (1.1.1.3024)">
+          <package appName="PowerPlatformEnvironmentSettingsApp" version="1.1.1.3024">PowerPlatformEnvironmentSettingsApp_Anchor (1.1.1.3024)</package>
         </Required>
         <Dependent type="62" schemaName="ol_GRAILAdminConsole" />
       </MissingDependency>

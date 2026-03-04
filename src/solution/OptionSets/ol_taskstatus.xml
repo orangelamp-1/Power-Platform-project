@@ -44,7 +44,7 @@
         <Description description="" languagecode="1033" />
       </Descriptions>
     </option>
-    <option value="125250200" ExternalValue="" IsHidden="0">
+    <option value="125250200" ExternalValue="" IsHidden="1">
       <labels>
         <label description="Closed" languagecode="1033" />
       </labels>

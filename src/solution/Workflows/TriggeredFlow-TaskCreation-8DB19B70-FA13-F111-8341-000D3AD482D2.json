@@ -64,7 +64,7 @@
                 "parameters": {
                   "entityName": "annotations",
                   "item/subject": "Record Created",
-                  "item/notetext": "New task created: @{triggerOutputs()?['body/ol_taskid']} ",
+                  "item/notetext": "New task created @{triggerOutputs()?['body/ol_taskid']}. ",
                   "item/objectid_ol_gr_task@odata.bind": "ol_gr_tasks/@{triggerOutputs()?['body/ol_gr_taskid']}"
                 },
                 "host": {
@@ -72,6 +72,11 @@
                   "operationId": "CreateRecord",
                   "connectionName": "shared_commondataserviceforapps"
                 }
+              },
+              "runAfter": {
+                "Perform_a_bound_action": [
+                  "SUCCEEDED"
+                ]
               },
               "metadata": {
                 "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
@@ -92,11 +97,6 @@
                   "operationId": "PerformBoundAction",
                   "connectionName": "shared_commondataserviceforapps"
                 }
-              },
-              "runAfter": {
-                "Add_a_new_row_-_Notes": [
-                  "Succeeded"
-                ]
               }
             }
           },

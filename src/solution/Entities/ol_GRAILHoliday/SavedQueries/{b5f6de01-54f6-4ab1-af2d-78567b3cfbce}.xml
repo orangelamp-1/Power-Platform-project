@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>0</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>0</isdefault>
+    <savedqueryid>{b5f6de01-54f6-4ab1-af2d-78567b3cfbce}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="ol_holidayid" select="1" icon="1" preview="1">
+        <row name="result" id="ol_grailholidayid">
+          <cell name="ol_holidayid" width="300" />
+          <cell name="createdon" width="125" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="ol_grailholiday">
+          <attribute name="ol_grailholidayid" />
+          <attribute name="ol_holidayid" />
+          <attribute name="createdon" />
+          <order attribute="ol_holidayid" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="1" />
+          </filter>
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="Inactive GRAIL Holidays" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

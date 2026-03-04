@@ -122,43 +122,13 @@
                   "Succeeded"
                 ]
               }
-            },
-            "Respond_to_a_Power_App_or_flow_-_200_OK": {
-              "type": "Response",
-              "kind": "PowerApp",
-              "inputs": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "responsecode": {
-                      "title": "responseCode",
-                      "type": "string",
-                      "x-ms-content-hint": "TEXT",
-                      "x-ms-dynamically-added": true
-                    },
-                    "responsedescription": {
-                      "title": "responseDescription",
-                      "type": "string",
-                      "x-ms-content-hint": "TEXT",
-                      "x-ms-dynamically-added": true
-                    }
-                  },
-                  "additionalProperties": {}
-                },
-                "statusCode": 200,
-                "body": {
-                  "responsecode": "200",
-                  "responsedescription": "OK"
-                }
-              },
-              "runAfter": {
-                "Condition_-_emailRequired": [
-                  "Succeeded"
-                ]
-              }
             }
           },
-          "runAfter": {}
+          "runAfter": {
+            "Respond_to_a_Power_App_or_flow_-_202_Accepted": [
+              "SUCCEEDED"
+            ]
+          }
         },
         "Scope_-_Error_Handling": {
           "type": "Scope",
@@ -187,6 +157,36 @@
               "Failed"
             ]
           }
+        },
+        "Respond_to_a_Power_App_or_flow_-_202_Accepted": {
+          "type": "Response",
+          "kind": "PowerApp",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "responsecode": {
+                  "title": "responseCode",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "responsedescription": {
+                  "title": "responseDescription",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "additionalProperties": {}
+            },
+            "statusCode": 200,
+            "body": {
+              "responsecode": "202",
+              "responsedescription": "Accepted"
+            }
+          },
+          "runAfter": {}
         }
       }
     },

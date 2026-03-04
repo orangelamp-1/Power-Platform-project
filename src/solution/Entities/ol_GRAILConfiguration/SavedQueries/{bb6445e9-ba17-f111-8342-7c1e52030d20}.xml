@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<savedqueries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <savedquery>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <isquickfindquery>0</isquickfindquery>
+    <isprivate>0</isprivate>
+    <isdefault>1</isdefault>
+    <savedqueryid>{bb6445e9-ba17-f111-8342-7c1e52030d20}</savedqueryid>
+    <layoutxml>
+      <grid name="resultset" jump="ol_configid" select="1" icon="1" preview="1">
+        <row name="result" id="ol_grailconfigurationid">
+          <cell name="ol_configid" width="200" />
+          <cell name="ol_configurationlookup" width="200" />
+          <cell name="ol_configurationvalue" width="200" />
+          <cell name="ol_configurationfunction" width="300" />
+        </row>
+      </grid>
+    </layoutxml>
+    <querytype>0</querytype>
+    <fetchxml>
+      <fetch version="1.0" mapping="logical">
+        <entity name="ol_grailconfiguration">
+          <attribute name="ol_grailconfigurationid" />
+          <attribute name="ol_configid" />
+          <order attribute="ol_configid" descending="false" />
+          <filter type="and">
+            <condition attribute="statecode" operator="eq" value="0" />
+          </filter>
+          <attribute name="ol_configurationfunction" />
+          <attribute name="ol_configurationlookup" />
+          <attribute name="ol_configurationvalue" />
+        </entity>
+      </fetch>
+    </fetchxml>
+    <IntroducedVersion>1.0.0.0</IntroducedVersion>
+    <LocalizedNames>
+      <LocalizedName description="GRAIL Configurations" languagecode="1033" />
+    </LocalizedNames>
+  </savedquery>
+</savedqueries>

@@ -40,7 +40,7 @@
                         <labels>
                           <label description="Assigned To" languagecode="1033" />
                         </labels>
-                        <control id="bpf_ol_gr_task_ol_bpfgrailtask:ol_assignedto" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="ol_assignedto" relationship="bpf_ol_gr_task_ol_bpfgrailtask" isrequired="true" disabled="false" />
+                        <control id="bpf_ol_gr_task_ol_bpfgrailtask:ol_assignedto" classid="{270bd3db-d9af-4782-9025-509e298dec0a}" datafieldname="ol_assignedto" disabled="false" relationship="bpf_ol_gr_task_ol_bpfgrailtask" isrequired="true" />
                       </cell>
                     </row>
                   </rows>

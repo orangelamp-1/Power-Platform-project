@@ -1,3 +1,0 @@
-{
-    workingDate: DateAdd(Now(), workingDays, TimeUnit.Days)
-}

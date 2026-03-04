@@ -10,13 +10,13 @@
     <layoutxml>
       <grid name="resultset" jump="ol_errorid" select="1" icon="1" preview="1">
         <row name="result" id="ol_grailerrorlogid">
-          <cell name="ol_errorid" width="300" />
-          <cell name="ol_source" width="173" />
-          <cell name="ol_action" width="217" />
-          <cell name="ol_context" width="183" />
-          <cell name="ol_link" width="245" />
-          <cell name="createdon" width="125" />
-          <cell name="ownerid" width="179" />
+          <cell name="ol_errorid" width="150" />
+          <cell name="ol_source" width="150" />
+          <cell name="ol_action" width="250" />
+          <cell name="ol_context" width="250" />
+          <cell name="ol_link" width="250" />
+          <cell name="createdon" width="150" />
+          <cell name="ownerid" width="200" />
         </row>
       </grid>
     </layoutxml>
@@ -27,7 +27,6 @@
           <attribute name="ol_grailerrorlogid" />
           <attribute name="ol_errorid" />
           <attribute name="createdon" />
-          <order attribute="ol_errorid" descending="false" />
           <filter type="and">
             <condition attribute="statecode" operator="eq" value="0" />
           </filter>
@@ -36,6 +35,7 @@
           <attribute name="ol_action" />
           <attribute name="ol_context" />
           <attribute name="ownerid" />
+          <order attribute="createdon" descending="true" />
         </entity>
       </fetch>
     </fetchxml>

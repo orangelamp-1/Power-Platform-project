@@ -32,8 +32,7 @@
               "subscriptionRequest/message": 4,
               "subscriptionRequest/entityname": "ol_gr_task",
               "subscriptionRequest/scope": 4,
-              "subscriptionRequest/filteringattributes": "ol_assignedto",
-              "subscriptionRequest/filterexpression": "_ol_assignedto_value"
+              "subscriptionRequest/filteringattributes": "ol_assignedto"
             },
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
@@ -41,6 +40,11 @@
               "connectionName": "shared_commondataserviceforapps"
             }
           },
+          "conditions": [
+            {
+              "expression": "@not(empty(triggerOutputs()?['body/_ol_assignedto_value']))"
+            }
+          ],
           "metadata": {
             "operationMetadataId": "860ce798-57f0-4798-949f-8fa227faa3ec"
           }
@@ -63,6 +67,51 @@
                   "operationId": "UpdateOnlyRecord",
                   "connectionName": "shared_commondataserviceforapps"
                 }
+              }
+            },
+            "Add_a_new_row_-_Notes": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "annotations",
+                  "item/subject": "Task Assigned",
+                  "item/notetext": "Task assigned to @{outputs('Get_a_row_by_ID_-_User_record')?['body/fullname']}.",
+                  "item/objectid_ol_gr_task@odata.bind": "ol_gr_tasks/@{triggerOutputs()?['body/ol_gr_taskid']}"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              },
+              "runAfter": {
+                "Get_a_row_by_ID_-_User_record": [
+                  "SUCCEEDED"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
+              }
+            },
+            "Get_a_row_by_ID_-_User_record": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "systemusers",
+                  "recordId": "@outputs('Update_a_row_-_Assign_Owner')?['body/_ownerid_value']",
+                  "x-ms-odata-metadata-full": false,
+                  "$select": "fullname"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "GetItem",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              },
+              "runAfter": {
+                "Update_a_row_-_Assign_Owner": [
+                  "SUCCEEDED"
+                ]
               }
             }
           },

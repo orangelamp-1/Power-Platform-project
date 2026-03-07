@@ -1,6 +1,16 @@
 {
   "properties": {
-    "connectionReferences": {},
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "ol_CRDataverse"
+        },
+        "runtimeSource": "embedded"
+      }
+    },
     "definition": {
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
@@ -33,8 +43,21 @@
                   "description": "Title of the task."
                 },
                 "taskRequestor": {
-                  "type": "string",
-                  "description": "User principle name (UPN) of the person submitting the task."
+                  "description": "User principal name (UPN) or ObjectID (GUID) of the person submitting the task.",
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "not": {
+                        "format": "uuid"
+                      },
+                      "description": "UPN value (must not be a UUID)."
+                    },
+                    {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "Azure AD ObjectID in GUID format."
+                    }
+                  ]
                 },
                 "taskDescription": {
                   "type": "string",
@@ -42,12 +65,17 @@
                 },
                 "taskPriority": {
                   "type": "string",
-                  "description": "Optional priority level for the task (placeholder description)."
+                  "description": "Optional priority level for the task."
+                },
+                "workItemLink": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "Optional link to the associated work item (e.g., Azure DevOps, Jira)."
                 }
               }
             },
             "method": "POST",
-            "relativePath": "grail/v1/tasks"
+            "relativePath": "grail/{apiVersion}/tasks"
           },
           "metadata": {
             "operationMetadataId": "84c3c5dd-da2c-47d0-ae12-fcb987f3b765"
@@ -85,13 +113,298 @@
           },
           "runAfter": {
             "Scope_-_Main": [
-              "SUCCEEDED"
+              "Failed"
             ]
           }
         },
         "Scope_-_Main": {
           "type": "Scope",
-          "actions": {},
+          "actions": {
+            "Switch": {
+              "type": "Switch",
+              "expression": "@toLower(triggerOutputs()?['relativePathParameters']?['apiVersion'])",
+              "default": {
+                "actions": {
+                  "Respond_-_405_Method_Not_Allowed": {
+                    "type": "Response",
+                    "kind": "PowerApp",
+                    "inputs": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "responsecode": {
+                            "title": "responseCode",
+                            "type": "string",
+                            "x-ms-content-hint": "TEXT",
+                            "x-ms-dynamically-added": true
+                          },
+                          "responsedescription": {
+                            "title": "responseDescription",
+                            "type": "string",
+                            "x-ms-content-hint": "TEXT",
+                            "x-ms-dynamically-added": true
+                          }
+                        },
+                        "additionalProperties": {}
+                      },
+                      "statusCode": 200,
+                      "body": {
+                        "responsecode": "405",
+                        "responsedescription": "Method Not Allowed"
+                      }
+                    }
+                  },
+                  "Upsert_a_row_-_Fail": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "entityName": "ol_grailapiauditlogs",
+                        "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
+                        "item/ol_responsebody": "@body('Respond_-_405_Method_Not_Allowed')",
+                        "item/ol_responsestatuscode": "@body('Respond_-_405_Method_Not_Allowed')?['ResponseCode']"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                        "operationId": "UpdateRecord",
+                        "connectionName": "shared_commondataserviceforapps"
+                      }
+                    },
+                    "runAfter": {
+                      "Respond_-_405_Method_Not_Allowed": [
+                        "Succeeded"
+                      ]
+                    }
+                  }
+                }
+              },
+              "cases": {
+                "v1": {
+                  "actions": {
+                    "Add_a_new_row_-_GRAIL_Tasks_v1": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "entityName": "ol_gr_tasks",
+                          "item/ol_Caller@odata.bind": "systemusers/@{outputs('List_rows_-_Get_user_record')?['body/value'][0]?['systemuserid']}",
+                          "item/ol_priority": 125250003,
+                          "item/ol_status": 125250000,
+                          "item/ol_title": "@triggerBody()?['taskTitle']",
+                          "item/ol_description": "@triggerBody()?['taskDescription']"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "connectionName": "shared_commondataserviceforapps"
+                        }
+                      }
+                    },
+                    "Respond_-_200_Success_v1": {
+                      "type": "Response",
+                      "kind": "PowerApp",
+                      "inputs": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "responsecode": {
+                              "title": "responseCode",
+                              "type": "string",
+                              "x-ms-content-hint": "TEXT",
+                              "x-ms-dynamically-added": true
+                            },
+                            "responsedescription": {
+                              "title": "responseDescription",
+                              "type": "string",
+                              "x-ms-content-hint": "TEXT",
+                              "x-ms-dynamically-added": true
+                            }
+                          },
+                          "additionalProperties": {}
+                        },
+                        "statusCode": 200,
+                        "body": {
+                          "responsecode": "200",
+                          "responsedescription": "Success"
+                        }
+                      },
+                      "runAfter": {
+                        "Add_a_new_row_-_GRAIL_Tasks_v1": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Upsert_a_row_-_v1": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "entityName": "ol_grailapiauditlogs",
+                          "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
+                          "item/ol_responsebody": "@body('Respond_-_200_Success_v1')",
+                          "item/ol_responsestatuscode": "@body('Respond_-_200_Success_v1')?['ResponseCode']"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "UpdateRecord",
+                          "connectionName": "shared_commondataserviceforapps"
+                        }
+                      },
+                      "runAfter": {
+                        "Respond_-_200_Success_v1": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  },
+                  "case": "v1"
+                },
+                "v2": {
+                  "actions": {
+                    "Add_a_new_row_-_GRAIL_Tasks_v2": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "entityName": "ol_gr_tasks",
+                          "item/ol_Caller@odata.bind": "systemusers/@{outputs('List_rows_-_Get_user_record')?['body/value'][0]?['systemuserid']}",
+                          "item/ol_priority": 125250003,
+                          "item/ol_status": 125250000,
+                          "item/ol_title": "@triggerBody()?['taskTitle']",
+                          "item/ol_description": "@triggerBody()?['taskDescription']"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "connectionName": "shared_commondataserviceforapps"
+                        }
+                      }
+                    },
+                    "Add_a_new_row_-_Notes_v2": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "entityName": "annotations",
+                          "item/subject": "Work item link",
+                          "item/notetext": "<a href=\"@{triggerBody()?['workItemLink']} \" target=\"_blank\">@{triggerBody()?['workItemLink']} </a>",
+                          "item/objectid_ol_gr_task@odata.bind": "ol_gr_tasks/@{outputs('Add_a_new_row_-_GRAIL_Tasks_v2')?['body/ol_gr_taskid']}"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "CreateRecord",
+                          "connectionName": "shared_commondataserviceforapps"
+                        }
+                      },
+                      "runAfter": {
+                        "Add_a_new_row_-_GRAIL_Tasks_v2": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
+                      }
+                    },
+                    "Respond_-_200_Success_v2": {
+                      "type": "Response",
+                      "kind": "PowerApp",
+                      "inputs": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "responsecode": {
+                              "title": "responseCode",
+                              "type": "string",
+                              "x-ms-content-hint": "TEXT",
+                              "x-ms-dynamically-added": true
+                            },
+                            "responsedescription": {
+                              "title": "responseDescription",
+                              "type": "string",
+                              "x-ms-content-hint": "TEXT",
+                              "x-ms-dynamically-added": true
+                            }
+                          },
+                          "additionalProperties": {}
+                        },
+                        "statusCode": 200,
+                        "body": {
+                          "responsecode": "200",
+                          "responsedescription": "Success"
+                        }
+                      },
+                      "runAfter": {
+                        "Add_a_new_row_-_Notes_v2": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Upsert_a_row_-_v2": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "entityName": "ol_grailapiauditlogs",
+                          "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
+                          "item/ol_responsebody": "@body('Respond_-_200_Success_v2')",
+                          "item/ol_responsestatuscode": "@body('Respond_-_200_Success_v2')?['ResponseCode']"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "UpdateRecord",
+                          "connectionName": "shared_commondataserviceforapps"
+                        }
+                      },
+                      "runAfter": {
+                        "Respond_-_200_Success_v2": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  },
+                  "case": "v2"
+                }
+              },
+              "runAfter": {
+                "List_rows_-_Get_user_record": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "List_rows_-_Get_user_record": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "systemusers",
+                  "$filter": "@if(\r\n  and(\r\n    equals(length(triggerBody()?['taskRequestor']), 36),\r\n    equals(substring(triggerBody()?['taskRequestor'], 8, 1), '-'),\r\n    equals(substring(triggerBody()?['taskRequestor'], 13, 1), '-'),\r\n    equals(substring(triggerBody()?['taskRequestor'], 18, 1), '-'),\r\n    equals(substring(triggerBody()?['taskRequestor'], 23, 1), '-')\r\n  ),\r\n  concat('azureactivedirectoryobjectid eq ', triggerBody()?['taskRequestor']),\r\n  concat('domainname eq ''', triggerBody()?['taskRequestor'], '''')\r\n)"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Add_a_new_row_-_API_Audit": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Add_a_new_row_-_API_Audit": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "entityName": "ol_grailapiauditlogs",
+              "item/ol_calleraddress": "@triggerOutputs()?['headers']?['X-Original-Host']",
+              "item/ol_correlationid": "@triggerOutputs()?['headers']?['x-ms-correlation-id']",
+              "item/ol_endpoint": "@workflow()?['tags']['flowDisplayName']",
+              "item/ol_httpmethod": "POST",
+              "item/ol_requestbody": "@triggerBody()",
+              "item/ol_requestheaders": "@triggerOutputs()?['headers']",
+              "item/ol_requestorid": "@triggerOutputs()?['headers']?['User-Agent']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
           "runAfter": {}
         }
       }

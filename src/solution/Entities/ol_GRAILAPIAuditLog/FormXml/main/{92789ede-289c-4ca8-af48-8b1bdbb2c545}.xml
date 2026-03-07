@@ -5,7 +5,7 @@
     <IntroducedVersion>1.0</IntroducedVersion>
     <FormPresentation>1</FormPresentation>
     <FormActivationState>1</FormActivationState>
-    <form>
+    <form headerdensity="HighWithControls">
       <tabs>
         <tab verticallayout="true" id="{b699dc3a-a23e-475f-8c29-2142c86d9d16}" IsUserDefined="1">
           <labels>
@@ -14,7 +14,7 @@
           <columns>
             <column width="100%">
               <sections>
-                <section showlabel="false" showbar="false" IsUserDefined="0" id="{046c83be-6426-4a43-b46b-438deab369c5}">
+                <section showlabel="true" showbar="false" IsUserDefined="0" id="{046c83be-6426-4a43-b46b-438deab369c5}" name="General" columns="11">
                   <labels>
                     <label description="General" languagecode="1033" />
                   </labels>
@@ -26,13 +26,100 @@
                         </labels>
                         <control id="ol_apiauditid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="ol_apiauditid" />
                       </cell>
+                      <cell id="{f8bbde77-68c2-4c9e-a215-e9b51f6c78d5}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="CorrelationId" languagecode="1033" />
+                        </labels>
+                        <control id="ol_correlationid" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_correlationid" disabled="false" />
+                      </cell>
                     </row>
                     <row>
-                      <cell id="{25d17590-a071-47df-bcb9-6b7c67118952}">
+                      <cell id="{25d17590-a071-47df-bcb9-6b7c67118952}" visible="false">
                         <labels>
                           <label description="Owner" languagecode="1033" />
                         </labels>
                         <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                      <cell id="{d27f82b8-8d7a-4567-90fd-c593e732d028}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="RequestorId" languagecode="1033" />
+                        </labels>
+                        <control id="ol_requestorid" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_requestorid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{9974a200-7ce1-4e08-b7fe-ce650bb1527d}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Endpoint" languagecode="1033" />
+                        </labels>
+                        <control id="ol_endpoint" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_endpoint" disabled="false" />
+                      </cell>
+                      <cell id="{e70dd7e7-aaf6-49b5-bf45-46a1fec59158}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="CallerAddress" languagecode="1033" />
+                        </labels>
+                        <control id="ol_calleraddress" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_calleraddress" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{4d9e9364-87d1-4554-9430-a9c771c92e37}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="HTTP Method" languagecode="1033" />
+                        </labels>
+                        <control id="ol_httpmethod" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_httpmethod" disabled="false" />
+                      </cell>
+                      <cell locklevel="0" id="{14b9f4b5-fb89-4001-86c8-89e00e1f27b3}">
+                        <labels>
+                          <label description="" languagecode="1033" />
+                        </labels>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="Request" id="738619f1-530a-4671-be3b-f4331936e373" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Request" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row />
+                    <row>
+                      <cell id="{177947f1-e224-4541-89c5-78ff79311bac}" locklevel="0" colspan="1" rowspan="1" auto="true">
+                        <labels>
+                          <label description="RequestHeaders" languagecode="1033" />
+                        </labels>
+                        <control id="ol_requestheaders" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="ol_requestheaders" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{c6d6c166-bf98-46ca-8e6e-6ac836bb50a9}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="RequestBody" languagecode="1033" />
+                        </labels>
+                        <control id="ol_requestbody" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="ol_requestbody" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+                <section name="Response" id="c84a5394-4eec-4dd0-9e15-f96d87c46a92" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Response" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row />
+                    <row>
+                      <cell id="{79f7a9f0-fd48-474c-9072-3af506f97816}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="ResponseStatusCode" languagecode="1033" />
+                        </labels>
+                        <control id="ol_responsestatuscode" classid="{4273EDBD-AC1D-40D3-9FB2-095C621B552D}" datafieldname="ol_responsestatuscode" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{46a234fd-97ea-4a06-98e3-9ace9dc504cf}" locklevel="0" colspan="1" rowspan="1" auto="true">
+                        <labels>
+                          <label description="ResponseBody" languagecode="1033" />
+                        </labels>
+                        <control id="ol_responsebody" classid="{E0DECE4B-6FC8-4A8F-A065-082708572369}" datafieldname="ol_responsebody" disabled="false" />
                       </cell>
                     </row>
                   </rows>
@@ -42,6 +129,51 @@
           </columns>
         </tab>
       </tabs>
+      <header id="{b2fe6b05-e089-4d3d-a791-f77b70736fd9}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{b9795059-81b6-44c9-9204-62eed3780283}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{dc9cc70c-8a5b-4bd2-a5f4-16e612774f88}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{24bbbc50-6730-4107-b9eb-5d183eab486d}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <footer id="{484d8f28-d641-4b72-a66a-4c2aa6d26aaa}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{c19adee6-db89-405e-b1dc-e4af6b5080d4}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{f6f24c0c-6287-46ef-85b3-548a6c7f5b52}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{2cc18083-6359-4eab-81a3-af46c2beeec0}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </footer>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
     </form>
     <IsCustomizable>1</IsCustomizable>
     <CanBeDeleted>1</CanBeDeleted>

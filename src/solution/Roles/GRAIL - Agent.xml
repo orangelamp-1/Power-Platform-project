@@ -25,7 +25,7 @@
     <RolePrivilege name="prvCreateNewProcess" level="Global" />
     <RolePrivilege name="prvCreateNote" level="Global" />
     <RolePrivilege name="prvCreateol_GR_Task" level="Global" />
-    <RolePrivilege name="prvCreateol_GRAILErrorLog" level="Global" />
+    <RolePrivilege name="prvCreateol_GRAILErrorLog" level="Basic" />
     <RolePrivilege name="prvCreateSharePointData" level="Global" />
     <RolePrivilege name="prvCreateTranslationProcess" level="Global" />
     <RolePrivilege name="prvCreateUserApplicationMetadata" level="Basic" />
@@ -53,7 +53,12 @@
     <RolePrivilege name="prvReadHierarchyRule" level="Global" />
     <RolePrivilege name="prvReadNewProcess" level="Global" />
     <RolePrivilege name="prvReadNote" level="Global" />
+    <RolePrivilege name="prvReadol_bpfgrailtask" level="Global" />
     <RolePrivilege name="prvReadol_GR_Task" level="Global" />
+    <RolePrivilege name="prvReadol_GRAILAPIAuditLog" level="Global" />
+    <RolePrivilege name="prvReadol_GRAILConfiguration" level="Global" />
+    <RolePrivilege name="prvReadol_GRAILErrorLog" level="Global" />
+    <RolePrivilege name="prvReadol_GRAILHoliday" level="Global" />
     <RolePrivilege name="prvReadOptionSet" level="Global" />
     <RolePrivilege name="prvReadOrganization" level="Global" />
     <RolePrivilege name="prvReadPluginAssembly" level="Global" />

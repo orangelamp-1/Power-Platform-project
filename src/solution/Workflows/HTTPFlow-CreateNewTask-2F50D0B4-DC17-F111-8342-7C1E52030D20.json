@@ -33,17 +33,15 @@
             "schema": {
               "type": "object",
               "required": [
-                "taskTitle",
-                "taskRequestor",
-                "taskDescription"
+                "taskTitle"
               ],
               "properties": {
                 "taskTitle": {
                   "type": "string",
-                  "description": "Title of the task."
+                  "description": "Required Title of the task."
                 },
                 "taskRequestor": {
-                  "description": "User principal name (UPN) or ObjectID (GUID) of the person submitting the task.",
+                  "description": "Optional user principal name (UPN) or ObjectID (GUID) of the person submitting the task.",
                   "oneOf": [
                     {
                       "type": "string",
@@ -61,16 +59,25 @@
                 },
                 "taskDescription": {
                   "type": "string",
-                  "description": "Detailed description of the task."
+                  "description": "Optional detailed description of the task."
                 },
                 "taskPriority": {
                   "type": "string",
-                  "description": "Optional priority level for the task."
+                  "description": "Optional priority level for the task. Cannot be used with taskDueDate."
+                },
+                "taskDueDate": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Optional due date for the task (YYYY-MM-DD). Cannot be used with taskPriority."
+                },
+                "taskStatus": {
+                  "type": "string",
+                  "description": "Optional status for the task."
                 },
                 "workItemLink": {
                   "type": "string",
                   "format": "uri",
-                  "description": "Optional link to the associated work item (e.g., Azure DevOps, Jira)."
+                  "description": "v2 Only. Optional link to the associated work item (e.g., Azure DevOps, Jira)."
                 }
               }
             },
@@ -93,7 +100,12 @@
               },
               "runAfter": {
                 "Run_a_Child_Flow": [
-                  "Succeeded"
+                  "Succeeded",
+                  "Failed"
+                ],
+                "Upsert_a_row_-_API_Audit_-_422": [
+                  "Succeeded",
+                  "Failed"
                 ]
               }
             },
@@ -106,8 +118,56 @@
                 "body": {
                   "text": "@workflow()?['tags']['flowDisplayName']",
                   "text_1": "@concat('https://flow.microsoft.com/manage/environments/', workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])",
+                  "text_2": "\"ol_grailapiauditlog\": \"@{outputs('Add_a_new_row_-_API_Audit')?['body/ol_apiauditid']}\"",
                   "text_3": "Yes"
                 }
+              },
+              "runAfter": {
+                "Respond_-_422_Unprocessable_Content": [
+                  "Succeeded",
+                  "Failed"
+                ]
+              }
+            },
+            "Respond_-_422_Unprocessable_Content": {
+              "type": "Response",
+              "description": "400 Code used as 500 codes are intercepted by power automate and blocks body.",
+              "kind": "Http",
+              "inputs": {
+                "statusCode": 422,
+                "headers": {
+                  "Content-Type": "application/json"
+                },
+                "body": {
+                  "responsecode": "422 ",
+                  "responsedescription": "422 Unprocessable Content",
+                  "responsecontent": {
+                    "error": "An error occurred during processing.",
+                    "ol_grailapiauditlog": "@{outputs('Add_a_new_row_-_API_Audit')?['body/ol_apiauditid']}"
+                  }
+                }
+              }
+            },
+            "Upsert_a_row_-_API_Audit_-_422": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "ol_grailapiauditlogs",
+                  "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
+                  "item/ol_responsebody": "@body('Respond_-_422_Unprocessable_Content')",
+                  "item/ol_responsestatuscode": "@body('Respond_-_422_Unprocessable_Content')?['responsecode']"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              },
+              "runAfter": {
+                "Respond_-_422_Unprocessable_Content": [
+                  "Succeeded",
+                  "Failed"
+                ]
               }
             }
           },
@@ -120,48 +180,47 @@
         "Scope_-_Main": {
           "type": "Scope",
           "actions": {
-            "Switch": {
+            "Switch_-_apiVersion": {
               "type": "Switch",
               "expression": "@toLower(triggerOutputs()?['relativePathParameters']?['apiVersion'])",
               "default": {
                 "actions": {
-                  "Respond_-_405_Method_Not_Allowed": {
-                    "type": "Response",
-                    "kind": "PowerApp",
+                  "Terminate_-_Cancel_-_400": {
+                    "type": "Terminate",
                     "inputs": {
-                      "schema": {
-                        "type": "object",
-                        "properties": {
-                          "responsecode": {
-                            "title": "responseCode",
-                            "type": "string",
-                            "x-ms-content-hint": "TEXT",
-                            "x-ms-dynamically-added": true
-                          },
-                          "responsedescription": {
-                            "title": "responseDescription",
-                            "type": "string",
-                            "x-ms-content-hint": "TEXT",
-                            "x-ms-dynamically-added": true
-                          }
-                        },
-                        "additionalProperties": {}
+                      "runStatus": "Cancelled"
+                    },
+                    "runAfter": {
+                      "Upsert_a_row_-_API_Audit_-_400": [
+                        "Succeeded"
+                      ]
+                    }
+                  },
+                  "Respond_-_400_Bad_Request_-_apiVersion": {
+                    "type": "Response",
+                    "kind": "Http",
+                    "inputs": {
+                      "statusCode": 400,
+                      "headers": {
+                        "Content-Type": "application/json"
                       },
-                      "statusCode": 200,
                       "body": {
-                        "responsecode": "405",
-                        "responsedescription": "Method Not Allowed"
+                        "responsecode": "400",
+                        "responsedescription": "Bad Request",
+                        "responsecontent": {
+                          "error": "Unsupported API version. Supported versions: v1,v2"
+                        }
                       }
                     }
                   },
-                  "Upsert_a_row_-_Fail": {
+                  "Upsert_a_row_-_API_Audit_-_400": {
                     "type": "OpenApiConnection",
                     "inputs": {
                       "parameters": {
                         "entityName": "ol_grailapiauditlogs",
                         "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
-                        "item/ol_responsebody": "@body('Respond_-_405_Method_Not_Allowed')",
-                        "item/ol_responsestatuscode": "@body('Respond_-_405_Method_Not_Allowed')?['ResponseCode']"
+                        "item/ol_responsebody": "@body('Respond_-_400_Bad_Request_-_apiVersion')",
+                        "item/ol_responsestatuscode": "@body('Respond_-_400_Bad_Request_-_apiVersion')?['responsecode']"
                       },
                       "host": {
                         "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
@@ -170,7 +229,7 @@
                       }
                     },
                     "runAfter": {
-                      "Respond_-_405_Method_Not_Allowed": [
+                      "Respond_-_400_Bad_Request_-_apiVersion": [
                         "Succeeded"
                       ]
                     }
@@ -180,16 +239,17 @@
               "cases": {
                 "v1": {
                   "actions": {
-                    "Add_a_new_row_-_GRAIL_Tasks_v1": {
+                    "Add_a_new_row_-_GRAIL_Tasks_-_v1": {
                       "type": "OpenApiConnection",
                       "inputs": {
                         "parameters": {
                           "entityName": "ol_gr_tasks",
-                          "item/ol_Caller@odata.bind": "systemusers/@{outputs('List_rows_-_Get_user_record')?['body/value'][0]?['systemuserid']}",
-                          "item/ol_priority": 125250003,
-                          "item/ol_status": 125250000,
+                          "item/ol_priority": "@outputs('Compose_-_Priority_logic')",
+                          "item/ol_status": "@outputs('Compose_-_Status_logic')",
                           "item/ol_title": "@triggerBody()?['taskTitle']",
-                          "item/ol_description": "@triggerBody()?['taskDescription']"
+                          "item/ol_Caller@odata.bind": "@outputs('Compose_-_Requestor')",
+                          "item/ol_description": "@triggerBody()?['taskDescription']",
+                          "item/ol_duedate": "@outputs('Compose_-_Due_Date')"
                         },
                         "host": {
                           "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
@@ -198,48 +258,37 @@
                         }
                       }
                     },
-                    "Respond_-_200_Success_v1": {
+                    "Respond_-_201_Created_-_v1": {
                       "type": "Response",
-                      "kind": "PowerApp",
+                      "kind": "Http",
                       "inputs": {
-                        "schema": {
-                          "type": "object",
-                          "properties": {
-                            "responsecode": {
-                              "title": "responseCode",
-                              "type": "string",
-                              "x-ms-content-hint": "TEXT",
-                              "x-ms-dynamically-added": true
-                            },
-                            "responsedescription": {
-                              "title": "responseDescription",
-                              "type": "string",
-                              "x-ms-content-hint": "TEXT",
-                              "x-ms-dynamically-added": true
-                            }
-                          },
-                          "additionalProperties": {}
+                        "statusCode": 201,
+                        "headers": {
+                          "Content-Type": "application/json",
+                          "Location": "@{outputs('Add_a_new_row_-_GRAIL_Tasks_-_v1')?['body/@odata.id']}"
                         },
-                        "statusCode": 200,
                         "body": {
-                          "responsecode": "200",
-                          "responsedescription": "Success"
+                          "responsecode": "201",
+                          "responsedescription": "Created",
+                          "responsecontent": {
+                            "taskID": "@{outputs('Add_a_new_row_-_GRAIL_Tasks_-_v1')?['body/ol_taskid']}"
+                          }
                         }
                       },
                       "runAfter": {
-                        "Add_a_new_row_-_GRAIL_Tasks_v1": [
+                        "Add_a_new_row_-_GRAIL_Tasks_-_v1": [
                           "Succeeded"
                         ]
                       }
                     },
-                    "Upsert_a_row_-_v1": {
+                    "Upsert_a_row_-_API_Audit_-_v1": {
                       "type": "OpenApiConnection",
                       "inputs": {
                         "parameters": {
                           "entityName": "ol_grailapiauditlogs",
                           "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
-                          "item/ol_responsebody": "@body('Respond_-_200_Success_v1')",
-                          "item/ol_responsestatuscode": "@body('Respond_-_200_Success_v1')?['ResponseCode']"
+                          "item/ol_responsebody": "@body('Respond_-_201_Created_-_v1')",
+                          "item/ol_responsestatuscode": "@body('Respond_-_201_Created_-_v1')?['responsecode']"
                         },
                         "host": {
                           "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
@@ -248,7 +297,7 @@
                         }
                       },
                       "runAfter": {
-                        "Respond_-_200_Success_v1": [
+                        "Respond_-_201_Created_-_v1": [
                           "Succeeded"
                         ]
                       }
@@ -258,16 +307,17 @@
                 },
                 "v2": {
                   "actions": {
-                    "Add_a_new_row_-_GRAIL_Tasks_v2": {
+                    "Add_a_new_row_-_GRAIL_Tasks_-_v2": {
                       "type": "OpenApiConnection",
                       "inputs": {
                         "parameters": {
                           "entityName": "ol_gr_tasks",
-                          "item/ol_Caller@odata.bind": "systemusers/@{outputs('List_rows_-_Get_user_record')?['body/value'][0]?['systemuserid']}",
-                          "item/ol_priority": 125250003,
-                          "item/ol_status": 125250000,
+                          "item/ol_priority": "@outputs('Compose_-_Priority_logic')",
+                          "item/ol_status": "@outputs('Compose_-_Status_logic')",
                           "item/ol_title": "@triggerBody()?['taskTitle']",
-                          "item/ol_description": "@triggerBody()?['taskDescription']"
+                          "item/ol_Caller@odata.bind": "@outputs('Compose_-_Requestor')",
+                          "item/ol_description": "@triggerBody()?['taskDescription']",
+                          "item/ol_duedate": "@outputs('Compose_-_Due_Date')"
                         },
                         "host": {
                           "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
@@ -276,72 +326,79 @@
                         }
                       }
                     },
-                    "Add_a_new_row_-_Notes_v2": {
-                      "type": "OpenApiConnection",
-                      "inputs": {
-                        "parameters": {
-                          "entityName": "annotations",
-                          "item/subject": "Work item link",
-                          "item/notetext": "<a href=\"@{triggerBody()?['workItemLink']} \" target=\"_blank\">@{triggerBody()?['workItemLink']} </a>",
-                          "item/objectid_ol_gr_task@odata.bind": "ol_gr_tasks/@{outputs('Add_a_new_row_-_GRAIL_Tasks_v2')?['body/ol_gr_taskid']}"
-                        },
-                        "host": {
-                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
-                          "operationId": "CreateRecord",
-                          "connectionName": "shared_commondataserviceforapps"
-                        }
-                      },
-                      "runAfter": {
-                        "Add_a_new_row_-_GRAIL_Tasks_v2": [
-                          "Succeeded"
+                    "Condition_-_Link_provided": {
+                      "type": "If",
+                      "expression": {
+                        "and": [
+                          {
+                            "equals": [
+                              "@not(empty(triggerBody()?['workItemLink']))",
+                              "@true"
+                            ]
+                          }
                         ]
                       },
-                      "metadata": {
-                        "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
-                      }
-                    },
-                    "Respond_-_200_Success_v2": {
-                      "type": "Response",
-                      "kind": "PowerApp",
-                      "inputs": {
-                        "schema": {
-                          "type": "object",
-                          "properties": {
-                            "responsecode": {
-                              "title": "responseCode",
-                              "type": "string",
-                              "x-ms-content-hint": "TEXT",
-                              "x-ms-dynamically-added": true
+                      "actions": {
+                        "Add_a_new_row_-_Notes_-_v2": {
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "parameters": {
+                              "entityName": "annotations",
+                              "item/subject": "Work item link",
+                              "item/notetext": "<a href=\"@{triggerBody()?['workItemLink']} \" target=\"_blank\">@{triggerBody()?['workItemLink']} </a>",
+                              "item/objectid_ol_gr_task@odata.bind": "ol_gr_tasks/@{outputs('Add_a_new_row_-_GRAIL_Tasks_-_v2')?['body/ol_gr_taskid']}"
                             },
-                            "responsedescription": {
-                              "title": "responseDescription",
-                              "type": "string",
-                              "x-ms-content-hint": "TEXT",
-                              "x-ms-dynamically-added": true
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                              "operationId": "CreateRecord",
+                              "connectionName": "shared_commondataserviceforapps"
                             }
                           },
-                          "additionalProperties": {}
-                        },
-                        "statusCode": 200,
-                        "body": {
-                          "responsecode": "200",
-                          "responsedescription": "Success"
+                          "metadata": {
+                            "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
+                          }
                         }
                       },
+                      "else": {
+                        "actions": {}
+                      },
                       "runAfter": {
-                        "Add_a_new_row_-_Notes_v2": [
+                        "Add_a_new_row_-_GRAIL_Tasks_-_v2": [
                           "Succeeded"
                         ]
                       }
                     },
-                    "Upsert_a_row_-_v2": {
+                    "Respond_-_201_Created_-_v2": {
+                      "type": "Response",
+                      "kind": "Http",
+                      "inputs": {
+                        "statusCode": 201,
+                        "headers": {
+                          "Content-Type": "application/json",
+                          "Location": "@{outputs('Add_a_new_row_-_GRAIL_Tasks_-_v2')?['body/@odata.id']}"
+                        },
+                        "body": {
+                          "responsecode": "201",
+                          "responsedescription": "Created",
+                          "responsecontent": {
+                            "taskID": "@{outputs('Add_a_new_row_-_GRAIL_Tasks_-_v2')?['body/ol_taskid']}"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Condition_-_Link_provided": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Upsert_a_row_-_API_Audit_-_v2": {
                       "type": "OpenApiConnection",
                       "inputs": {
                         "parameters": {
                           "entityName": "ol_grailapiauditlogs",
                           "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
-                          "item/ol_responsebody": "@body('Respond_-_200_Success_v2')",
-                          "item/ol_responsestatuscode": "@body('Respond_-_200_Success_v2')?['ResponseCode']"
+                          "item/ol_responsebody": "@body('Respond_-_201_Created_-_v2')",
+                          "item/ol_responsestatuscode": "@body('Respond_-_201_Created_-_v2')?['responsecode']"
                         },
                         "host": {
                           "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
@@ -350,61 +407,195 @@
                         }
                       },
                       "runAfter": {
-                        "Respond_-_200_Success_v2": [
+                        "Respond_-_201_Created_-_v2": [
                           "Succeeded"
                         ]
                       }
                     }
                   },
                   "case": "v2"
+                },
+                "v99": {
+                  "actions": {
+                    "Force_API_Error": {
+                      "type": "Compose",
+                      "inputs": "@int(null)"
+                    }
+                  },
+                  "case": "v99"
                 }
               },
               "runAfter": {
-                "List_rows_-_Get_user_record": [
+                "Condition_-_Requestor_provided": [
                   "Succeeded"
                 ]
               }
             },
-            "List_rows_-_Get_user_record": {
+            "Add_a_new_row_-_API_Audit": {
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
-                  "entityName": "systemusers",
-                  "$filter": "@if(\r\n  and(\r\n    equals(length(triggerBody()?['taskRequestor']), 36),\r\n    equals(substring(triggerBody()?['taskRequestor'], 8, 1), '-'),\r\n    equals(substring(triggerBody()?['taskRequestor'], 13, 1), '-'),\r\n    equals(substring(triggerBody()?['taskRequestor'], 18, 1), '-'),\r\n    equals(substring(triggerBody()?['taskRequestor'], 23, 1), '-')\r\n  ),\r\n  concat('azureactivedirectoryobjectid eq ', triggerBody()?['taskRequestor']),\r\n  concat('domainname eq ''', triggerBody()?['taskRequestor'], '''')\r\n)"
+                  "entityName": "ol_grailapiauditlogs",
+                  "item/ol_calleraddress": "@triggerOutputs()?['headers']?['X-Original-Host']",
+                  "item/ol_correlationid": "@triggerOutputs()?['headers']?['x-ms-correlation-id']",
+                  "item/ol_endpoint": "@workflow()?['tags']['flowDisplayName']",
+                  "item/ol_flowlink": "@concat('https://flow.microsoft.com/manage/environments/', workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])",
+                  "item/ol_httpmethod": "POST",
+                  "item/ol_requestbody": "@triggerBody()",
+                  "item/ol_requestheaders": "@triggerOutputs()?['headers']",
+                  "item/ol_requestorid": "@triggerOutputs()?['headers']?['User-Agent']"
                 },
                 "host": {
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
-                  "operationId": "ListRecords",
+                  "operationId": "CreateRecord",
                   "connectionName": "shared_commondataserviceforapps"
                 }
+              }
+            },
+            "Condition_-_Requestor_provided": {
+              "type": "If",
+              "expression": {
+                "and": [
+                  {
+                    "equals": [
+                      "@not(empty(triggerBody()?['taskRequestor']))",
+                      "@true"
+                    ]
+                  }
+                ]
+              },
+              "actions": {
+                "List_rows_-_Get_user_record": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "entityName": "systemusers",
+                      "$filter": "@if(\r\n  and(\r\n    equals(length(triggerBody()?['taskRequestor']), 36),\r\n    equals(substring(triggerBody()?['taskRequestor'], 8, 1), '-'),\r\n    equals(substring(triggerBody()?['taskRequestor'], 13, 1), '-'),\r\n    equals(substring(triggerBody()?['taskRequestor'], 18, 1), '-'),\r\n    equals(substring(triggerBody()?['taskRequestor'], 23, 1), '-')\r\n  ),\r\n  concat('azureactivedirectoryobjectid eq ', triggerBody()?['taskRequestor']),\r\n  concat('domainname eq ''', triggerBody()?['taskRequestor'], '''')\r\n)"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                      "operationId": "ListRecords",
+                      "connectionName": "shared_commondataserviceforapps"
+                    }
+                  }
+                },
+                "Compose_-_Requestor": {
+                  "type": "Compose",
+                  "inputs": "systemusers/@{outputs('List_rows_-_Get_user_record')?['body/value'][0]?['systemuserid']}",
+                  "runAfter": {
+                    "List_rows_-_Get_user_record": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "else": {
+                "actions": {}
+              },
+              "runAfter": {
+                "Condition_-_Date_or_Priority_Check": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Condition_-_Date_or_Priority_Check": {
+              "type": "If",
+              "expression": {
+                "and": [
+                  {
+                    "not": {
+                      "equals": [
+                        "@and(\r\n  not(empty(triggerBody()?['taskPriority'])),\r\n  not(empty(triggerBody()?['taskDueDate']))\r\n)\r\n",
+                        true
+                      ]
+                    }
+                  }
+                ]
+              },
+              "actions": {
+                "Compose_-_Due_Date": {
+                  "type": "Compose",
+                  "inputs": "@if(empty(triggerBody()?['taskDueDate']), null, formatDateTime(triggerBody()?['taskDueDate'], 'yyyy-MM-dd'))"
+                }
+              },
+              "else": {
+                "actions": {
+                  "Terminate_-_Cancel_-_400_-_Field_Validation": {
+                    "type": "Terminate",
+                    "inputs": {
+                      "runStatus": "Cancelled"
+                    },
+                    "runAfter": {
+                      "Upsert_a_row_-_API_Audit_-_400_-_Field_Validation": [
+                        "Succeeded"
+                      ]
+                    }
+                  },
+                  "Respond_-_400_Bad_Request_-_Field_Validation": {
+                    "type": "Response",
+                    "kind": "Http",
+                    "inputs": {
+                      "statusCode": 400,
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "responsecode": "400",
+                        "responsedescription": "Bad Request",
+                        "responsecontent": {
+                          "error": "Invalid request. taskPriority and taskDueDate cannot both be provided. Please use one or the other."
+                        }
+                      }
+                    }
+                  },
+                  "Upsert_a_row_-_API_Audit_-_400_-_Field_Validation": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "entityName": "ol_grailapiauditlogs",
+                        "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
+                        "item/ol_responsebody": "@body('Respond_-_400_Bad_Request_-_Field_Validation')",
+                        "item/ol_responsestatuscode": "@body('Respond_-_400_Bad_Request_-_Field_Validation')?['responsecode']"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                        "operationId": "UpdateRecord",
+                        "connectionName": "shared_commondataserviceforapps"
+                      }
+                    },
+                    "runAfter": {
+                      "Respond_-_400_Bad_Request_-_Field_Validation": [
+                        "Succeeded"
+                      ]
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Add_a_new_row_-_API_Audit": [
+                  "Succeeded"
+                ]
               }
             }
           },
           "runAfter": {
-            "Add_a_new_row_-_API_Audit": [
+            "Compose_-_Status_logic": [
               "Succeeded"
             ]
           }
         },
-        "Add_a_new_row_-_API_Audit": {
-          "type": "OpenApiConnection",
-          "inputs": {
-            "parameters": {
-              "entityName": "ol_grailapiauditlogs",
-              "item/ol_calleraddress": "@triggerOutputs()?['headers']?['X-Original-Host']",
-              "item/ol_correlationid": "@triggerOutputs()?['headers']?['x-ms-correlation-id']",
-              "item/ol_endpoint": "@workflow()?['tags']['flowDisplayName']",
-              "item/ol_httpmethod": "POST",
-              "item/ol_requestbody": "@triggerBody()",
-              "item/ol_requestheaders": "@triggerOutputs()?['headers']",
-              "item/ol_requestorid": "@triggerOutputs()?['headers']?['User-Agent']"
-            },
-            "host": {
-              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
-              "operationId": "CreateRecord",
-              "connectionName": "shared_commondataserviceforapps"
-            }
-          },
+        "Compose_-_Status_logic": {
+          "type": "Compose",
+          "inputs": "@if(\r\n  or(equals(triggerBody()?['taskStatus'], null), equals(triggerBody()?['taskStatus'], '')),\r\n  125250000,\r\n  if(\r\n    equals(toLower(triggerBody()?['taskStatus']), 'new'),\r\n    125250000,\r\n    if(\r\n      equals(toLower(triggerBody()?['taskStatus']), 'in progress'),\r\n      125250001,\r\n      if(\r\n        equals(toLower(triggerBody()?['taskStatus']), 'on hold'),\r\n        125250002,\r\n        if(\r\n          equals(toLower(triggerBody()?['taskStatus']), 'completed'),\r\n          125250003,\r\n          if(\r\n            equals(toLower(triggerBody()?['taskStatus']), 'closed'),\r\n            125250200,\r\n            if(\r\n              equals(toLower(triggerBody()?['taskStatus']), 'cancelled'),\r\n              125250999,\r\n              125250000\r\n            )\r\n          )\r\n        )\r\n      )\r\n    )\r\n  )\r\n)\r\n",
+          "runAfter": {
+            "Compose_-_Priority_logic": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Compose_-_Priority_logic": {
+          "type": "Compose",
+          "inputs": "@if(\r\n  or(equals(triggerBody()?['taskPriority'], null), equals(triggerBody()?['taskPriority'], '')),\r\n  125250999,\r\n  if(\r\n    equals(toLower(triggerBody()?['taskPriority']), 'low'),\r\n    125250000,\r\n    if(\r\n      equals(toLower(triggerBody()?['taskPriority']), 'medium'),\r\n      125250001,\r\n      if(\r\n        equals(toLower(triggerBody()?['taskPriority']), 'high'),\r\n        125250002,\r\n        125250999\r\n      )\r\n    )\r\n  )\r\n)\r\n",
           "runAfter": {}
         }
       }

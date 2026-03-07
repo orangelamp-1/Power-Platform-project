@@ -32,7 +32,8 @@
               "subscriptionRequest/message": 4,
               "subscriptionRequest/entityname": "ol_gr_task",
               "subscriptionRequest/scope": 4,
-              "subscriptionRequest/filteringattributes": "ol_assignedto"
+              "subscriptionRequest/filteringattributes": "ol_assignedto",
+              "subscriptionRequest/runas": 3
             },
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
@@ -86,7 +87,7 @@
               },
               "runAfter": {
                 "Get_a_row_by_ID_-_User_record": [
-                  "SUCCEEDED"
+                  "Succeeded"
                 ]
               },
               "metadata": {
@@ -110,7 +111,7 @@
               },
               "runAfter": {
                 "Update_a_row_-_Assign_Owner": [
-                  "SUCCEEDED"
+                  "Succeeded"
                 ]
               }
             }

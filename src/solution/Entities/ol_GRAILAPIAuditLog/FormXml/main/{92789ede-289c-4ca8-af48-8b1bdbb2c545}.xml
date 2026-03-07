@@ -74,6 +74,14 @@
                         </labels>
                       </cell>
                     </row>
+                    <row>
+                      <cell id="{e1263c61-3554-4ef3-8cca-22174279255e}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="Flow Link" languagecode="1033" />
+                        </labels>
+                        <control id="ol_flowlink" classid="{71716B6C-711E-476C-8AB8-5D11542BFB47}" datafieldname="ol_flowlink" disabled="false" />
+                      </cell>
+                    </row>
                   </rows>
                 </section>
                 <section name="Request" id="738619f1-530a-4671-be3b-f4331936e373" IsUserDefined="0" locklevel="0" showlabel="true" showbar="false" layout="varwidth" celllabelalignment="Left" celllabelposition="Left" columns="1" labelwidth="115">

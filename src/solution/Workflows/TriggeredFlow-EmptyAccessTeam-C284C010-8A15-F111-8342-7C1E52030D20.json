@@ -27,7 +27,8 @@
           "defaultValue": "3b6d6949-8715-f111-8342-7c1e52030d20",
           "type": "String",
           "metadata": {
-            "schemaName": "ol_EVTeamTemplateReadGRAILTask"
+            "schemaName": "ol_EVTeamTemplateReadGRAILTask",
+            "description": "The id of \"Team Template - Read GRAIL Task\". This should not change if part of solution, but is stored as EV as precaution. "
           }
         }
       },
@@ -41,7 +42,8 @@
               "subscriptionRequest/entityname": "ol_gr_task",
               "subscriptionRequest/scope": 4,
               "subscriptionRequest/filteringattributes": "ol_status",
-              "subscriptionRequest/filterexpression": "ol_status eq 125250200 or ol_status eq 125250999"
+              "subscriptionRequest/filterexpression": "ol_status eq 125250200 or ol_status eq 125250999",
+              "subscriptionRequest/runas": 3
             },
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",

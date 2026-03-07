@@ -29,11 +29,12 @@
           "type": "OpenApiConnectionWebhook",
           "inputs": {
             "parameters": {
-              "subscriptionRequest/message": 7,
+              "subscriptionRequest/message": 4,
               "subscriptionRequest/entityname": "ol_gr_task",
               "subscriptionRequest/scope": 4,
               "subscriptionRequest/filteringattributes": "ol_priority",
-              "subscriptionRequest/filterexpression": "ol_priority ne 125250003"
+              "subscriptionRequest/filterexpression": "ol_priority ne 125250999",
+              "subscriptionRequest/runas": 3
             },
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
@@ -78,7 +79,7 @@
               },
               "runAfter": {
                 "Run_a_Child_Flow_-_Calculate_Due_Dates": [
-                  "SUCCEEDED"
+                  "Succeeded"
                 ]
               },
               "metadata": {

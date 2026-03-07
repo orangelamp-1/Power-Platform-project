@@ -1,0 +1,555 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "ol_CRDataverse"
+        },
+        "runtimeSource": "embedded"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Http",
+          "inputs": {
+            "triggerAuthenticationType": "All",
+            "schema": {
+              "type": "object",
+              "required": [
+                "taskStatus"
+              ],
+              "properties": {
+                "taskStatus": {
+                  "type": "string",
+                  "description": "Updated status for the task."
+                }
+              }
+            },
+            "method": "PATCH",
+            "relativePath": "grail/{apiVersion}/tasks"
+          },
+          "metadata": {
+            "operationMetadataId": "b01be0ba-9971-407a-8bde-74012d7be056"
+          }
+        }
+      },
+      "actions": {
+        "Scope_-_Main": {
+          "type": "Scope",
+          "actions": {
+            "Add_a_new_row_-_API_Audit": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "ol_grailapiauditlogs",
+                  "item/ol_calleraddress": "@triggerOutputs()?['headers']?['X-Original-Host']",
+                  "item/ol_correlationid": "@triggerOutputs()?['headers']?['x-ms-correlation-id']",
+                  "item/ol_endpoint": "@workflow()?['tags']['flowDisplayName']",
+                  "item/ol_flowlink": "@concat('https://flow.microsoft.com/manage/environments/', workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])",
+                  "item/ol_httpmethod": "DELETE",
+                  "item/ol_requestbody": "@triggerBody()",
+                  "item/ol_requestheaders": "@triggerOutputs()?['headers']",
+                  "item/ol_requestorid": "@triggerOutputs()?['headers']?['User-Agent']"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              }
+            },
+            "Switch_-_apiVersion_1": {
+              "type": "Switch",
+              "expression": "@toLower(triggerOutputs()?['relativePathParameters']?['apiVersion'])",
+              "default": {
+                "actions": {
+                  "Respond_-_400_Bad_Request_-_apiVersion": {
+                    "type": "Response",
+                    "kind": "Http",
+                    "inputs": {
+                      "statusCode": 400,
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "responsecode": "400",
+                        "responsedescription": "Bad Request",
+                        "responsecontent": {
+                          "error": "Unsupported API version. Supported versions: v1"
+                        }
+                      }
+                    }
+                  },
+                  "Upsert_a_row_-_API_Audit_-_400": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "entityName": "ol_grailapiauditlogs",
+                        "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
+                        "item/ol_responsebody": "@body('Respond_-_400_Bad_Request_-_apiVersion')",
+                        "item/ol_responsestatuscode": "@body('Respond_-_400_Bad_Request_-_apiVersion')?['responsecode']"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                        "operationId": "UpdateRecord",
+                        "connectionName": "shared_commondataserviceforapps"
+                      }
+                    },
+                    "runAfter": {
+                      "Respond_-_400_Bad_Request_-_apiVersion": [
+                        "Succeeded"
+                      ]
+                    }
+                  },
+                  "Terminate_-_Cancel_-_400": {
+                    "type": "Terminate",
+                    "inputs": {
+                      "runStatus": "Cancelled"
+                    },
+                    "runAfter": {
+                      "Upsert_a_row_-_API_Audit_-_400": [
+                        "Succeeded"
+                      ]
+                    }
+                  }
+                }
+              },
+              "cases": {
+                "v1": {
+                  "actions": {
+                    "Respond_-_200_Success_-_v1": {
+                      "type": "Response",
+                      "kind": "Http",
+                      "inputs": {
+                        "statusCode": 200,
+                        "headers": {
+                          "Content-Type": "application/json"
+                        },
+                        "body": {
+                          "responsecode": "200",
+                          "responsedescription": "Success",
+                          "responsecontent": {
+                            "taskId": "@{coalesce(triggerOutputs()?['queries']?['taskId'],triggerOutputs()?['queries']?['taskID'])}"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Update_a_row_-_GRAIL_Task_-_v1": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Upsert_a_row_-_API_Audit_-_204": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "entityName": "ol_grailapiauditlogs",
+                          "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
+                          "item/ol_responsebody": "@body('Respond_-_200_Success_-_v1')",
+                          "item/ol_responsestatuscode": "@body('Respond_-_200_Success_-_v1')?['responsecode']"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "UpdateRecord",
+                          "connectionName": "shared_commondataserviceforapps"
+                        }
+                      },
+                      "runAfter": {
+                        "Respond_-_200_Success_-_v1": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Update_a_row_-_GRAIL_Task_-_v1": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "entityName": "ol_gr_tasks",
+                          "recordId": "@outputs('List_rows_-_GRIAL_Task')?['body/value'][0]?['ol_gr_taskid']",
+                          "item/ol_status": "@outputs('Compose_-_Status_logic')"
+                        },
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                          "operationId": "UpdateOnlyRecord",
+                          "connectionName": "shared_commondataserviceforapps"
+                        }
+                      }
+                    }
+                  },
+                  "case": "v1"
+                },
+                "v99": {
+                  "actions": {
+                    "Force_API_Error": {
+                      "type": "Compose",
+                      "inputs": "@int(null)"
+                    }
+                  },
+                  "case": "v99"
+                }
+              },
+              "runAfter": {
+                "Condition_-_Check_Task_found": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Condition_-_Check_taskId_was_provided": {
+              "type": "If",
+              "expression": {
+                "or": [
+                  {
+                    "equals": [
+                      "@not(empty(triggerOutputs()?['queries']?['taskId']))",
+                      "@true"
+                    ]
+                  },
+                  {
+                    "equals": [
+                      "@not(empty(triggerOutputs()?['queries']?['taskID']))",
+                      "@true"
+                    ]
+                  }
+                ]
+              },
+              "actions": {
+                "List_rows_-_GRIAL_Task": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "entityName": "ol_gr_tasks",
+                      "$filter": "ol_taskid eq '@{triggerOutputs()?['queries']?['taskId']}' or ol_taskid eq '@{triggerOutputs()?['queries']?['taskID']}'"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                      "operationId": "ListRecords",
+                      "connectionName": "shared_commondataserviceforapps"
+                    }
+                  }
+                }
+              },
+              "else": {
+                "actions": {
+                  "Respond_-_400_Bad_Request_-_taskId": {
+                    "type": "Response",
+                    "kind": "Http",
+                    "inputs": {
+                      "statusCode": 400,
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "responsecode": "400",
+                        "responsedescription": "Bad Request",
+                        "responsecontent": {
+                          "error": "taskId query parameter is required for PATCH requests."
+                        }
+                      }
+                    }
+                  },
+                  "Upsert_a_row_-_400_Bad_Request_-_taskId": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "entityName": "ol_grailapiauditlogs",
+                        "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
+                        "item/ol_responsebody": "@body('Respond_-_400_Bad_Request_-_taskId')",
+                        "item/ol_responsestatuscode": "@body('Respond_-_400_Bad_Request_-_taskId')?['responsecode']"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                        "operationId": "UpdateRecord",
+                        "connectionName": "shared_commondataserviceforapps"
+                      }
+                    },
+                    "runAfter": {
+                      "Respond_-_400_Bad_Request_-_taskId": [
+                        "Succeeded"
+                      ]
+                    }
+                  },
+                  "Terminate_-_400_Bad_Request_-_taskId": {
+                    "type": "Terminate",
+                    "inputs": {
+                      "runStatus": "Cancelled"
+                    },
+                    "runAfter": {
+                      "Upsert_a_row_-_400_Bad_Request_-_taskId": [
+                        "Succeeded"
+                      ]
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Condition_-_Check_taskStatus_valid": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Condition_-_Check_Task_found": {
+              "type": "If",
+              "expression": {
+                "and": [
+                  {
+                    "equals": [
+                      "@not(empty(outputs('List_rows_-_GRIAL_Task')?['body/value']))",
+                      "@true"
+                    ]
+                  }
+                ]
+              },
+              "actions": {},
+              "else": {
+                "actions": {
+                  "Respond_-_404_Not_Found": {
+                    "type": "Response",
+                    "kind": "Http",
+                    "inputs": {
+                      "statusCode": 404,
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "responsecode": "404",
+                        "responsedescription": "Not Found",
+                        "responsecontent": {
+                          "error": "No matching taskId was found."
+                        }
+                      }
+                    }
+                  },
+                  "Upsert_a_row_-_400_Not_Found": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "entityName": "ol_grailapiauditlogs",
+                        "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
+                        "item/ol_responsebody": "@body('Respond_-_404_Not_Found')",
+                        "item/ol_responsestatuscode": "@body('Respond_-_404_Not_Found')?['responsecode']"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                        "operationId": "UpdateRecord",
+                        "connectionName": "shared_commondataserviceforapps"
+                      }
+                    },
+                    "runAfter": {
+                      "Respond_-_404_Not_Found": [
+                        "Succeeded"
+                      ]
+                    }
+                  },
+                  "Terminate_-_404_Not_Found": {
+                    "type": "Terminate",
+                    "inputs": {
+                      "runStatus": "Cancelled"
+                    },
+                    "runAfter": {
+                      "Upsert_a_row_-_400_Not_Found": [
+                        "Succeeded"
+                      ]
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Condition_-_Check_taskId_was_provided": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Condition_-_Check_taskStatus_valid": {
+              "type": "If",
+              "expression": {
+                "or": [
+                  {
+                    "greater": [
+                      "@outputs('Compose_-_Status_logic')",
+                      0
+                    ]
+                  }
+                ]
+              },
+              "actions": {},
+              "else": {
+                "actions": {
+                  "Respond_-_400_Bad_Request_-_taskStatus": {
+                    "type": "Response",
+                    "kind": "Http",
+                    "inputs": {
+                      "statusCode": 400,
+                      "headers": {
+                        "Content-Type": "application/json"
+                      },
+                      "body": {
+                        "responsecode": "400",
+                        "responsedescription": "Bad Request",
+                        "responsecontent": {
+                          "error": "taskStatus query parameter invalid."
+                        }
+                      }
+                    }
+                  },
+                  "Upsert_a_row_-_400_Bad_Request_-_taskStatus": {
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "entityName": "ol_grailapiauditlogs",
+                        "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
+                        "item/ol_responsebody": "@body('Respond_-_400_Bad_Request_-_taskStatus')",
+                        "item/ol_responsestatuscode": "@body('Respond_-_400_Bad_Request_-_taskStatus')?['responsecode']"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                        "operationId": "UpdateRecord",
+                        "connectionName": "shared_commondataserviceforapps"
+                      }
+                    },
+                    "runAfter": {
+                      "Respond_-_400_Bad_Request_-_taskStatus": [
+                        "Succeeded"
+                      ]
+                    }
+                  },
+                  "Terminate_-_400_Bad_Request_-_taskStatus": {
+                    "type": "Terminate",
+                    "inputs": {
+                      "runStatus": "Cancelled"
+                    },
+                    "runAfter": {
+                      "Upsert_a_row_-_400_Bad_Request_-_taskStatus": [
+                        "Succeeded"
+                      ]
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Add_a_new_row_-_API_Audit": [
+                  "Succeeded"
+                ]
+              }
+            }
+          },
+          "runAfter": {
+            "Compose_-_Status_logic": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Scope_-_Error_Handling": {
+          "type": "Scope",
+          "actions": {
+            "Run_a_Child_Flow": {
+              "type": "Workflow",
+              "inputs": {
+                "host": {
+                  "workflowReferenceName": "8d5db0d0-fd13-f111-8341-000d3ad482d2"
+                },
+                "body": {
+                  "text": "@workflow()?['tags']['flowDisplayName']",
+                  "text_1": "@concat('https://flow.microsoft.com/manage/environments/', workflow()?['tags']['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']['name'])",
+                  "text_2": "\"ol_grailapiauditlog\": \"@{outputs('Add_a_new_row_-_API_Audit')?['body/ol_apiauditid']}\"",
+                  "text_3": "Yes"
+                }
+              },
+              "runAfter": {
+                "Respond_-_422_Unprocessable_Content": [
+                  "Succeeded",
+                  "Failed"
+                ]
+              }
+            },
+            "Upsert_a_row_-_API_Audit_-_422": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "ol_grailapiauditlogs",
+                  "recordId": "@outputs('Add_a_new_row_-_API_Audit')?['body/ol_grailapiauditlogid']",
+                  "item/ol_responsebody": "@body('Respond_-_422_Unprocessable_Content')",
+                  "item/ol_responsestatuscode": "@body('Respond_-_422_Unprocessable_Content')?['responsecode']"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              },
+              "runAfter": {
+                "Respond_-_422_Unprocessable_Content": [
+                  "Succeeded",
+                  "Failed"
+                ]
+              }
+            },
+            "Respond_-_422_Unprocessable_Content": {
+              "type": "Response",
+              "description": "400 Code used as 500 codes are intercepted by power automate and blocks body.",
+              "kind": "Http",
+              "inputs": {
+                "statusCode": 422,
+                "headers": {
+                  "Content-Type": "application/json"
+                },
+                "body": {
+                  "responsecode": "422 ",
+                  "responsedescription": "422 Unprocessable Content",
+                  "responsecontent": {
+                    "error": "An error occurred during processing.",
+                    "ol_grailapiauditlog": "@{outputs('Add_a_new_row_-_API_Audit')?['body/ol_apiauditid']}"
+                  }
+                }
+              }
+            },
+            "Terminate_-_Failed_Main_Scope": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed"
+              },
+              "runAfter": {
+                "Upsert_a_row_-_API_Audit_-_422": [
+                  "Succeeded",
+                  "Failed"
+                ],
+                "Run_a_Child_Flow": [
+                  "Succeeded",
+                  "Failed"
+                ]
+              }
+            }
+          },
+          "runAfter": {
+            "Scope_-_Main": [
+              "Failed"
+            ]
+          }
+        },
+        "Compose_-_Status_logic": {
+          "type": "Compose",
+          "inputs": "@if(\r\n  or(equals(triggerBody()?['taskStatus'], null), equals(triggerBody()?['taskStatus'], '')),\r\n  -1,\r\n  if(\r\n    equals(toLower(triggerBody()?['taskStatus']), 'new'),\r\n    125250000,\r\n    if(\r\n      equals(toLower(triggerBody()?['taskStatus']), 'in progress'),\r\n      125250001,\r\n      if(\r\n        equals(toLower(triggerBody()?['taskStatus']), 'on hold'),\r\n        125250002,\r\n        if(\r\n          equals(toLower(triggerBody()?['taskStatus']), 'completed'),\r\n          125250003,\r\n          if(\r\n            equals(toLower(triggerBody()?['taskStatus']), 'closed'),\r\n            125250200,\r\n            if(\r\n              equals(toLower(triggerBody()?['taskStatus']), 'cancelled'),\r\n              125250999,\r\n              -1\r\n            )\r\n          )\r\n        )\r\n      )\r\n    )\r\n  )\r\n)\r\n",
+          "runAfter": {}
+        }
+      }
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

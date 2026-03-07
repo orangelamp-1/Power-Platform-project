@@ -32,7 +32,8 @@
               "subscriptionRequest/message": 7,
               "subscriptionRequest/entityname": "ol_grailholiday",
               "subscriptionRequest/scope": 4,
-              "subscriptionRequest/filteringattributes": "ol_date"
+              "subscriptionRequest/filteringattributes": "ol_date",
+              "subscriptionRequest/runas": 3
             },
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",

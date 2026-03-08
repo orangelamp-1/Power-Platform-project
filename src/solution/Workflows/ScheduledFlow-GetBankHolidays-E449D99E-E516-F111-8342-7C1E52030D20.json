@@ -2,13 +2,14 @@
   "properties": {
     "connectionReferences": {
       "shared_commondataserviceforapps": {
-        "api": {
-          "name": "shared_commondataserviceforapps"
-        },
+        "impersonation": {},
+        "runtimeSource": "embedded",
         "connection": {
           "connectionReferenceLogicalName": "ol_CRDataverse"
         },
-        "runtimeSource": "embedded"
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
       }
     },
     "definition": {
@@ -26,7 +27,6 @@
       },
       "triggers": {
         "Recurrence": {
-          "type": "Recurrence",
           "recurrence": {
             "frequency": "Month",
             "interval": 1,
@@ -34,12 +34,12 @@
           },
           "metadata": {
             "operationMetadataId": "5d55adac-e73f-4423-bed5-4dda549bb898"
-          }
+          },
+          "type": "Recurrence"
         }
       },
       "actions": {
         "Scope_-_Main": {
-          "type": "Scope",
           "actions": {
             "HTTP_GET_-_Bank_Holidays": {
               "type": "Http",
@@ -54,30 +54,35 @@
               }
             },
             "Filter_array_-_Future_dates_only": {
-              "type": "Query",
-              "inputs": {
-                "from": "@body('HTTP_GET_-_Bank_Holidays')?['england-and-wales']?['events']",
-                "where": "@greater(parseDateTime(item()?['date'],'en-GB'),formatDateTime(utcNow(),'yyyy-MM-dd'))"
-              },
               "runAfter": {
                 "HTTP_GET_-_Bank_Holidays": [
                   "Succeeded"
                 ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('HTTP_GET_-_Bank_Holidays')?['england-and-wales']?['events']",
+                "where": "@greater(parseDateTime(item()?['date'],'en-GB'),formatDateTime(utcNow(),'yyyy-MM-dd'))"
               }
             },
             "Select_-_HTTP_-_date": {
-              "type": "Select",
-              "inputs": {
-                "from": "@body('Filter_array_-_Future_dates_only')",
-                "select": "@item()?['date']"
-              },
               "runAfter": {
                 "Filter_array_-_Future_dates_only": [
                   "Succeeded"
                 ]
+              },
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Filter_array_-_Future_dates_only')",
+                "select": "@item()?['date']"
               }
             },
             "List_rows_-_GRAIL_Holidays": {
+              "runAfter": {
+                "Select_-_HTTP_-_date": [
+                  "Succeeded"
+                ]
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -89,51 +94,45 @@
                   "operationId": "ListRecords",
                   "connectionName": "shared_commondataserviceforapps"
                 }
-              },
-              "runAfter": {
-                "Select_-_HTTP_-_date": [
-                  "Succeeded"
-                ]
               }
             },
             "Select_-_Dataverse_-_date": {
-              "type": "Select",
-              "inputs": {
-                "from": "@outputs('List_rows_-_GRAIL_Holidays')?['body/value']",
-                "select": "@formatDateTime(item()?['ol_date'],'yyyy-MM-dd')"
-              },
               "runAfter": {
                 "List_rows_-_GRAIL_Holidays": [
                   "Succeeded"
                 ]
+              },
+              "type": "Select",
+              "inputs": {
+                "from": "@outputs('List_rows_-_GRAIL_Holidays')?['body/value']",
+                "select": "@formatDateTime(item()?['ol_date'],'yyyy-MM-dd')"
               }
             },
             "Filter_array_-_Dataverse_x_HTTP": {
+              "runAfter": {
+                "Select_-_Dataverse_-_date": [
+                  "Succeeded"
+                ]
+              },
               "type": "Query",
               "inputs": {
                 "from": "@body('Select_-_Dataverse_-_date')",
                 "where": "@not(contains(body('Select_-_HTTP_-_date'),item()))"
-              },
+              }
+            },
+            "Filter_array_-_HTTP_x_Dataverse": {
               "runAfter": {
                 "Select_-_Dataverse_-_date": [
                   "Succeeded"
                 ]
-              }
-            },
-            "Filter_array_-_HTTP_x_Dataverse": {
+              },
               "type": "Query",
               "inputs": {
                 "from": "@body('Select_-_HTTP_-_date')",
                 "where": "@not(contains(body('Select_-_Dataverse_-_date'),item()))"
-              },
-              "runAfter": {
-                "Select_-_Dataverse_-_date": [
-                  "Succeeded"
-                ]
               }
             },
             "Apply_to_each_-_Missing_bank_holidays": {
-              "type": "Foreach",
               "foreach": "@body('Filter_array_-_HTTP_x_Dataverse')",
               "actions": {
                 "Filter_array_-_Get_full_bank_holiday_record": {
@@ -144,6 +143,11 @@
                   }
                 },
                 "Add_a_new_row_-_GRAIL_Holidays": {
+                  "runAfter": {
+                    "Filter_array_-_Get_full_bank_holiday_record": [
+                      "Succeeded"
+                    ]
+                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -158,11 +162,6 @@
                       "operationId": "CreateRecord",
                       "connectionName": "shared_commondataserviceforapps"
                     }
-                  },
-                  "runAfter": {
-                    "Filter_array_-_Get_full_bank_holiday_record": [
-                      "Succeeded"
-                    ]
                   }
                 }
               },
@@ -170,10 +169,10 @@
                 "Filter_array_-_HTTP_x_Dataverse": [
                   "Succeeded"
                 ]
-              }
+              },
+              "type": "Foreach"
             },
             "Apply_to_each_-_Excess_bank_holiday": {
-              "type": "Foreach",
               "foreach": "@body('Filter_array_-_Dataverse_x_HTTP')",
               "actions": {
                 "Filter_array_-_Get_full_Dataverse_record": {
@@ -184,6 +183,11 @@
                   }
                 },
                 "Delete_a_row_-_GRAIL_Holidays": {
+                  "runAfter": {
+                    "Filter_array_-_Get_full_Dataverse_record": [
+                      "Succeeded"
+                    ]
+                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -195,11 +199,6 @@
                       "operationId": "DeleteRecord",
                       "connectionName": "shared_commondataserviceforapps"
                     }
-                  },
-                  "runAfter": {
-                    "Filter_array_-_Get_full_Dataverse_record": [
-                      "Succeeded"
-                    ]
                   }
                 }
               },
@@ -207,23 +206,24 @@
                 "Filter_array_-_Dataverse_x_HTTP": [
                   "Succeeded"
                 ]
-              }
+              },
+              "type": "Foreach"
             }
           },
-          "runAfter": {}
+          "runAfter": {},
+          "type": "Scope"
         },
         "Scope_-_Error_Handling": {
-          "type": "Scope",
           "actions": {
             "Terminate_-_Failed_Main_Scope": {
-              "type": "Terminate",
-              "inputs": {
-                "runStatus": "Failed"
-              },
               "runAfter": {
                 "Run_a_Child_Flow": [
                   "Succeeded"
                 ]
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed"
               }
             },
             "Run_a_Child_Flow": {
@@ -244,7 +244,8 @@
             "Scope_-_Main": [
               "Failed"
             ]
-          }
+          },
+          "type": "Scope"
         }
       }
     },

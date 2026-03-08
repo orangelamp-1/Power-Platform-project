@@ -2,13 +2,14 @@
   "properties": {
     "connectionReferences": {
       "shared_commondataserviceforapps": {
-        "api": {
-          "name": "shared_commondataserviceforapps"
-        },
+        "impersonation": {},
+        "runtimeSource": "embedded",
         "connection": {
           "connectionReferenceLogicalName": "ol_CRDataverse"
         },
-        "runtimeSource": "embedded"
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
       }
     },
     "definition": {
@@ -26,6 +27,9 @@
       },
       "triggers": {
         "When_a_row_is_added,_modified_or_deleted": {
+          "metadata": {
+            "operationMetadataId": "860ce798-57f0-4798-949f-8fa227faa3ec"
+          },
           "type": "OpenApiConnectionWebhook",
           "inputs": {
             "parameters": {
@@ -45,15 +49,11 @@
             {
               "expression": "@not(empty(triggerOutputs()?['body/_ol_assignedto_value']))"
             }
-          ],
-          "metadata": {
-            "operationMetadataId": "860ce798-57f0-4798-949f-8fa227faa3ec"
-          }
+          ]
         }
       },
       "actions": {
         "Scope_-_Main": {
-          "type": "Scope",
           "actions": {
             "Update_a_row_-_Assign_Owner": {
               "type": "OpenApiConnection",
@@ -71,6 +71,14 @@
               }
             },
             "Add_a_new_row_-_Notes": {
+              "runAfter": {
+                "Get_a_row_by_ID_-_User_record": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -84,17 +92,14 @@
                   "operationId": "CreateRecord",
                   "connectionName": "shared_commondataserviceforapps"
                 }
-              },
-              "runAfter": {
-                "Get_a_row_by_ID_-_User_record": [
-                  "Succeeded"
-                ]
-              },
-              "metadata": {
-                "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
               }
             },
             "Get_a_row_by_ID_-_User_record": {
+              "runAfter": {
+                "Update_a_row_-_Assign_Owner": [
+                  "Succeeded"
+                ]
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -108,28 +113,23 @@
                   "operationId": "GetItem",
                   "connectionName": "shared_commondataserviceforapps"
                 }
-              },
-              "runAfter": {
-                "Update_a_row_-_Assign_Owner": [
-                  "Succeeded"
-                ]
               }
             }
           },
-          "runAfter": {}
+          "runAfter": {},
+          "type": "Scope"
         },
         "Scope_-_Error_Handling": {
-          "type": "Scope",
           "actions": {
             "Terminate_-_Failed_Main_Scope": {
-              "type": "Terminate",
-              "inputs": {
-                "runStatus": "Failed"
-              },
               "runAfter": {
                 "Run_a_Child_Flow": [
                   "Succeeded"
                 ]
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed"
               }
             },
             "Run_a_Child_Flow": {
@@ -150,7 +150,8 @@
             "Scope_-_Main": [
               "Failed"
             ]
-          }
+          },
+          "type": "Scope"
         }
       }
     },

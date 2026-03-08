@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{19f6cafe-7a1a-f111-8342-7c1e52030d20}" Name="Triggered Flow - Task Closed" Description="When a GRAIL Task moves to a non-active state in it's Business Process Flow (GRAIL Task Timeline). Set Task Status to Closed. This will then result in main fields on the record becoming locked due to a business rule. Also adds a note to the Task Timeline in both closed and cancelled cases." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <JsonFileName>/Workflows/TriggeredFlow-TaskClosed-19F6CAFE-7A1A-F111-8342-7C1E52030D20.json</JsonFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>5</Category>
+  <Mode>0</Mode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>0</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <RunAs>1</RunAs>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0.0.10</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <ModernFlowType>0</ModernFlowType>
+  <PrimaryEntity>none</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="Triggered Flow - Task Closed" />
+  </LocalizedNames>
+  <Descriptions>
+    <Description languagecode="1033" description="When a GRAIL Task moves to a non-active state in it's Business Process Flow (GRAIL Task Timeline). Set Task Status to Closed. This will then result in main fields on the record becoming locked due to a business rule. Also adds a note to the Task Timeline in both closed and cancelled cases." />
+  </Descriptions>
+</Workflow>

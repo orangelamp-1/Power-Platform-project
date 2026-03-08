@@ -36,16 +36,16 @@
       "triggers": {
         "When_a_row_is_added,_modified_or_deleted": {
           "metadata": {
-            "operationMetadataId": "c958ed29-03d3-428c-91ff-12addc9b3ef8"
+            "operationMetadataId": "7443ad05-ad29-4d84-bfa5-fe7ffe316a0b"
           },
           "type": "OpenApiConnectionWebhook",
           "inputs": {
             "parameters": {
-              "subscriptionRequest/message": 4,
-              "subscriptionRequest/entityname": "ol_gr_task",
+              "subscriptionRequest/message": 3,
+              "subscriptionRequest/entityname": "ol_bpfgrailtask",
               "subscriptionRequest/scope": 4,
-              "subscriptionRequest/filteringattributes": "ol_caller",
-              "subscriptionRequest/runas": 3
+              "subscriptionRequest/filteringattributes": "statuscode",
+              "subscriptionRequest/filterexpression": "statuscode ne 1"
             },
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
@@ -64,18 +64,12 @@
                   "Succeeded"
                 ]
               },
-              "metadata": {
-                "operationMetadataId": "a3cb5cad-b2b7-48f2-a935-9337a5c80b6b"
-              },
               "type": "Terminate",
               "inputs": {
                 "runStatus": "Failed"
               }
             },
             "Run_a_Child_Flow": {
-              "metadata": {
-                "operationMetadataId": "ce9ff655-4b9f-4d07-a941-ec41f160d41b"
-              },
               "type": "Workflow",
               "inputs": {
                 "host": {
@@ -94,23 +88,136 @@
               "Failed"
             ]
           },
-          "metadata": {
-            "operationMetadataId": "eb6418f4-0a3e-46b4-bffd-5eaa8c1f059d"
-          },
           "type": "Scope"
         },
         "Scope_-_Main": {
           "actions": {
+            "Get_a_row_by_ID": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "entityName": "ol_gr_tasks",
+                  "recordId": "@triggerOutputs()?['body/_bpf_ol_gr_taskid_value']"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                  "operationId": "GetItem",
+                  "connectionName": "shared_commondataserviceforapps"
+                }
+              }
+            },
+            "Condition_-_Check_if_Cancelled_Task": {
+              "actions": {
+                "Add_a_new_row_-_Notes_-_Cancelled": {
+                  "metadata": {
+                    "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "entityName": "annotations",
+                      "item/subject": "Task Closed - Cancelled",
+                      "item/objectid_ol_gr_task@odata.bind": "ol_gr_tasks/@{outputs('Get_a_row_by_ID')?['body/ol_gr_taskid']}"
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "connectionName": "shared_commondataserviceforapps"
+                    }
+                  }
+                },
+                "Update_a_row_-_GRAIL_TASK_-_Set_Task_Status_to_Closed_-_Cancelled": {
+                  "runAfter": {
+                    "Add_a_new_row_-_Notes_-_Cancelled": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "parameters": {
+                      "entityName": "ol_gr_tasks",
+                      "recordId": "@triggerOutputs()?['body/_bpf_ol_gr_taskid_value']",
+                      "item/ol_status": 125250201
+                    },
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                      "operationId": "UpdateOnlyRecord",
+                      "connectionName": "shared_commondataserviceforapps"
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Get_a_row_by_ID": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Update_a_row_-_GRAIL_TASK_-_Set_Task_Status_to_Closed": {
+                    "runAfter": {
+                      "Add_a_new_row_-_Notes_-_Closed": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "entityName": "ol_gr_tasks",
+                        "recordId": "@triggerOutputs()?['body/_bpf_ol_gr_taskid_value']",
+                        "item/ol_status": 125250200
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                        "operationId": "UpdateOnlyRecord",
+                        "connectionName": "shared_commondataserviceforapps"
+                      }
+                    }
+                  },
+                  "Add_a_new_row_-_Notes_-_Closed": {
+                    "metadata": {
+                      "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "parameters": {
+                        "entityName": "annotations",
+                        "item/subject": "Task Closed - Completed",
+                        "item/objectid_ol_gr_task@odata.bind": "ol_gr_tasks/@{outputs('Get_a_row_by_ID')?['body/ol_gr_taskid']}"
+                      },
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                        "operationId": "CreateRecord",
+                        "connectionName": "shared_commondataserviceforapps"
+                      }
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "and": [
+                  {
+                    "equals": [
+                      "@outputs('Get_a_row_by_ID')?['body/ol_status']",
+                      125250999
+                    ]
+                  }
+                ]
+              },
+              "type": "If"
+            },
             "List_rows_-_Teams": {
-              "metadata": {
-                "operationMetadataId": "b566c955-adb7-4bd3-be79-2a13ea3c2a12"
+              "runAfter": {
+                "Get_a_row_by_ID": [
+                  "Succeeded"
+                ]
               },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
                   "entityName": "teams",
                   "$select": "teamid,name,_regardingobjectid_value",
-                  "$filter": "_regardingobjectid_value eq '@{triggerOutputs()?['body/ol_gr_taskid']}' and teamtype eq 1 and _teamtemplateid_value eq '@{parameters('EV Team Template - Read GRAIL Task (ol_EVTeamTemplateReadGRAILTask)')}'"
+                  "$filter": "_regardingobjectid_value eq '@{outputs('Get_a_row_by_ID')?['body/ol_gr_taskid']}' and teamtype eq 1 and _teamtemplateid_value eq '@{parameters('EV Team Template - Read GRAIL Task (ol_EVTeamTemplateReadGRAILTask)')}'"
                 },
                 "host": {
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
@@ -124,9 +231,6 @@
               "foreach": "@outputs('List_rows_-_Teams')?['body/value']",
               "actions": {
                 "List_rows_-_Users_in_access_team": {
-                  "metadata": {
-                    "operationMetadataId": "3d4f6563-083e-4392-bf97-ea76223e309d"
-                  },
                   "type": "OpenApiConnection",
                   "inputs": {
                     "parameters": {
@@ -145,16 +249,13 @@
                   "foreach": "@outputs('List_rows_-_Users_in_access_team')?['body/value']",
                   "actions": {
                     "Perform_a_bound_action_-_remove_user_from_access_team": {
-                      "metadata": {
-                        "operationMetadataId": "97e0580b-b5f6-4ed0-9dcc-42779472d123"
-                      },
                       "type": "OpenApiConnection",
                       "inputs": {
                         "parameters": {
                           "entityName": "systemusers",
                           "actionName": "Microsoft.Dynamics.CRM.RemoveUserFromRecordTeam",
                           "recordId": "@items('For_each_-_User')?['systemuserid']",
-                          "item/Record": "ol_gr_tasks/@{triggerOutputs()?['body/ol_gr_taskid']}",
+                          "item/Record": "ol_gr_tasks/@{triggerOutputs()?['body/_bpf_ol_gr_taskid_value']}",
                           "item/TeamTemplate/teamtemplateid": "@parameters('EV Team Template - Read GRAIL Task (ol_EVTeamTemplateReadGRAILTask)')"
                         },
                         "host": {
@@ -170,9 +271,6 @@
                       "Succeeded"
                     ]
                   },
-                  "metadata": {
-                    "operationMetadataId": "0ef3065b-9cde-4b6f-adc1-370528192d61"
-                  },
                   "type": "Foreach"
                 }
               },
@@ -181,110 +279,10 @@
                   "Succeeded"
                 ]
               },
-              "metadata": {
-                "operationMetadataId": "23282401-e9cc-4691-8789-a6b572c16e90"
-              },
               "type": "Foreach"
-            },
-            "Condition_-_Check_for_new_Caller": {
-              "actions": {
-                "Perform_a_bound_action_-AddUserToRecordTeam": {
-                  "metadata": {
-                    "operationMetadataId": "e6dab1f7-1b79-4b32-9d43-e249fa2e5724"
-                  },
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "parameters": {
-                      "entityName": "systemusers",
-                      "actionName": "Microsoft.Dynamics.CRM.AddUserToRecordTeam",
-                      "recordId": "@triggerOutputs()?['body/_ol_caller_value']",
-                      "item/Record": "ol_gr_tasks/@{triggerOutputs()?['body/ol_gr_taskid']}",
-                      "item/TeamTemplate/teamtemplateid": "@parameters('EV Team Template - Read GRAIL Task (ol_EVTeamTemplateReadGRAILTask)')"
-                    },
-                    "host": {
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
-                      "operationId": "PerformBoundAction",
-                      "connectionName": "shared_commondataserviceforapps"
-                    }
-                  }
-                },
-                "Get_a_row_by_ID_-_User_record": {
-                  "runAfter": {
-                    "Perform_a_bound_action_-AddUserToRecordTeam": [
-                      "Succeeded"
-                    ]
-                  },
-                  "metadata": {
-                    "operationMetadataId": "9aa96793-4c7f-4810-a4c4-fb48c2d0c765"
-                  },
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "parameters": {
-                      "entityName": "systemusers",
-                      "recordId": "@triggerOutputs()?['body/_ol_caller_value']",
-                      "x-ms-odata-metadata-full": false,
-                      "$select": "fullname"
-                    },
-                    "host": {
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
-                      "operationId": "GetItem",
-                      "connectionName": "shared_commondataserviceforapps"
-                    }
-                  }
-                },
-                "Add_a_new_row_-_Notes": {
-                  "runAfter": {
-                    "Get_a_row_by_ID_-_User_record": [
-                      "Succeeded"
-                    ]
-                  },
-                  "metadata": {
-                    "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
-                  },
-                  "type": "OpenApiConnection",
-                  "inputs": {
-                    "parameters": {
-                      "entityName": "annotations",
-                      "item/subject": "Requestor Changed",
-                      "item/notetext": "Requestor changed to @{outputs('Get_a_row_by_ID_-_User_record')?['body/fullname']}.",
-                      "item/objectid_ol_gr_task@odata.bind": "ol_gr_tasks/@{triggerOutputs()?['body/ol_gr_taskid']}"
-                    },
-                    "host": {
-                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
-                      "operationId": "CreateRecord",
-                      "connectionName": "shared_commondataserviceforapps"
-                    }
-                  }
-                }
-              },
-              "runAfter": {
-                "For_each_-_Team": [
-                  "Succeeded"
-                ]
-              },
-              "else": {
-                "actions": {}
-              },
-              "expression": {
-                "and": [
-                  {
-                    "equals": [
-                      "@empty(triggerOutputs()?['body/_ol_caller_value'])",
-                      "@false"
-                    ]
-                  }
-                ]
-              },
-              "metadata": {
-                "operationMetadataId": "aa074008-78e1-4bb7-ad69-a1956e0f9f71"
-              },
-              "type": "If"
             }
           },
           "runAfter": {},
-          "metadata": {
-            "operationMetadataId": "36805b7a-f68e-4a9d-aacb-713dbd17907d"
-          },
           "type": "Scope"
         }
       }

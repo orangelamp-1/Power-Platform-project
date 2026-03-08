@@ -20,6 +20,7 @@
           <Variable x:TypeArguments="x:Boolean" Default="False" Name="ConditionBranchStep2_condition" />
           <Variable x:TypeArguments="x:Object" Name="ConditionBranchStep2_1" />
           <Variable x:TypeArguments="x:Object" Name="ConditionBranchStep2_2" />
+          <Variable x:TypeArguments="x:Object" Name="ConditionBranchStep2_3" />
         </sco:Collection>
         <sco:Collection x:TypeArguments="Activity" x:Key="Activities">
           <mxswa:GetEntityProperty Attribute="ol_status" Entity="[InputEntities(&quot;primaryEntity&quot;)]" EntityName="ol_gr_task" Value="[ConditionBranchStep2_1]">
@@ -41,10 +42,20 @@
               <OutArgument x:TypeArguments="x:Object" x:Key="Result">[ConditionBranchStep2_2]</OutArgument>
             </mxswa:ActivityReference.Arguments>
           </mxswa:ActivityReference>
+          <mxswa:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.EvaluateExpression, Microsoft.Crm.Workflow, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" DisplayName="EvaluateExpression">
+            <mxswa:ActivityReference.Arguments>
+              <InArgument x:TypeArguments="x:String" x:Key="ExpressionOperator">CreateCrmType</InArgument>
+              <InArgument x:TypeArguments="s:Object[]" x:Key="Parameters">[New Object() { Microsoft.Xrm.Sdk.Workflow.WorkflowPropertyType.OptionSetValue, "125250201", "Picklist" }]</InArgument>
+              <InArgument x:TypeArguments="s:Type" x:Key="TargetType">
+                <mxswa:ReferenceLiteral x:TypeArguments="s:Type" Value="mxs:OptionSetValue" />
+              </InArgument>
+              <OutArgument x:TypeArguments="x:Object" x:Key="Result">[ConditionBranchStep2_3]</OutArgument>
+            </mxswa:ActivityReference.Arguments>
+          </mxswa:ActivityReference>
           <mxswa:ActivityReference AssemblyQualifiedName="Microsoft.Crm.Workflow.Activities.EvaluateCondition, Microsoft.Crm.Workflow, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" DisplayName="EvaluateCondition">
             <mxswa:ActivityReference.Arguments>
               <InArgument x:TypeArguments="mxsq:ConditionOperator" x:Key="ConditionOperator">Equal</InArgument>
-              <InArgument x:TypeArguments="s:Object[]" x:Key="Parameters">[New Object() { ConditionBranchStep2_2 }]</InArgument>
+              <InArgument x:TypeArguments="s:Object[]" x:Key="Parameters">[New Object() { ConditionBranchStep2_2, ConditionBranchStep2_3 }]</InArgument>
               <InArgument x:TypeArguments="x:Object" x:Key="Operand">[ConditionBranchStep2_1]</InArgument>
               <OutArgument x:TypeArguments="x:Boolean" x:Key="Result">[ConditionBranchStep2_condition]</OutArgument>
             </mxswa:ActivityReference.Arguments>
@@ -58,6 +69,9 @@
                 <mxswa:ActivityReference.Properties>
                   <sco:Collection x:TypeArguments="Variable" x:Key="Variables" />
                   <sco:Collection x:TypeArguments="Activity" x:Key="Activities">
+                    <Sequence DisplayName="SetDisplayModeStep8: Task Title">
+                      <mcwc:SetDisplayMode ControlId="ol_title" ControlType="standard" Entity="[InputEntities(&quot;primaryEntity&quot;)]" EntityName="ol_gr_task" IsReadOnly="True" />
+                    </Sequence>
                     <Sequence DisplayName="SetDisplayModeStep1: Lock Task Status">
                       <mcwc:SetDisplayMode ControlId="ol_status" ControlType="standard" Entity="[InputEntities(&quot;primaryEntity&quot;)]" EntityName="ol_gr_task" IsReadOnly="True" />
                     </Sequence>
@@ -67,7 +81,7 @@
                     <Sequence DisplayName="SetDisplayModeStep2: Lock Priority">
                       <mcwc:SetDisplayMode ControlId="ol_priority" ControlType="standard" Entity="[InputEntities(&quot;primaryEntity&quot;)]" EntityName="ol_gr_task" IsReadOnly="True" />
                     </Sequence>
-                    <Sequence DisplayName="SetDisplayModeStep_SetDisplayModeStep2_6: Lock Due Date">
+                    <Sequence DisplayName="SetDisplayModeStep6: Lock Due Date">
                       <mcwc:SetDisplayMode ControlId="ol_duedate" ControlType="standard" Entity="[InputEntities(&quot;primaryEntity&quot;)]" EntityName="ol_gr_task" IsReadOnly="True" />
                     </Sequence>
                     <Sequence DisplayName="SetDisplayModeStep4: Lock Assigned To">
@@ -76,11 +90,17 @@
                     <Sequence DisplayName="SetDisplayModeStep3: Lock Task Description">
                       <mcwc:SetDisplayMode ControlId="ol_description" ControlType="standard" Entity="[InputEntities(&quot;primaryEntity&quot;)]" EntityName="ol_gr_task" IsReadOnly="True" />
                     </Sequence>
+                    <Sequence DisplayName="SetDisplayModeStep9: Completion Date">
+                      <mcwc:SetDisplayMode ControlId="ol_completiondate" ControlType="standard" Entity="[InputEntities(&quot;primaryEntity&quot;)]" EntityName="ol_gr_task" IsReadOnly="True" />
+                    </Sequence>
+                    <Sequence DisplayName="SetDisplayModeStep10: Completion Notes">
+                      <mcwc:SetDisplayMode ControlId="ol_completionnotes" ControlType="standard" Entity="[InputEntities(&quot;primaryEntity&quot;)]" EntityName="ol_gr_task" IsReadOnly="True" />
+                    </Sequence>
                   </sco:Collection>
                 </mxswa:ActivityReference.Properties>
               </mxswa:ActivityReference>
               <x:Null x:Key="Else" />
-              <x:String x:Key="Description">Task Closed</x:String>
+              <x:String x:Key="Description">Task Closed OR Cancelled</x:String>
             </mxswa:ActivityReference.Properties>
           </mxswa:ActivityReference>
         </sco:Collection>

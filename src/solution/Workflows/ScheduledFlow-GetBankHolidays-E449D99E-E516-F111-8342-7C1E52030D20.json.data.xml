@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Workflow WorkflowId="{e449d99e-e516-f111-8342-7c1e52030d20}" Name="Scheduled Flow - Get Bank Holidays" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Workflow WorkflowId="{e449d99e-e516-f111-8342-7c1e52030d20}" Name="Scheduled Flow - Get Bank Holidays" Description="Runs 1/month and uses https://www.gov.uk/bank-holidays.json to store and maintain future bank holidays in GRAIL Holiday." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <JsonFileName>/Workflows/ScheduledFlow-GetBankHolidays-E449D99E-E516-F111-8342-7C1E52030D20.json</JsonFileName>
   <Type>1</Type>
   <Subprocess>0</Subprocess>
@@ -26,4 +26,7 @@
   <LocalizedNames>
     <LocalizedName languagecode="1033" description="Scheduled Flow - Get Bank Holidays" />
   </LocalizedNames>
+  <Descriptions>
+    <Description languagecode="1033" description="Runs 1/month and uses https://www.gov.uk/bank-holidays.json to store and maintain future bank holidays in GRAIL Holiday." />
+  </Descriptions>
 </Workflow>

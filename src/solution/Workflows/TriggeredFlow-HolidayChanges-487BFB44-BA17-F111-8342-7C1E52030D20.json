@@ -2,13 +2,14 @@
   "properties": {
     "connectionReferences": {
       "shared_commondataserviceforapps": {
-        "api": {
-          "name": "shared_commondataserviceforapps"
-        },
+        "impersonation": {},
+        "runtimeSource": "embedded",
         "connection": {
           "connectionReferenceLogicalName": "ol_CRDataverse"
         },
-        "runtimeSource": "embedded"
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
       }
     },
     "definition": {
@@ -26,6 +27,9 @@
       },
       "triggers": {
         "When_a_row_is_added,_modified_or_deleted": {
+          "metadata": {
+            "operationMetadataId": "895f54b2-f36e-4aca-957f-29bbffe29ad4"
+          },
           "type": "OpenApiConnectionWebhook",
           "inputs": {
             "parameters": {
@@ -40,25 +44,21 @@
               "operationId": "SubscribeWebhookTrigger",
               "connectionName": "shared_commondataserviceforapps"
             }
-          },
-          "metadata": {
-            "operationMetadataId": "895f54b2-f36e-4aca-957f-29bbffe29ad4"
           }
         }
       },
       "actions": {
         "Scope_-_Error_Handling": {
-          "type": "Scope",
           "actions": {
             "Terminate_-_Failed_Main_Scope": {
-              "type": "Terminate",
-              "inputs": {
-                "runStatus": "Failed"
-              },
               "runAfter": {
                 "Run_a_Child_Flow": [
                   "Succeeded"
                 ]
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed"
               }
             },
             "Run_a_Child_Flow": {
@@ -79,26 +79,15 @@
             "Scope_-_Main": [
               "Failed"
             ]
-          }
+          },
+          "type": "Scope"
         },
         "Scope_-_Main": {
-          "type": "Scope",
           "actions": {
             "Switch": {
-              "type": "Switch",
-              "expression": "@triggerOutputs()?['body/SdkMessage']",
-              "default": {
-                "actions": {
-                  "Terminate_-_Cancel": {
-                    "type": "Terminate",
-                    "inputs": {
-                      "runStatus": "Cancelled"
-                    }
-                  }
-                }
-              },
               "cases": {
                 "Create": {
+                  "case": "Create",
                   "actions": {
                     "List_rows_-_GRAIL_Tasks_-_Create": {
                       "type": "OpenApiConnection",
@@ -120,6 +109,11 @@
                       }
                     },
                     "Update_a_row_-_Store_Previous_Date_-_Create": {
+                      "runAfter": {
+                        "List_rows_-_GRAIL_Tasks_-_Create": [
+                          "Succeeded"
+                        ]
+                      },
                       "type": "OpenApiConnection",
                       "inputs": {
                         "parameters": {
@@ -133,17 +127,12 @@
                           "operationId": "UpdateOnlyRecord",
                           "connectionName": "shared_commondataserviceforapps"
                         }
-                      },
-                      "runAfter": {
-                        "List_rows_-_GRAIL_Tasks_-_Create": [
-                          "Succeeded"
-                        ]
                       }
                     }
-                  },
-                  "case": "Create"
+                  }
                 },
                 "Update": {
+                  "case": "Update",
                   "actions": {
                     "List_rows_-_GRAIL_Tasks_-_Update": {
                       "type": "OpenApiConnection",
@@ -165,6 +154,11 @@
                       }
                     },
                     "Update_a_row_-_Store_Previous_Date_-_Update": {
+                      "runAfter": {
+                        "List_rows_-_GRAIL_Tasks_-_Update": [
+                          "Succeeded"
+                        ]
+                      },
                       "type": "OpenApiConnection",
                       "inputs": {
                         "parameters": {
@@ -178,21 +172,20 @@
                           "operationId": "UpdateOnlyRecord",
                           "connectionName": "shared_commondataserviceforapps"
                         }
-                      },
-                      "runAfter": {
-                        "List_rows_-_GRAIL_Tasks_-_Update": [
-                          "Succeeded"
-                        ]
                       }
                     }
-                  },
-                  "case": "Update"
+                  }
                 },
                 "Delete": {
+                  "case": "Delete",
                   "actions": {
                     "List_rows_-_Audit_Log": {
+                      "runAfter": {
+                        "Delay_-_10s": [
+                          "Succeeded"
+                        ]
+                      },
                       "type": "OpenApiConnection",
-                      "description": "",
                       "inputs": {
                         "parameters": {
                           "entityName": "audits",
@@ -209,11 +202,7 @@
                           "interval": "PT5S"
                         }
                       },
-                      "runAfter": {
-                        "Delay_-_10s": [
-                          "Succeeded"
-                        ]
-                      }
+                      "description": ""
                     },
                     "Delay_-_10s": {
                       "type": "Wait",
@@ -225,27 +214,32 @@
                       }
                     },
                     "Compose": {
-                      "type": "Compose",
-                      "inputs": "@json(first(outputs('List_rows_-_Audit_Log')?['body/value'])?['changedata'])?['changedAttributes']",
                       "runAfter": {
                         "List_rows_-_Audit_Log": [
                           "Succeeded"
                         ]
-                      }
+                      },
+                      "type": "Compose",
+                      "inputs": "@json(first(outputs('List_rows_-_Audit_Log')?['body/value'])?['changedata'])?['changedAttributes']"
                     },
                     "Filter_array": {
-                      "type": "Query",
-                      "inputs": {
-                        "from": "@outputs('Compose')",
-                        "where": "@equals(item()?['logicalName'],'ol_date')"
-                      },
                       "runAfter": {
                         "Compose": [
                           "Succeeded"
                         ]
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@outputs('Compose')",
+                        "where": "@equals(item()?['logicalName'],'ol_date')"
                       }
                     },
                     "List_rows_-_GRAIL_Tasks_-_Delete": {
+                      "runAfter": {
+                        "Filter_array": [
+                          "Succeeded"
+                        ]
+                      },
                       "type": "OpenApiConnection",
                       "inputs": {
                         "parameters": {
@@ -262,20 +256,25 @@
                           "count": 2,
                           "interval": "PT5S"
                         }
-                      },
-                      "runAfter": {
-                        "Filter_array": [
-                          "Succeeded"
-                        ]
                       }
                     }
-                  },
-                  "case": "Delete"
+                  }
                 }
-              }
+              },
+              "default": {
+                "actions": {
+                  "Terminate_-_Cancel": {
+                    "type": "Terminate",
+                    "inputs": {
+                      "runStatus": "Cancelled"
+                    }
+                  }
+                }
+              },
+              "expression": "@triggerOutputs()?['body/SdkMessage']",
+              "type": "Switch"
             },
             "For_each_-_GRAIL_Task": {
-              "type": "Foreach",
               "foreach": "@coalesce(outputs('List_rows_-_GRAIL_Tasks_-_Create')?['body/value'],outputs('List_rows_-_GRAIL_Tasks_-_Update')?['body/value'],outputs('List_rows_-_GRAIL_Tasks_-_Delete')?['body/value'])",
               "actions": {
                 "Run_a_Child_Flow_-_Calculate_Due_Dates": {
@@ -295,6 +294,7 @@
                   "Succeeded"
                 ]
               },
+              "type": "Foreach",
               "runtimeConfiguration": {
                 "concurrency": {
                   "repetitions": 50
@@ -302,7 +302,8 @@
               }
             }
           },
-          "runAfter": {}
+          "runAfter": {},
+          "type": "Scope"
         }
       }
     },

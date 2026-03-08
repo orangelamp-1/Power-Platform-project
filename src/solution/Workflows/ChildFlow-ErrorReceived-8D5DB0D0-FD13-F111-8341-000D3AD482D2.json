@@ -2,13 +2,14 @@
   "properties": {
     "connectionReferences": {
       "shared_commondataserviceforapps": {
-        "api": {
-          "name": "shared_commondataserviceforapps"
-        },
+        "impersonation": {},
+        "runtimeSource": "embedded",
         "connection": {
           "connectionReferenceLogicalName": "ol_CRDataverse"
         },
-        "runtimeSource": "embedded"
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
       }
     },
     "definition": {
@@ -26,6 +27,9 @@
       },
       "triggers": {
         "manual": {
+          "metadata": {
+            "operationMetadataId": "cdd3a191-5871-4977-81fe-4c9c850d1717"
+          },
           "type": "Request",
           "kind": "Button",
           "inputs": {
@@ -66,15 +70,11 @@
                 "text_1"
               ]
             }
-          },
-          "metadata": {
-            "operationMetadataId": "cdd3a191-5871-4977-81fe-4c9c850d1717"
           }
         }
       },
       "actions": {
         "Scope_-_Main": {
-          "type": "Scope",
           "actions": {
             "Add_a_new_row_-_GRAIL_Error_Logs": {
               "type": "OpenApiConnection",
@@ -94,7 +94,23 @@
               }
             },
             "Condition_-_emailRequired": {
-              "type": "If",
+              "actions": {
+                "PLACEHOLDER_-_Send_Email_Step": {
+                  "metadata": {
+                    "operationMetadataId": "3abdf969-4133-400b-92f5-9590a95557ca"
+                  },
+                  "type": "Compose",
+                  "inputs": "@null"
+                }
+              },
+              "runAfter": {
+                "Add_a_new_row_-_GRAIL_Error_Logs": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {}
+              },
               "expression": {
                 "and": [
                   {
@@ -105,60 +121,46 @@
                   }
                 ]
               },
-              "actions": {
-                "PLACEHOLDER_-_Send_Email_Step": {
-                  "type": "Compose",
-                  "inputs": "@null",
-                  "metadata": {
-                    "operationMetadataId": "3abdf969-4133-400b-92f5-9590a95557ca"
-                  }
-                }
-              },
-              "else": {
-                "actions": {}
-              },
-              "runAfter": {
-                "Add_a_new_row_-_GRAIL_Error_Logs": [
-                  "Succeeded"
-                ]
-              }
+              "type": "If"
             }
           },
           "runAfter": {
             "Respond_to_a_Power_App_or_flow_-_202_Accepted": [
-              "SUCCEEDED"
+              "Succeeded"
             ]
-          }
+          },
+          "type": "Scope"
         },
         "Scope_-_Error_Handling": {
-          "type": "Scope",
           "actions": {
             "Terminate_-_Failed_Main_Scope": {
-              "type": "Terminate",
-              "inputs": {
-                "runStatus": "Failed"
-              },
               "runAfter": {
                 "Send_Email_Error_Handling_Failure": [
                   "Succeeded"
                 ]
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed"
               }
             },
             "Send_Email_Error_Handling_Failure": {
-              "type": "Compose",
-              "inputs": "@null",
               "metadata": {
                 "operationMetadataId": "3abdf969-4133-400b-92f5-9590a95557ca"
-              }
+              },
+              "type": "Compose",
+              "inputs": "@null"
             }
           },
           "runAfter": {
             "Scope_-_Main": [
               "Failed"
             ]
-          }
+          },
+          "type": "Scope"
         },
         "Respond_to_a_Power_App_or_flow_-_202_Accepted": {
+          "runAfter": {},
           "type": "Response",
           "kind": "PowerApp",
           "inputs": {
@@ -185,8 +187,7 @@
               "responsecode": "202",
               "responsedescription": "Accepted"
             }
-          },
-          "runAfter": {}
+          }
         }
       }
     },

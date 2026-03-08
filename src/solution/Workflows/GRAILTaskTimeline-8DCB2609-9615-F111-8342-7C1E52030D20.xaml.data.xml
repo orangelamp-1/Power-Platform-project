@@ -31,6 +31,9 @@
     <steplabels id="{fcf47717-97fd-4fcb-a0da-d35eba741551}">
       <label languagecode="1033" description="Setup" />
     </steplabels>
+    <steplabels id="{dd2f5485-9689-418c-b5e2-460947d98bca}">
+      <label languagecode="1033" description="Task Status" />
+    </steplabels>
     <steplabels id="{fc6eee3b-9324-4121-b751-ca6cf4cf35a9}">
       <label languagecode="1033" description="Task Description" />
     </steplabels>
@@ -43,6 +46,9 @@
     <steplabels id="{1dbf4446-833f-4d01-ae8d-4996adaa0608}">
       <label languagecode="1033" description="Processing" />
     </steplabels>
+    <steplabels id="{61ea6bd5-1cab-403a-86a6-98d68de41e54}">
+      <label languagecode="1033" description="Task Status" />
+    </steplabels>
     <steplabels id="{5e22fa1c-9f10-4cf8-93ab-74ddfffc369a}">
       <label languagecode="1033" description="Completion Notes" />
     </steplabels>
@@ -51,6 +57,9 @@
     </steplabels>
     <steplabels id="{3260011e-8021-49ff-bc53-a45d221c4ada}">
       <label languagecode="1033" description="Completed" />
+    </steplabels>
+    <steplabels id="{db5f90f9-9d20-4833-8601-e631fa35703b}">
+      <label languagecode="1033" description="Task Overdue" />
     </steplabels>
     <steplabels id="{ead95355-c952-4a4c-8e62-9f173f63535f}">
       <label languagecode="1033" description="Task Review Required" />

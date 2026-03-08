@@ -12,7 +12,7 @@
     <Description description="Task Status choice." languagecode="1033" />
   </Descriptions>
   <options>
-    <option value="125250000" ExternalValue="" IsHidden="0">
+    <option value="125250000" ExternalValue="" IsHidden="1">
       <labels>
         <label description="New" languagecode="1033" />
       </labels>
@@ -44,17 +44,25 @@
         <Description description="" languagecode="1033" />
       </Descriptions>
     </option>
-    <option value="125250200" ExternalValue="" IsHidden="1">
+    <option value="125250999" ExternalValue="" IsHidden="0">
       <labels>
-        <label description="Closed" languagecode="1033" />
+        <label description="Cancelled" languagecode="1033" />
       </labels>
       <Descriptions>
         <Description description="" languagecode="1033" />
       </Descriptions>
     </option>
-    <option value="125250999" ExternalValue="" IsHidden="0">
+    <option value="125250200" ExternalValue="" IsHidden="1">
       <labels>
-        <label description="Cancelled" languagecode="1033" />
+        <label description="Closed - Completed" languagecode="1033" />
+      </labels>
+      <Descriptions>
+        <Description description="" languagecode="1033" />
+      </Descriptions>
+    </option>
+    <option value="125250201" ExternalValue="" IsHidden="1">
+      <labels>
+        <label description="Closed - Cancelled" languagecode="1033" />
       </labels>
       <Descriptions>
         <Description description="" languagecode="1033" />

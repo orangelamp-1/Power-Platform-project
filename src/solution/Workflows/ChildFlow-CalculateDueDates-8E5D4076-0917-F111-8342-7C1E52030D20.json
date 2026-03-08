@@ -254,7 +254,7 @@
                 }
               },
               "runAfter": {
-                "Get_a_row_by_ID_-_GRAIL_Tasks": [
+                "Condition_-_Check_if_Task_Priority_is_NA": [
                   "Succeeded"
                 ]
               }
@@ -285,6 +285,69 @@
               "inputs": "@int(outputs('List_rows_-_GRAIL_Configurations')?['body/value']?[0]?['ol_configurationvalue'])",
               "runAfter": {
                 "Compose_-_Start_Date": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Condition_-_Check_if_Task_Priority_is_NA": {
+              "type": "If",
+              "expression": {
+                "and": [
+                  {
+                    "equals": [
+                      "@outputs('Get_a_row_by_ID_-_GRAIL_Tasks')?['body/ol_priority']",
+                      125250999
+                    ]
+                  }
+                ]
+              },
+              "actions": {
+                "Terminate": {
+                  "type": "Terminate",
+                  "inputs": {
+                    "runStatus": "Succeeded"
+                  },
+                  "runAfter": {
+                    "Respond_-_200_Success_-_Not_Required": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Respond_-_200_Success_-_Not_Required": {
+                  "type": "Response",
+                  "kind": "PowerApp",
+                  "inputs": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "responsecode": {
+                          "title": "responseCode",
+                          "type": "string",
+                          "x-ms-content-hint": "TEXT",
+                          "x-ms-dynamically-added": true
+                        },
+                        "responsedescription": {
+                          "title": "responseDescription",
+                          "type": "string",
+                          "x-ms-content-hint": "TEXT",
+                          "x-ms-dynamically-added": true
+                        }
+                      },
+                      "additionalProperties": {}
+                    },
+                    "statusCode": 200,
+                    "body": {
+                      "responsecode": "200",
+                      "responsedescription": "Success"
+                    }
+                  }
+                }
+              },
+              "else": {
+                "actions": {}
+              },
+              "runAfter": {
+                "Get_a_row_by_ID_-_GRAIL_Tasks": [
                   "Succeeded"
                 ]
               }
@@ -356,8 +419,8 @@
                       "x-ms-content-hint": "TEXT",
                       "x-ms-dynamically-added": true
                     },
-                    "responsedescription_": {
-                      "title": "responseDescription ",
+                    "responsedescription": {
+                      "title": "responseDescription",
                       "type": "string",
                       "x-ms-content-hint": "TEXT",
                       "x-ms-dynamically-added": true
@@ -368,7 +431,7 @@
                 "statusCode": 200,
                 "body": {
                   "responsecode": "500",
-                  "responsedescription_": "Error"
+                  "responsedescription": "Error"
                 }
               }
             }
@@ -408,8 +471,8 @@
                   "x-ms-content-hint": "TEXT",
                   "x-ms-dynamically-added": true
                 },
-                "responsedescription_": {
-                  "title": "responseDescription ",
+                "responsedescription": {
+                  "title": "responseDescription",
                   "type": "string",
                   "x-ms-content-hint": "TEXT",
                   "x-ms-dynamically-added": true
@@ -420,7 +483,7 @@
             "statusCode": 200,
             "body": {
               "responsecode": "200",
-              "responsedescription_": "Success"
+              "responsedescription": "Success"
             }
           },
           "runAfter": {

@@ -5,13 +5,18 @@
     <CanBeDeleted>0</CanBeDeleted>
     <isquickfindquery>0</isquickfindquery>
     <isprivate>0</isprivate>
-    <isdefault>0</isdefault>
+    <isdefault>1</isdefault>
     <savedqueryid>{7a0c0988-ce98-4b22-af2b-661482fba295}</savedqueryid>
     <layoutxml>
       <grid name="resultset" jump="ol_apiauditid" select="1" icon="1" preview="1">
         <row name="result" id="ol_grailapiauditlogid">
-          <cell name="ol_apiauditid" width="300" />
-          <cell name="createdon" width="125" />
+          <cell name="ol_apiauditid" width="200" />
+          <cell name="createdon" width="150" />
+          <cell name="ol_calleraddress" width="150" />
+          <cell name="ol_requestorid" width="250" />
+          <cell name="ol_endpoint" width="250" />
+          <cell name="ol_httpmethod" width="200" />
+          <cell name="ol_responsestatuscode" width="200" />
         </row>
       </grid>
     </layoutxml>
@@ -22,10 +27,15 @@
           <attribute name="ol_grailapiauditlogid" />
           <attribute name="ol_apiauditid" />
           <attribute name="createdon" />
-          <order attribute="ol_apiauditid" descending="false" />
           <filter type="and">
             <condition attribute="statecode" operator="eq" value="0" />
           </filter>
+          <attribute name="ol_endpoint" />
+          <attribute name="ol_httpmethod" />
+          <attribute name="ol_requestorid" />
+          <attribute name="ol_responsestatuscode" />
+          <order attribute="createdon" descending="true" />
+          <attribute name="ol_calleraddress" />
         </entity>
       </fetch>
     </fetchxml>

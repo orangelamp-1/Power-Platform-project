@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Workflow WorkflowId="{8e5d4076-0917-f111-8342-7c1e52030d20}" Name="Child Flow - Calculate Due Dates" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Workflow WorkflowId="{8e5d4076-0917-f111-8342-7c1e52030d20}" Name="Child Flow - Calculate Due Dates" Description="Takes ol_gr_taskid - GRAIL Task GUID and calculates the due date based on the task priority. Working days per priority stored in GRAIL Configuration table, Working days calculated to ignore weekends and any dates in the GRAIL Holiday table." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <JsonFileName>/Workflows/ChildFlow-CalculateDueDates-8E5D4076-0917-F111-8342-7C1E52030D20.json</JsonFileName>
   <Type>1</Type>
   <Subprocess>0</Subprocess>
@@ -25,4 +25,7 @@
   <LocalizedNames>
     <LocalizedName languagecode="1033" description="Child Flow - Calculate Due Dates" />
   </LocalizedNames>
+  <Descriptions>
+    <Description languagecode="1033" description="Takes ol_gr_taskid - GRAIL Task GUID and calculates the due date based on the task priority. Working days per priority stored in GRAIL Configuration table, Working days calculated to ignore weekends and any dates in the GRAIL Holiday table." />
+  </Descriptions>
 </Workflow>

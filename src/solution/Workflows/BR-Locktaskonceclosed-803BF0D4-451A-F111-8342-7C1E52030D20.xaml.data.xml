@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Workflow WorkflowId="{803bf0d4-451a-f111-8342-7c1e52030d20}" Name="BR - Lock task once closed." Description="Click to add description" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Workflow WorkflowId="{803bf0d4-451a-f111-8342-7c1e52030d20}" Name="BR - Lock task once closed" Description="Click to add description" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <XamlFileName>/Workflows/BR-Locktaskonceclosed-803BF0D4-451A-F111-8342-7C1E52030D20.xaml</XamlFileName>
   <Type>1</Type>
   <Subprocess>0</Subprocess>
@@ -23,7 +23,7 @@
   <ModernFlowType>0</ModernFlowType>
   <PrimaryEntity>ol_GR_Task</PrimaryEntity>
   <LocalizedNames>
-    <LocalizedName languagecode="1033" description="BR - Lock task once closed." />
+    <LocalizedName languagecode="1033" description="BR - Lock task once closed" />
   </LocalizedNames>
   <Descriptions>
     <Description languagecode="1033" description="Click to add description" />

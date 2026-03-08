@@ -2,13 +2,14 @@
   "properties": {
     "connectionReferences": {
       "shared_commondataserviceforapps": {
-        "api": {
-          "name": "shared_commondataserviceforapps"
-        },
+        "impersonation": {},
+        "runtimeSource": "embedded",
         "connection": {
           "connectionReferenceLogicalName": "ol_CRDataverse"
         },
-        "runtimeSource": "embedded"
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
       }
     },
     "definition": {
@@ -26,8 +27,10 @@
       },
       "triggers": {
         "When_a_row_is_added,_modified_or_deleted": {
+          "metadata": {
+            "operationMetadataId": "df0937a2-a2e5-4b45-b7bc-9ea2697ea751"
+          },
           "type": "OpenApiConnectionWebhook",
-          "description": "New GRAIL Task",
           "inputs": {
             "parameters": {
               "subscriptionRequest/message": 1,
@@ -42,16 +45,16 @@
             }
           },
           "conditions": [],
-          "metadata": {
-            "operationMetadataId": "df0937a2-a2e5-4b45-b7bc-9ea2697ea751"
-          }
+          "description": "New GRAIL Task"
         }
       },
       "actions": {
         "Scope_-_Main": {
-          "type": "Scope",
           "actions": {
             "Add_a_new_row_-_Record_Created_-_Notes": {
+              "metadata": {
+                "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -65,26 +68,23 @@
                   "operationId": "CreateRecord",
                   "connectionName": "shared_commondataserviceforapps"
                 }
-              },
-              "metadata": {
-                "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
               }
             }
           },
-          "runAfter": {}
+          "runAfter": {},
+          "type": "Scope"
         },
         "Scope_-_Error_Handling": {
-          "type": "Scope",
           "actions": {
             "Terminate_-_Failed_Main_Scope": {
-              "type": "Terminate",
-              "inputs": {
-                "runStatus": "Failed"
-              },
               "runAfter": {
                 "Run_a_Child_Flow": [
                   "Succeeded"
                 ]
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed"
               }
             },
             "Run_a_Child_Flow": {
@@ -105,7 +105,8 @@
             "Scope_-_Main": [
               "Failed"
             ]
-          }
+          },
+          "type": "Scope"
         }
       }
     },

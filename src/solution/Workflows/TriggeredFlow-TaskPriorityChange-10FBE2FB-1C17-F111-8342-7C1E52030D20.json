@@ -2,13 +2,14 @@
   "properties": {
     "connectionReferences": {
       "shared_commondataserviceforapps": {
-        "api": {
-          "name": "shared_commondataserviceforapps"
-        },
+        "impersonation": {},
+        "runtimeSource": "embedded",
         "connection": {
           "connectionReferenceLogicalName": "ol_CRDataverse"
         },
-        "runtimeSource": "embedded"
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
       }
     },
     "definition": {
@@ -26,6 +27,9 @@
       },
       "triggers": {
         "When_a_row_is_added,_modified_or_deleted": {
+          "metadata": {
+            "operationMetadataId": "ea223817-f9bb-4ba2-99a9-a0fcc306e7d2"
+          },
           "type": "OpenApiConnectionWebhook",
           "inputs": {
             "parameters": {
@@ -41,15 +45,11 @@
               "operationId": "SubscribeWebhookTrigger",
               "connectionName": "shared_commondataserviceforapps"
             }
-          },
-          "metadata": {
-            "operationMetadataId": "ea223817-f9bb-4ba2-99a9-a0fcc306e7d2"
           }
         }
       },
       "actions": {
         "Scope_-_Main": {
-          "type": "Scope",
           "actions": {
             "Run_a_Child_Flow_-_Calculate_Due_Dates": {
               "type": "Workflow",
@@ -63,11 +63,19 @@
               }
             },
             "Add_a_new_row_-_Notes": {
+              "runAfter": {
+                "Run_a_Child_Flow_-_Calculate_Due_Dates": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
                   "entityName": "annotations",
-                  "item/subject": "Priority changed.",
+                  "item/subject": "Priority Changed",
                   "item/notetext": "Priority changed to @{triggerOutputs()?['body/_ol_priority_label']}.",
                   "item/objectid_ol_gr_task@odata.bind": "ol_gr_tasks/@{triggerOutputs()?['body/ol_gr_taskid']}"
                 },
@@ -76,31 +84,23 @@
                   "operationId": "CreateRecord",
                   "connectionName": "shared_commondataserviceforapps"
                 }
-              },
-              "runAfter": {
-                "Run_a_Child_Flow_-_Calculate_Due_Dates": [
-                  "Succeeded"
-                ]
-              },
-              "metadata": {
-                "operationMetadataId": "528ad611-aea8-41b7-b624-f1df00144288"
               }
             }
           },
-          "runAfter": {}
+          "runAfter": {},
+          "type": "Scope"
         },
         "Scope_-_Error_Handling": {
-          "type": "Scope",
           "actions": {
             "Terminate_-_Failed_Main_Scope": {
-              "type": "Terminate",
-              "inputs": {
-                "runStatus": "Failed"
-              },
               "runAfter": {
                 "Run_a_Child_Flow": [
                   "Succeeded"
                 ]
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed"
               }
             },
             "Run_a_Child_Flow": {
@@ -121,7 +121,8 @@
             "Scope_-_Main": [
               "Failed"
             ]
-          }
+          },
+          "type": "Scope"
         }
       }
     },

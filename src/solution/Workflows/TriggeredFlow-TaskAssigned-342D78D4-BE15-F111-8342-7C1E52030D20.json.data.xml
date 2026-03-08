@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Workflow WorkflowId="{342d78d4-be15-f111-8342-7c1e52030d20}" Name="Triggered Flow - Task Assigned" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Workflow WorkflowId="{342d78d4-be15-f111-8342-7c1e52030d20}" Name="Triggered Flow - Task Assigned" Description="When a task is assigned to a user, update the owner of that record to the same user.&#xA;Add a new note to the ask timeline showing the fullname of the assigned user." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <JsonFileName>/Workflows/TriggeredFlow-TaskAssigned-342D78D4-BE15-F111-8342-7C1E52030D20.json</JsonFileName>
   <Type>1</Type>
   <Subprocess>0</Subprocess>
@@ -25,4 +25,7 @@
   <LocalizedNames>
     <LocalizedName languagecode="1033" description="Triggered Flow - Task Assigned" />
   </LocalizedNames>
+  <Descriptions>
+    <Description languagecode="1033" description="When a task is assigned to a user, update the owner of that record to the same user.&#xA;Add a new note to the ask timeline showing the fullname of the assigned user." />
+  </Descriptions>
 </Workflow>
